@@ -1,0 +1,37 @@
+/* 본문 */
+#main_page{
+    background-color: aqua;
+}
+
+#main_page div {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* 메인 이미지 슬라이드 */
+#hd_slide img{
+    width: 100%;
+    height: 600px;
+}
+
+/* 베스트 상품 */
+#best_item {
+    
+}
+
+/* 광고1 */
+#advert_one img{
+    width: 100%;
+    height: 200px;    
+}
+
+/* 세일상품 */
+
+
+/* 광고2 */
+#advert_two img {
+    width: 100%;
+    height: 200px;
+}
+
+/* 신상품 */

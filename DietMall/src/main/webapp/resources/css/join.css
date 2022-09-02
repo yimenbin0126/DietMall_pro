@@ -1,0 +1,89 @@
+
+/* 초기화 */
+* {
+    margin: 0; padding: 0;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+}
+
+/* 헤더와 섹션 */
+header, section {
+    width: 500px;
+    margin: 0 auto;
+}
+
+
+/* 헤더 */
+
+header div {
+    margin-top: 20px;
+}
+
+
+/* 헤더 - 로그인하기 */
+#goto_login {
+    text-align: left;
+}
+
+#goto_login input{
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 5px 10px 5px 10px;
+    background-color: white;
+}
+
+#main_logo{
+    font-size: 20px;
+    padding-bottom: 20px;
+}
+
+
+/* 섹션 본문 */
+section {
+    padding-top: 40px;
+}
+
+section p, img{
+    padding-bottom: 10px;
+    font-size: 15px;
+}
+
+
+/* 회원가입 */
+#join_title{
+    padding-bottom: 60px;
+    font-size: 25px;
+}
+
+/* 회원가입 버튼 */
+.join_button {
+    padding: 0px 50px 0px 50px;
+}
+
+.join_button input{
+    width: 100%;
+}
+
+/* 회원가입 버튼 - 다이어터몰, 카카오톡 */
+.join_button input[type="button"]{
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: lightgray;
+}
+
+#join_dietmall {
+    margin-top: 15px;
+}
+
+#join_kakao, #join_dietmall {
+    padding-bottom: 15px;
+    border-bottom: 1px solid gray;
+}
+
+#join_kakao input{
+    background-color: yellow;
+}

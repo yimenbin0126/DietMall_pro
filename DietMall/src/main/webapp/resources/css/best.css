@@ -1,0 +1,126 @@
+
+/* 섹션 */
+section {
+    margin: 0 auto;
+    background-color: aqua;
+}
+
+#section_header {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    padding-bottom: 50px;
+    font-size: 30px;
+}
+
+
+
+#section_mid_content {
+    padding-top: 100px;
+}
+
+
+
+/* 랭크 top3 세일품목 */
+
+
+#top3_logo{
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+/* 정렬 */
+.rank_top3_sale_content, .saleitems_content_list {
+    text-align: left;
+}
+
+
+/* 이미지 */
+
+img {
+    border-radius: 7px;
+}
+
+.rank_top3_sale_content_all div {
+    display: inline-block;
+    width: 350px;
+    margin-right: 20px;
+}
+
+.rank_top3_sale_content_all:last-child {
+    margin-right: 0px;
+}
+
+.rank_top3_sale_content_all img {
+    width: 350px;
+    height: 350px;
+}
+
+.saleitems_content_list img {
+    width: 260px;
+    height: 260px;
+}
+
+
+/* 글자색 */
+.sale_top3_content, .saleitems_content_list {
+    color: gray;
+}
+
+.sale_top3_discount, .saleitems_discount {
+    color: red;
+}
+
+.sale_top3_price, .saleitems_price {
+    color: black;
+}
+
+.sale_top3_before_price, .saleitems_before_price {
+    color: lightgray;
+    text-decoration:line-through;
+}
+
+/* 글자굵기 */
+.sale_top3_discount, .saleitems_discount,
+.sale_top3_price, .saleitems_price {
+    font-weight: bold;
+}
+
+
+
+/* 기본 세일 품목 */
+/* 헤더 */
+#saleitems_content_header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 30px;
+}
+
+#saleitems_content_header strong {
+    font-size: 20px;
+}
+
+
+/* 품목 */
+.saleitems_content_list{
+    margin-bottom: 100px;
+    display: inline-block;
+    width: 260px;
+    margin-right: 10px;
+}
+
+.saleitems_content_middle div:last-child {
+    margin-right: 0px;
+}
+
+
+#saleitems_condition li {
+    display: inline;
+    padding: 8px;
+    margin-left: 3px;
+    font-size: 13px;
+    border-radius: 20px;
+    border: 1px solid black;
+    background-color: white;
+}

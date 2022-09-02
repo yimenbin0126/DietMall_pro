@@ -1,0 +1,121 @@
+
+/* 초기화 */
+* {
+    margin: 0; padding: 0;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+}
+
+/* 헤더와 섹션 */
+header, section {
+    width: 500px;
+    margin: 0 auto;
+}
+
+
+/* 헤더 */
+
+header div {
+    margin-top: 20px;
+}
+
+#goto_main {
+    text-align: left;
+}
+
+#goto_main input{
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 5px 10px 5px 10px;
+    background-color: white;
+}
+
+#main_logo{
+    font-size: 20px;
+    padding-bottom: 20px;
+}
+
+
+
+/* 섹션 */
+
+section {
+    height: 400px;
+    padding-top: 40px;
+}
+
+#login_header input, #log_button input {
+    width: 100%;
+    padding: 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-width: 0;
+    outline: none;
+}
+
+
+
+
+/* 로그인 */
+
+.login{
+    margin: 0px 50px 0px 50px;
+}
+
+#login_logo{
+    padding-bottom: 30px;
+    font-size: 25px;
+}
+
+#login_header input{
+    text-indent: 10px;
+    text-align: left;
+    border: 1px solid black;
+}
+
+
+/* 자동로그인 등  */
+
+
+/* 푸터 */
+/* 자동로그인 */
+#log_ing  {
+    padding-bottom: 20px;
+}
+
+#log_ing label {
+    padding: 10px;
+}
+
+#log_auto input[type="checkbox"] {
+    margin: 5px;
+}
+
+
+/* 로그인 버튼 */
+#log_ing_button {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid gray;
+}
+
+#log_button input {
+    font-size: 20px;
+    color: white;
+
+    background-color: black;
+    border-radius: 5px;
+}
+
+
+#log_to_link {
+    padding-top: 15px;
+    font-weight: bold;
+}
+
+a {color: gray;}
+
+#log_to_link a{
+    color: brown;
+}

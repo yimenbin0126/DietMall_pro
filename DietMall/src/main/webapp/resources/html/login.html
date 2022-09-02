@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login_page</title>
+    <link href="../css/login.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+    <header>
+        <!-- 버튼(메인 홈페이지로) -->
+        <div id="goto_main">
+            <input type="button" onClick="location.href='main.html'" value=" 메인 홈페이지로">
+        </div>
+        <!-- 로고(메인 홈페이지로) -->
+        <div id="main_logo">
+            <a href="main.html">다이어터몰</a>
+        </div>
+        <hr>
+    </header>
+
+    <section class="join_list">
+        <div class="login">
+
+            <div id="login_logo">
+                <h1>로그인</h1>
+            </div>
+
+            <div id="login_header">
+                <div id="log">
+                    <input type="text" placeholder="아이디" onfocus="this.placeholder=''"
+                        onblur="this.placeholder='아이디'">
+                </div>
+
+                <div id="pass">
+                    <input type="password" placeholder="비밀번호" onfocus="this.placeholder=''"
+                        onblur="this.placeholder='비밀번호'">
+                </div>
+            </div>
+
+            <div id="login_footer">
+
+                <div id="log_ing_button">
+                    <div id="log_ing">
+                        <label id="log_auto"><input type="checkbox" name="log_ing_auto" value="log_ing_auto">자동
+                            로그인</label>
+                        <label id="log_check"><a href="idps_CheckPage.html" id="log_check">아이디/비밀번호 찾기</a></label>
+                    </div>
+
+                    <div id="log_button">
+                        <input type="button" value="로그인">
+                    </div>
+                </div>
+                
+                
+                <div id="log_to_link">
+                    <div id="lost_pass">
+                        <a href="">비밀번호를 잃어버리셨나요?</a>
+                    </div>
+                    
+                    <div id="to_join">
+                        <a href="join.html">이 곳은 처음이신가요? 회원가입하기</a>
+                    </div>
+                 </div>
+            
+            </div>
+    </div>
+
+    </section>
+
+    <footer>
+        <!-- 기타 설명 -->
+    </footer>
+
+</body>
+
+</html>

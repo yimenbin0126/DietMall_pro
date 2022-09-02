@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객센터</title>
+    <link href="../css/allMain.css" rel="stylesheet">
+    <link href="../css/contact-QnA.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header>
+
+        <div id="fir_header_admin">
+            <ul>
+                <li><a href="login.html">로그인</a></li>
+                <li><a href="join.html">회원가입</a></li>
+                <li>
+                    <a href="contact.html">
+                        고객센터
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main_header">
+            <div class="main_header_nm" id="name">
+                <h1>
+                    <a href="main.html">
+                        다이어터몰
+                    </a>
+                </h1>
+            </div>
+            <div class="main_header_nm" id="search">
+                <input type="text" id="search_bar" placeholder="검색어를 입력해주세요." onfocus="this.placeholder=''"
+                    onblur="this.placeholder='검색어를 입력해주세요.'">
+                <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+            </div>
+        </div>
+
+        <div id="sec_header_catecory">
+            <nav>
+                <ul class="catecory">
+                    <li class="all_category">
+                        <a href="home.html">
+                            <span class="hd_txt">전체 카테고리</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="home.html">
+                            <span class="hd_txt">SALE</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="about.html">
+                            <span class="hd_txt">베스트</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="sns.html">
+                            <span class="hd_txt">신상품</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="post.html">
+                            <span class="hd_txt">이벤트</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+        <div id="main_page">
+
+            <nav id="contact-catecory">
+                <ul>
+                    <li>
+                        <a href="contact.html">고객센터</a>
+                    </li>
+                    <li>
+                        <a href="contact-QnA.html">1:1 질문하기</a>
+                    </li>
+                    <li>
+                        <a href="contact-user-message">고객 건의함</a>
+                    </li>
+                    <li>
+                        <a href="contact-user-manage">회원 정보 관리</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <section id="contact-QnA-list">
+                <header id="contact-QnA-header">
+                    <h1>고객센터</h1>
+                    
+                </header>
+                <table id="table">
+                    <caption>
+                        <div>자주 묻는 질문</div>
+                        <select id="list-select">
+                            <option value="5">5개씩</option>
+                            <option value="10">10개씩</option>
+                            <option value="15">15개씩</option>
+                            <option value="30">30개씩</option>
+                        </select>
+                    </caption>
+                    <tr id="header">
+                        <th></th>
+                        <th></th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성날짜</th>
+                        <th>조회수</th>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>숫자</td>
+                        <td>제목</td>
+                        <td>운영자</td>
+                        <td>2022.06.30</td>
+                        <td>50</td>
+                    </tr>
+                </table>
+
+                <div id="table-bottom">
+                    <span><input type="checkbox">전체선택</span>
+                    <span><input type="button" value="이동"></span>
+                    <span><input type="button" value="삭제"></span>
+                    <span><input type="button" value="글쓰기"></span>
+                </div>
+
+                <footer id="contact-QnA-footer">
+                    <p>1</p>
+                </footer>
+
+            </section>
+        </div>
+
+    
+    </header>
+
+    <footer>
+        2022. 다이어터몰<br>
+        Tel. 041-4242-4242
+    </footer>
+
+</body>
+</html>

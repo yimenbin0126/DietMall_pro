@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다이어터몰</title>
+    <link href="../css/join-detail.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        $(function () {
+            id_pass();
+            birthday();
+            gender();
+            email();
+            phone();
+            enjoy();
+        });
+
+        // 아이디, 패스워드 관리
+        function id_pass() {
+
+
+
+            // 포커스 시 경고
+            var contents = [$('#id'), $('#password'), $('#password_more')];
+            var confirms = [$('#id_confirm'), $('#psw_confirm'), $('#psw_confirm_more')]
+
+            // 아이디, 비밀번호 입력 확인 (1) - 가능한 단어, 순서상관X, 총 갯수
+            const regex = [(/^[a-z0-9]{5,20}$/), (/^[a-zA-Z0-9!@#*]{7,20}$/)]
+            // 아이디, 비밀번호 입력 확인 (2) - 필수 단어, 비밀번호 특수문자 포함여부
+            const regex2 = [(/[a-z]*[0-9]/), (/[a-z]*[A-Z]*[0-9]*[@!#*]/)]
+
+            //쓰면 안되는 문자
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].on('focus', function () {
+                    contents[i].on('keyup', function () {
+                        // 각각 옵션 넣어주기
+                        if (i == 0) {
+                            if (regex[i].test(contents[i].val()) && regex2[i].test(contents[i].val())) {
+                                confirms[i].css('display', 'none');
+                            } else {
+                                confirms[i].css('display', 'block');
+                            }
+                        } else if (i == 1) {
+                            if (regex[i].test(contents[i].val()) && regex2[i].test(contents[i].val())) {
+                                confirms[i].css('display', 'none');
+                            } else {
+                                confirms[i].css('display', 'block');
+                            }
+                        } else {
+                            if (contents[i].val() == contents[1].val()) {
+                                confirms[i].css('display', 'none');
+                            } else {
+                                confirms[i].css('display', 'block');
+                            }
+
+                        }
+                    });
+                }
+                )
+            };
+
+            // 비밀번호 확인
+            $('#content #password_more').on('keydown', function () {
+                if ($('#content #password_more').val() != $('#content #password').val()) {
+                    $('#content #psw_confirm_more').css('display', 'block');
+                } else {
+                    $('#content #psw_confirm_more').css('display', 'none');
+                }
+            });
+
+        }
+
+
+        // 생년월일 관리
+        function birthday() {
+
+            // 월 선택지 추가
+            for (let i = 1; i <= 12; i++) {
+                let j = i
+                if (i < 10) {
+                    j = '0' + i
+                }
+                let text = '<option value="' + i + '">' + j + '</option>'
+                $('#bir_mm select').append(text)
+            }
+
+            // 일 선택지 추가
+            $("#bir_dd select").append('<option>일</option>')
+            $("#bir_mm select").on('click', function () {
+                $("#bir_dd select").html('')
+                $("#bir_dd select").append('<option>일</option>')
+
+                switch ($("#bir_mm select option:selected").val()) {
+                    case "1": case "3": case "5": case "7": case "8":
+                    case "10": case "12": //31일
+                        for (let a = 1; a <= 31; a++) {
+                            let b = a
+                            if (a < 10) {
+                                b = '0' + a
+                            }
+                            let text = '<option value="' + a + '">' + b + '</option>'
+                            $('#bir_dd select').append(text)
+                        }
+                        break
+                    case "4": case "6": case "9": case "11": //30일
+                        for (let a = 1; a <= 30; a++) {
+                            let b = a
+                            if (a < 10) {
+                                b = '0' + a
+                            }
+                            let text = '<option value="' + a + '">' + b + '</option>'
+                            $('#bir_dd select').append(text)
+                        }
+                        break
+                    case "2": //28일
+                        for (let a = 1; a <= 28; a++) {
+                            let b = a
+                            if (a < 10) {
+                                b = '0' + a
+                            }
+                            let text = '<option value="' + a + '">' + b + '</option>'
+                            $('#bir_dd select').append(text)
+                        }
+                        break
+                }
+            }
+            )
+
+            // 생년월일 입력 확인
+
+            //연도
+            const regex = /^[0-9]/
+
+
+            $('#bir_yy input').on('keyup', b_init);
+            $('#bir_mm select').on('click', b_init);
+            $('#bir_dd select').on('click', b_init);
+
+
+            function b_init(){
+                if ($('#bir_yy input').val().length == 4 && regex.test($('#bir_yy input').val()) == true
+                && $('#bir_mm select option:selected').val() != "월"
+                && $('#bir_dd select option:selected').val() != "일") {
+                    $('#bir_confirm').css('display', 'none');
+                } else {
+                    $('#bir_confirm').css('display', 'block');
+                }
+            }  
+        }
+    
+        // 성별
+        function gender() {
+
+            $('#gender select').on('click', () => {
+                if($('#gender select').val() == '선택'){
+                    $('#gender_confirm').css('display', 'block');
+                } else {
+                    $('#gender_confirm').css('display', 'none');
+                }
+            })
+        }
+
+
+        // 이메일
+        function email() {
+
+            // 이메일 형식 확인 - 알파벳+숫자@알파벳+숫자.알파벳+숫자
+            const regex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+            $('#email input').on('keyup', function () {
+                if (regex.test($('#email input').val()) === false) {
+                    $('#email_confirm').css('display', 'block');
+                } else {
+                    $('#email_confirm').css('display', 'none');
+                }
+            });
+        }
+
+        // 휴대전화
+        function phone() {
+
+            // 휴대전화 형식 확인 - 01012345678
+            const regex = /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/;
+
+            $('#phone input').on('keyup', function () {
+                if (regex.test($('#phone input').val()) === false) {
+                    $('#phone_confirm').css('display', 'block');
+                } else {
+                    $('#phone_confirm').css('display', 'none');
+                }
+            });
+        }
+
+        // 가입하기
+        function enjoy() {
+
+            $('#sub #enjoy').on('click', () => {
+
+                // 초기화
+                let id_check = 'N';
+                let pass_check = 'N';
+                let pass_confirm_check = 'N';
+                let birth_check = 'N';
+                let gender_check = 'N';
+                let email_check = 'N';
+                let phone_check = 'N';
+
+                // 아이디
+                if ($('#id_confirm').css('display') == 'block' || $('#id').val().length == 0) {
+                    alert('아이디를 제대로 입력해주세요.');
+                    document.querySelector('#id').focus();
+                } else {
+                    id_check = 'Y';
+                    p_check();
+                }
+
+                // 비밀번호
+                function p_check() {
+                    if ($('#psw_confirm').css('display') == 'block' || $('#password').val().length == 0) {
+                        alert('비밀번호를 제대로 입력해주세요.');
+                        document.querySelector('#password').focus();
+                    } else {
+                        console.log("통과")
+                        pass_check = 'Y';
+                        p_more_check();
+                    }
+                }
+
+
+                // 비밀번호 확인
+                function p_more_check() {
+                    if ($('#psw_confirm_more').css('display') == 'block' || $('#password_more').val().length == 0) {
+                        alert('입력한 비밀번호가 맞지 않습니다.');
+                        document.querySelector('#password_more').focus();
+                    } else {
+                        pass_confirm_check = 'Y';
+                        b_check();
+                    }
+                }
+
+                // 생년월일
+                function b_check() {
+                    if ($('#bir_confirm').css('display') == 'block' || $('#bir_yy input').val().length == 0) {
+                        alert('생년월일을 입력해주세요.');
+                        document.querySelector('#bir_yy input').focus();
+                    } else {
+                        birth_check = 'Y';
+                        g_check();
+                    }
+                }
+
+                // 성별
+                function g_check() {
+                    if ($('#psw_confirm_more').css('display') == 'block' || $('#gender select').val() == '선택') {
+                        alert('성별을 선택해주세요.');
+                        document.querySelector('#gender select').focus();
+                    } else {
+                        gender_check = 'Y';
+                        e_check();
+                    }
+                }
+
+                // 이메일
+                function e_check() {
+                    const regex = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+                    if ($('#email_confirm').css('display') == 'block' || regex.test($('#email input').val()) === false) {
+                        alert('이메일을 제대로 입력해주세요.');
+                        document.querySelector('#email input').focus();
+                    } else {
+                        email_check = 'Y';
+                        t_check();
+                    }
+                }
+
+                // 휴대전화
+                function t_check() {
+                    const regex = /^01([0|1|6|7|8|9])-?([0-9]{4})-?([0-9]{4})$/;
+
+                    if ($('#phone_confirm').css('display') == 'block' || regex.test($('#phone input').val()) === false) {
+                        alert('전화번호를 제대로 입력해주세요.');
+                        document.querySelector('#phone input').focus();
+                    } else {
+                        phone_check = 'Y';
+                        end();
+                    }
+                }
+
+
+                // 가입 완료
+                function end() {
+                    if(id_check == 'Y' && pass_check == 'Y'
+                    && pass_confirm_check == 'Y' && birth_check == 'Y'
+                    && gender_check == 'Y' && email_check == 'Y'
+                    && phone_check == 'Y') {
+                        // 해당 링크로 이동
+                        location.href = "joinEnd.html";
+                    }
+                }
+
+
+            });
+
+
+        }
+    </script>
+</head>
+
+<body>
+
+    <header>
+        <!-- 뒤로 가기 -->
+        <div id="goto_main">
+            <input type="button" onClick="location.href='join.html'" value="< 뒤로 가기">
+        </div>
+
+        <!-- 제목 -->
+        <div id="join_logo">
+            <h1>회원가입</h1>
+        </div>
+    </header>
+
+    <section>
+        <div id="wrapper">
+            <div id="content">
+
+                <h4>아이디</h4>
+                <div id="id_confirm" class="errorindex">*영문 소문자와 숫자를 혼합해 5~20자리로 만들어주세요</div>
+                <input type="text" id="id" placeholder="아이디를 입력해 주세요." onfocus="this.placeholder=''"
+                    onblur="this.placeholder='아이디를 입력해 주세요.'" required>
+
+                <h4>비밀번호</h4>
+                <div id="psw_confirm" class="errorindex">*영문 대소문자, 숫자, 특수문자(!@#*)를 하나 이상씩 사용하여 7~20자리로 만들어주세요</div>
+                <input type="password" id="password" placeholder="비밀번호를 입력해 주세요." onfocus="this.placeholder=''"
+                    onblur="this.placeholder='비밀번호를 입력해 주세요.'" required>
+
+                <h4>비밀번호 확인</h4>
+                <div id="psw_confirm_more" class="errorindex">*비밀번호가 맞지 않습니다.</div>
+                <input type="password" id="password_more" placeholder="비밀번호를 한번 더 입력해 주세요."
+                    onfocus="this.placeholder=''" onblur="this.placeholder='비밀번호를 한번 더 입력해 주세요.'" required>
+
+
+                <!-- 생년월일 시작 -->
+                <h4>생년월일</h4>
+                <div id="bir_confirm" class="errorindex">*생년월일을 제대로 입력해주세요.</div>
+                <div id="bir">
+                    <!-- 연도 -->
+                    <div id="bir_yy">
+                        <input type="text" id="yy" class="int" maxlength="4" placeholder="ex.1999년(4자)"
+                            onfocus="this.placeholder=''" onblur="this.placeholder='ex.1999년(4자)'" required>
+                    </div>
+                    <!-- 월 -->
+                    <div id="bir_mm">
+                        <select>
+                            <option>월</option>
+
+                        </select>
+                    </div>
+
+                    <!-- 일 -->
+                    <div id="bir_dd">
+                        <select>
+                        </select>
+                    </div>
+
+                </div>
+                <!-- 생년월일 끝 -->
+
+                <!-- 성별 -->
+                <h4>성별</h4>
+                <div id="gender_confirm" class="errorindex">*성별을 선택해주세요.</div>
+                <div id="gender">
+                    <select>
+                        <option>선택</option>
+                        <option>여자</option>
+                        <option>남자</option>
+                    </select>
+                </div>
+
+                <!-- 이메일 -->
+                <h4>이메일</h4>
+                <div id="email_confirm" class="errorindex">*이메일 형식이 올바르지 않습니다.</div>
+                <div id="email">
+                    <input type="test" id="email_input" placeholder="ex) dietmall@naver.com"
+                        onfocus="this.placeholder=''" onblur='this.placeholder="ex) dietmall@naver.com"' required>
+                    <button id="email_confirm">이메일 인증</button>
+                </div>
+
+                <!-- 휴대전화 -->
+                <h4>휴대전화</h4>
+                <div id="phone_confirm" class="errorindex">*올바른 전화번호 형식이 아닙니다.</div>
+                <div id="phone">
+                    <input type="text" id="tel" placeholder="ex) 01012345678, -를 빼고 입력해주세요."
+                        onfocus="this.placeholder=''" onblur="this.placeholder='ex) 01012345678, -를 빼고 입력해주세요.'"
+                        required>
+                    <button id="tel_confirm">휴대폰 인증</button>
+                </div>
+
+                <!-- 초기화, 가입하기 -->
+                <div id="sub">
+                    <input type="button" value="가입하기" id="enjoy">
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
