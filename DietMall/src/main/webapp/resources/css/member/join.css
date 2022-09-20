@@ -1,4 +1,5 @@
 
+
 /* 초기화 */
 * {
     margin: 0; padding: 0;
@@ -86,4 +87,8 @@ section p, img{
 
 #join_kakao input{
     background-color: yellow;
+}
+
+#join_kakao img {
+	width: 400px;
 }

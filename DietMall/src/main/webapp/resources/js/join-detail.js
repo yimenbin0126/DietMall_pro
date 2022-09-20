@@ -1,5 +1,6 @@
 $(function () {
     id_check();
+    email_check();
 
     id_pass();
     birthday();
@@ -16,6 +17,7 @@ function id_check() {
     // input 값 변동사항 있을 때
     document.querySelector("#id").addEventListener('change', function () {
     	if(document.querySelector("#idchk_true").style.display == "block"){
+    		document.querySelector("#idChk_result").value = "N";
 	        document.querySelector("#idchk_true").style.display = "none";
 	        document.querySelector("#idchk_false").style.display = "none";
     	} 
@@ -24,22 +26,24 @@ function id_check() {
     // 아이디 중복확인 버튼
     document.querySelector("#idchk").addEventListener('click', function () {
         if (document.querySelector("#id").value.length != 0 && document.querySelector('#id_confirm').style.display == "none") {
-			console.log(document.querySelector("#id").value);
             $.ajax({
                 url: "/member/idChk",
                 type: "post",
-                data: {
+                data: JSON.stringify({
                 	"userId": document.querySelector("#id").value
-            	},
+            	}),
+            	contentType: "application/json;charset=UTF-8",
                 dataType:'json', /* controller로부터 리턴받을 타입 */
                 success: function (result) {
                     if (result == 1) {
                         console.log("아이디 중복됨");
+                        document.querySelector("#idChk_result").value = "N";
                         document.querySelector("#idchk_true").style.display = "none";
                         document.querySelector("#idchk_false").style.display = "block";
                     } else {
                     	console.log(result);
                         console.log("아이디 중복없음");
+                        document.querySelector("#idChk_result").value = "Y";
                         document.querySelector("#idchk_true").style.display = "block";
                         document.querySelector("#idchk_false").style.display = "none";
                     }
@@ -51,6 +55,53 @@ function id_check() {
         }
     });
 }
+
+
+// 이메일 중복 체크
+function email_check() {
+	
+    // input 값 변동사항 있을 때
+    document.querySelector("#email_input").addEventListener('change', function () {
+    	if(document.querySelector("#email_true").style.display == "block"){
+    		document.querySelector("#email_result").value = "N";
+	        document.querySelector("#email_true").style.display = "none";
+	        document.querySelector("#email_false").style.display = "none";
+    	} 
+    });
+
+    // 이메일 중복확인 버튼
+    document.querySelector("#emailchk").addEventListener('click', function () {
+        if (document.querySelector("#email_input").value.length != 0 && document.querySelector('#email_confirm').style.display == "none") {
+            $.ajax({
+                url: "/member/emailChk",
+                type: "post",
+                data: JSON.stringify({
+                	"userEmail": document.querySelector("#email_input").value
+            	}),
+            	contentType: "application/json;charset=UTF-8",
+                dataType:'json',
+                success: function (result) {
+                    if (result == 1) {
+                        console.log("이메일 중복됨");
+                        document.querySelector("#email_result").value = "N";
+                        document.querySelector("#email_true").style.display = "none";
+                        document.querySelector("#email_false").style.display = "block";
+                    } else {
+                    	console.log(result);
+                        console.log("이메일 중복없음");
+                        document.querySelector("#email_result").value = "Y";
+                        document.querySelector("#email_true").style.display = "block";
+                        document.querySelector("#email_false").style.display = "none";
+                    }
+
+                }
+            })
+        } else {
+            alert("이메일을 제대로 입력해주세요!");
+        }
+    });
+}
+
 
 
 // 아이디, 패스워드 관리
@@ -185,11 +236,16 @@ function birthday() {
     $('#bir_mm select').on('click', b_init);
     $('#bir_dd select').on('click', b_init);
 
-
     function b_init() {
         if ($('#bir_yy input').val().length == 4 && regex.test($('#bir_yy input').val()) == true
+            && parseInt($('#bir_yy input').val(), 10) > 1900 && parseInt($('#bir_yy input').val(), 10) <= 2022
             && $('#bir_mm select option:selected').val() != "월"
             && $('#bir_dd select option:selected').val() != "일") {
+            var value = $('#bir_yy input').val()+"-";
+			value += $('#bir_mm select option:selected').val()+"-";
+			value += $('#bir_dd select option:selected').val();
+			$('#bir_value').val(value);
+	
             $('#bir_confirm').css('display', 'none');
         } else {
             $('#bir_confirm').css('display', 'block');
@@ -244,7 +300,6 @@ function phone() {
 function enjoy() {
 
     $('#sub #userjoin').on('click', () => {
-
         // 초기화
         let id_check = 'N';
         let pass_check = 'N';
@@ -256,7 +311,7 @@ function enjoy() {
 
         // 아이디
         if (($('#id_confirm').css('display') == 'block' || $('#id').val().length == 0)
-        && document.querySelector("#idchk_true").style.display == "none") {
+        && document.querySelector("#idChk_result").value == "Y") {
             alert('아이디를 제대로 입력해주세요.');
             document.querySelector('#id').focus();
         } else {

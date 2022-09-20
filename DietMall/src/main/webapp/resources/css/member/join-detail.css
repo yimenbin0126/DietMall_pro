@@ -1,4 +1,11 @@
 
+/* 푸터 */
+footer {
+    color: black;
+    padding: 100px;
+    height: 160px;
+    background-color: rgb(231, 231, 231);
+}
 /* 초기화 */
 * {margin: 0; padding: 0;}
 
@@ -83,24 +90,33 @@ h4 {
     margin-bottom: 10px;
 }
 
-/* 아이디 중복확인 */
-#idchk {
+
+/* 중복확인 */
+#idchk, #telchk, #emilchk {
 	padding: 10px;
 	font-weight: bold;
 }
 
 #idchk_true,
-#idchk_false {
+#tel_true,
+#email_true,
+#idchk_false,
+#tel_false,
+#email_false {
 	font-size: 13px;
 	padding-top: 5px;
 	display: none;
 }
 
-#idchk_true {
+#idchk_true,
+#tel_true,
+#email_true {
 	color: green;
 }
 
-#idchk_false {
+#idchk_false,
+#tel_false,
+#email_false {
 	color: red;
 }
 
@@ -133,11 +149,12 @@ h4 {
 }
 
 /* 이메일, 휴대전화 */
-#email #email_confirm,
-#phone #tel_confirm {
+#emailchk,
+#telchk {
     width: 130px;
     margin-left: 10px;
 }
+
 
 
 /* 초기화 */
@@ -146,7 +163,7 @@ h4 {
 }
 
 #sub #userjoin {
-    background-color: rgb(54, 100, 56);
+    background-color: black;
     margin-bottom: 100px;
     color: white;
     font-size: 20px;

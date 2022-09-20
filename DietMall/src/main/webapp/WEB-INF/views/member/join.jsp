@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>회원가입</title>
-<link href="/resources/css/join.css" rel="stylesheet">
+<link href="/resources/css/member/join.css" rel="stylesheet">
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script type="text/javascript" src="/resources/js/join.js"></script>
 
@@ -15,7 +15,7 @@
 	<header>
 		<!-- 로그인 홈페이지로 -->
 		<div id="goto_login">
-			<input type="button" onClick="location.href='login'" value="< 로그인 하기">
+			<input type="button" onClick="location.href='/member/login'" value="< 로그인 하기">
 		</div>
 		<!-- 로고(메인 홈페이지로) -->
 		<div id="main_logo">
@@ -52,8 +52,8 @@
 			<div id="join_dietmall">
 				<p>다이어터몰 회원으로 다양한 혜택을 받아보세요!</p>
 				<input type="button" value="다이어터몰 공식 회원가입"
-					onClick="location.href='join-detail'"> <img src="">이미지
-				들어갈곳
+					onClick="location.href='join-detail'">
+				<img src="">이미지들어갈곳
 			</div>
 
 		</div>

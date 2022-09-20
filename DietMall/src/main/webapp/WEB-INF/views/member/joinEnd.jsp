@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
+    <link href="/resources/css/member/joinEnd.css" rel="stylesheet">
 </head>
 <body>
     <h4>회원 가입을 축하드립니다!</h4>

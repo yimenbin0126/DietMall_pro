@@ -9,32 +9,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.dietmall.DTO.MemberDTO;
 import com.dietmall.service.MemberService;
-import com.dietmall.vo.MemberVO;
 
 
 @Controller
-public class HomeController {
+@RequestMapping("/category/*")
+public class CategoryController {
 	
 	@Autowired
 	MemberService service;
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
 	
-	// 메인 화면
-	@GetMapping("/main")
-	public void getMain(MemberVO vo, HttpSession session, HttpServletRequest req)
+	// 카데고리 get
+	@GetMapping("/all")
+	public void getAll(MemberDTO vo, HttpSession session, HttpServletRequest req)
 			throws Exception {
-		logger.info("get main");
-		
+		log.info("AllController - get all");
 	}
 	
-	// 메인화면 post - 로그인여부
-	@PostMapping("/main")
-	public void postMain(HttpSession session, HttpServletRequest req)
+	// 카데고리 post
+	@PostMapping("/all")
+	public void postAll(HttpSession session, HttpServletRequest req)
 			throws Exception {
-		logger.info("post main");
+		log.info("AllController - post all");
 	}
-	
 }

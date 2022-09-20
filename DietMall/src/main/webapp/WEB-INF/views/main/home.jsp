@@ -9,8 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>다이어터몰</title>
-<link href="/resources/css/main.css" rel="stylesheet">
-<link href="/resources/css/allMain.css" rel="stylesheet">
+<link href="/resources/css/main/home.css" rel="stylesheet">
 
 </head>
 
@@ -33,7 +32,7 @@
 				</c:if>
 				<li><a href="mypage.html">마이페이지</a></li>
 				<li><a href="contact.html">고객센터</a></li>
-				<%@include file="nav/header.jsp"%>
+				<%@include file="../nav/header.jsp"%>
 			</ul>
 		</form>
 	</header>

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
-    <link href="/resources/css/login.css" rel="stylesheet">
+    <link href="/resources/css/member/login.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script>
 		$(function () {
@@ -19,7 +19,7 @@
     <header>
         <!-- 버튼(메인 홈페이지로) -->
         <div id="goto_main">
-            <input type="button" onClick="location.href='/main'" value=" 메인 홈페이지로">
+            <input type="button" onClick="location.href='/main/home'" value="< 메인 홈페이지로">
         </div>
         <!-- 로고(메인 홈페이지로) -->
         <div id="main_logo">
@@ -53,9 +53,9 @@
 				<!-- 자동 로그인/아이디, 비밀번호 찾기 -->
                 <div id="log_ing_button">
                     <div id="log_ing">
-                        <label id="log_auto"><input type="checkbox" name="log_ing_auto" value="log_ing_auto">자동
+                        <label id="log_auto"><input type="checkbox" name="remember-me" value="log_ing_auto">자동
                             로그인</label>
-                        <label id="log_check"><a href="idps_CheckPage.html" id="log_check">아이디/비밀번호 찾기</a></label>
+                        <label id="log_check"><a href="idpsCheck" id="log_check">아이디/비밀번호 찾기</a></label>
                     </div>
 
                     <div id="log_button">

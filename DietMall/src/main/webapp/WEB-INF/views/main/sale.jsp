@@ -9,8 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>다이어터몰</title>
-    <link href="../css/sale.css" rel="stylesheet">
-    <link href="../css/allMain.css" rel="stylesheet">
+    <link href="/resources/css/main/sale.css" rel="stylesheet">
 </head>
 
 <body>

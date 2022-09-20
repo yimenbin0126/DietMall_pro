@@ -21,17 +21,31 @@
 <div id="sec_header_catecory">
 	<nav>
 		<ul class="catecory">
-			<li class="all_category"><a href="home.html"> <span
-					class="hd_txt">전체 카테고리</span>
-			</a></li>
-			<li><a href="sale.html"> <span class="hd_txt">SALE</span>
-			</a></li>
-			<li><a href="best.html"> <span class="hd_txt">베스트</span>
-			</a></li>
-			<li><a href="newitem.html"> <span class="hd_txt">신상품</span>
-			</a></li>
-			<li><a href="event.html"> <span class="hd_txt">이벤트</span>
-			</a></li>
+			<li class="all_category">
+				<a href="/category/all">
+					<span class="hd_txt">전체 카테고리</span>
+				</a>
+			</li>
+			<li>
+				<a href="/main/sale">
+					<span class="hd_txt">SALE</span>
+				</a>
+			</li>
+			<li>
+				<a href="/main/best"> 
+					<span class="hd_txt">베스트</span>
+				</a>
+			</li>
+			<li>
+				<a href="/main/new">
+					<span class="hd_txt">신상품</span>
+				</a>
+			</li>
+			<li>
+				<a href="/main/event">
+					<span class="hd_txt">이벤트</span>
+				</a>
+			</li>
 		</ul>
 	</nav>
 </div>
