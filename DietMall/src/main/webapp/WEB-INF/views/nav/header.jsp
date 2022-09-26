@@ -4,7 +4,7 @@
 
 <!-- 메인 헤더(검색) -->
 <div class="main_header">
-	<h1 id="name" class="main_header_list">
+	<h1 id="title" class="main_header_list">
 		<a href="main.html"> 다이어터몰 </a>
 	</h1>
 	<div id="search" class="main_header_list">

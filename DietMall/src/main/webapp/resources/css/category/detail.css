@@ -1,0 +1,512 @@
+
+/* 본문 */
+.con_selction {
+	display: flex;
+	justify-content: center;
+}
+
+/* 왼쪽 카데고리 */
+.nav {
+	width: 200px;
+	text-align: left;
+	text-indent: 20px;
+}
+
+.nav div {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+/* 왼쪽 카데고리 - 전체 */
+.nav_all, .nav_category {
+	font-weight: bold;
+}
+
+.nav_all {
+	border-top: 1px solid #154d2e;
+	color: white;
+	background-color: #206f43;
+}
+
+/* 왼쪽 카데고리 - 대분류 */
+.nav_category {
+	color: white;
+	background-color: gray;
+}
+
+/* 왼쪽 카데고리 - 소분류 */
+.category_content_list {
+	color: black;
+	background-color: rgb(230,230,230);
+	border-bottom: 1px solid lightgray;
+	text-indent: 30px;
+}
+
+
+/* 오른쪽 컨텐츠 - 하단 여백 */
+.right_content_bottom {
+	height: 80px;
+}
+
+/* 오른쪽 컨텐츠 - 결제 */
+.s_header {
+	display:flex;
+	border: 1px solid lightgray;
+	margin: 100px 0px 20px 80px;
+}
+
+.s_header_pay {
+	text-align: left;
+	border-left: 1px solid lightgray;
+	padding: 30px 30px 0px 30px;
+}
+
+/* 오른쪽 컨텐츠 - 결제 - 제목, 설명 */
+.h_pay_title {
+	font-weight: bold;
+	font-size: 22px;
+}
+
+.h_pay_explan {
+	padding: 5px 0px 5px 0px;
+	font-size: 12px;
+}
+
+/* 오른쪽 컨텐츠 - 결제 - 별점 */
+.h_pay_star .s_text {
+	vertical-align: middle;
+	font-size: 12px;
+}
+
+.h_pay_star .s_star {
+	font-size: 17px;
+	color: red;
+}
+
+.h_pay_star .s_num {
+	vertical-align: middle;
+	font-size: 17px;
+	font-weight: bold;	
+}
+
+/* 오른쪽 컨텐츠 - 결제 - 가격 */
+.h_pay_price {
+	text-align: right;
+	padding-bottom: 25px;
+}
+
+/* 할인할때 */
+.sale_percent .percent {
+	font-weight:bold;
+	color: red;
+}
+
+.sale_percent .percent_price {
+	text-decoration:line-through;
+	font-weight:bold;
+	color: gray;
+}
+
+.origin_price {
+	font-weight: bold;
+	font-size: 25px;
+	color: red;
+	vertical-align: middle;
+}
+
+.origin_price_text {
+	font-weight: bold;
+	color: red;
+	vertical-align: middle;
+}
+
+/* 오른쪽 컨텐츠 - 배송정보 */
+.h_pay_delivery_content {
+	border-top: 1px solid lightgray;
+}
+
+.h_pay_delivery_content, .h_pay_delivery_price,
+.h_pay_items_add {
+	font-size: 14px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid lightgray;
+}
+
+.c_title span:first-child,
+.d_content_top span:first-child,
+.d_content_bottom div:last-child {
+	font-weight: bold;
+}
+
+.d_content_bottom div:last-child {
+	padding-top: 3px;
+	color: red;
+}
+
+/* 오른쪽 컨텐츠 - 구입할 상품 수량 추가 */
+.h_pay_items_add {
+	display: flex;
+}
+
+.h_pay_items_add div {
+	padding: 5px 10px 5px 10px;
+	background-color: lightgray;
+}
+
+.h_pay_items_add div:not(last-child) {
+	margin-right: 4px;
+}
+
+.h_pay_items_add .add_btn_num {
+	background-color: rgb(230,230,230);
+}
+
+/* 오른쪽 컨텐츠 - 총 상품 금액 */
+.h_pay_items_price {
+	font-size: 14px;
+	font-weight: bold;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	display: flex;
+	align-items: center;
+	justify-content : space-between;
+}
+
+.i_price_all_content span {
+	font-size: 20px;
+	font-weight: bold;
+	color: red;
+}
+
+/* 오른쪽 컨텐츠 - 구매하기 버튼 */
+.h_pay_buy_button input {
+	color: white;
+	border: none;
+	font-size: 20px;
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background-color:#206f43;
+	width: 100%;
+}
+
+/* 오른쪽 컨텐츠 - 장바구니 담기 */
+.h_pay_cart {
+	text-align: center;
+	margin-top: 5px;
+	color: white;
+	border: none;
+	font-size: 20px;
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background-color: orange;
+	width: 100%;
+}
+
+/* 오른쪽 컨텐츠 - 찜하기 */
+.h_pay_wish {
+	text-align: center;
+	margin-top: 5px;
+	color: white;
+	border: none;
+	font-size: 20px;
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background-color: lightgray;
+	width: 100%;
+}
+
+/* 오른쪽 컨텐츠 - 고정 카데고리 */
+.section_pick_category {
+	position: sticky;
+	top: 0px;
+	display: flex;
+	justify-content : space-between;
+	border-bottom: 1.5px solid gray;
+	margin: 40px 0px 20px 80px;
+}
+
+.section_pick_category div {
+	font-size: 13px;
+	font-weight: bold;
+	width: 200px;
+	border-right: 1px solid lightgray;
+	padding:10px;
+	background-color: rgb(230,230,230);
+}
+
+/* 오른쪽 컨텐츠 - 고정 카데고리 - 클릭된거 */
+.section_pick_category div:first-child {
+	color: white;
+	background-color: gray;
+}
+
+/* 오른쪽 컨텐츠 - 상품 설명 */
+.section_middle_detail {
+	margin: 40px 0px 20px 80px;
+	
+}
+/* 오른쪽 컨텐츠 - 상품 설명 - 이미지 */
+.s_middle_detail_image img {
+	width: 880px;
+}
+
+/* 오른쪽 컨텐츠 - 상품 설명 - 상품 정보 */
+.section_detail_item {
+	text-align: left;
+	margin-top: 100px;
+	border-top: 1px solid lightgray;
+}
+
+
+
+/* 제목 */
+.s_detail_title, .s_delivery_title {
+	padding: 40px 0px 20px 0px;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+.section_detail_item table {
+	width: 100%;
+	border-collapse : collapse;
+	border-top: 1px solid lightgray;
+}
+
+.section_detail_item table tr th {
+	width: 160px;
+	padding-left: 15px;
+	background-color: rgb(240,240,240);
+}
+
+.section_detail_item table tr {
+	font-size: 12px;
+	text-align: left;
+	height: 40px;
+}
+
+.section_detail_item table tr td {
+	padding-left: 15px;
+}
+
+.section_detail_item table tr th,
+.section_detail_item table tr td {
+	border-bottom: 1px solid lightgray;
+}
+
+/* 오른쪽 컨텐츠 - 상품 설명 - 배송 안내 */
+.section_detail_delivery {
+	text-align: left;
+}
+
+.section_detail_delivery p {
+	font-size: 12px;
+	padding-bottom: 5px;
+}
+
+/* 리뷰 */
+.section_footer_review {
+	margin: 40px 0px 20px 80px;
+}
+
+/* 리뷰 건수 */
+.f_review_num {
+	text-align: left;
+	font-weight: bold;
+	font-size: 20px;
+	padding: 40px 0px 20px 0px;
+	border-bottom: 1px solid lightgray;
+}
+
+/* 리뷰 기준 */
+.f_review_standard {
+	font-weight:bold;
+	font-size: 13px;
+	text-align: left;
+	padding: 20px 0px 20px 0px;
+	
+}
+
+.f_review_standard span:nth-child(2),
+.f_review_standard span:nth-child(4) {
+	font-weight: lighter;
+	color: lightgray;
+}
+
+/* 리뷰 상단 */
+.r_content {
+	border-bottom: 1px solid lightgray;
+}
+
+.r_content_top {
+	font-weight: bold;
+	display: flex;
+	justify-content: space-between;
+}
+
+.c_top_star span:first-child {
+	color: red;
+}
+
+.c_top_date {
+	font-size: 13px;
+	color: lightgray;
+}
+
+/* 리뷰 내용 */
+.r_content_middle {
+	padding: 20px 0px 20px 0px;
+	text-align: left;
+}
+
+.c_middle_image img {
+	width: 170px;
+	height: 170px;
+}
+
+.c_middle_detail {
+	font-size: 13px;
+	padding: 20px 0px 20px 0px;
+	width: 700px;
+}
+
+/* 리뷰 내용 - 답변 */
+.answer_review {
+	font-size: 13px;
+	margin-left: 20px;
+	padding: 20px 0px 25px 0px;
+	width: 700px;	
+	background-color: rgb(230,230,230);
+}
+
+.answer_writer {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 5px;
+	color: gray;
+	font-weight: bold;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.answer_content {
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+/* 페이지 */
+.f_review_page {
+	padding: 30px 0px 30px 0px;
+	display: flex;	
+	justify-content: center;
+}
+
+.f_review_page div {
+	font-weight: bold;
+	padding: 10px 15px 10px 15px;
+}
+
+.f_review_page div:not(:last-child) {
+	margin-right: 7px;
+}
+
+.r_page_left, .f_review_right {
+	color: gray;
+	background-color: rgb(230,230,230);
+}
+
+.r_page_num {
+	color: white;
+	background-color: #206f43;
+}
+
+/* QnA */
+.section_footer_QnA {
+	text-align: left;
+	padding: 0px 30px 0px 80px;
+}
+
+/* QnA 상단 */
+.f_QnA_header {
+	border-bottom: 1px solid lightgray;
+}
+
+.s_footer_title {
+	font-size: 25px;
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+
+.s_footer_content {
+	font-size: 12px;
+	padding-bottom: 10px;
+}
+
+.s_footer_write_button {
+	font-size: 14px;
+	padding: 15px;
+	margin-bottom: 10px;
+	width: 130px;
+	color: white;
+	background-color: black;
+}
+
+/* QnA - 내용 */
+.f_QnA_content ul li {
+	list-style: none; 
+}
+
+.f_QnA_content ul {
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	font-size: 13px;
+	padding: 10px;
+	border-bottom: 1px solid rgb(225,225,225);
+}
+
+.f_QnA_content ul:first-child {
+	font-weight: bold;
+}
+
+.f_QnA_content ul li:nth-child(1) {
+	width: 100px;	
+}
+
+.f_QnA_content ul li:nth-child(2) {
+	width: 510px;	
+}
+
+.f_QnA_content ul li:nth-child(3) {
+	width: 100px;	
+}
+
+.f_QnA_content ul li:nth-child(4) {
+	width: 100px;	
+}
+
+.section_footer_QnA .f_review_page {
+	padding-left: 25px;
+}
+
+/* 반품 교환 정보 */
+.section_footer_exchange {
+	text-align: left;
+	padding: 60px 30px 40px 80px;
+}
+
+.footer_e_title {
+	font-size: 20px;
+	font-weight: bold;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid lightgray;
+}
+
+.footer_e_content p {
+	padding: 5px 0px 5px 10px; 
+	font-size: 13px;
+}

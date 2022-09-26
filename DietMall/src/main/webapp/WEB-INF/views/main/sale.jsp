@@ -10,13 +10,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>다이어터몰</title>
     <link href="/resources/css/main/sale.css" rel="stylesheet">
+    <link href="/resources/css/nav/header.css" rel="stylesheet">
+    <link href="/resources/css/nav/footer.css" rel="stylesheet">
 </head>
 
 <body>
-   	<!-- 헤더 -->
+   	<!-- 헤더 시작 -->
 	<header>
+		<!-- 상단 -->
+		<form id="fir_header_admin" name='mainForm' method="post">
+			<ul>
+				<!-- 로그인이 안되있을 때 -->
+				<c:if test="${member == null}">
+					<li><a href="member/login">로그인</a></li>
+					<li><a href="member/join">회원가입</a></li>
+				</c:if>
+				<!-- 로그인이 되있을 때 -->
+				<c:if test="${member != null}">
+					<li>${member.userName}님 환영합니다.</li>
+					<li><a href="member/logout">로그아웃</a></li>
+				</c:if>
+				<li><a href="mypage.html">마이페이지</a></li>
+				<li><a href="contact.html">고객센터</a></li>
+			</ul>
+		</form>
 		<%@include file="../nav/header.jsp"%>
 	</header>
+	<!-- 헤더 끝 -->
 
 
     <!-- 본문 -->

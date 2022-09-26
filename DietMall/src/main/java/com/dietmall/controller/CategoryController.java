@@ -28,13 +28,49 @@ public class CategoryController {
 	@GetMapping("/all")
 	public void getAll(MemberDTO vo, HttpSession session, HttpServletRequest req)
 			throws Exception {
-		log.info("AllController - get all");
+		log.info("CategoryController - get all");
 	}
 	
 	// 카데고리 post
 	@PostMapping("/all")
 	public void postAll(HttpSession session, HttpServletRequest req)
 			throws Exception {
-		log.info("AllController - post all");
+		log.info("CategoryController - post all");
+	}
+	
+	// 상세보기 get
+	@GetMapping("/detail")
+	public void getDetail(MemberDTO vo, HttpSession session, HttpServletRequest req) throws Exception {
+		log.info("CategoryController - get detail");
+	}
+
+	// 상세보기 post
+	@PostMapping("/detail")
+	public void postDetail(HttpSession session, HttpServletRequest req) throws Exception {
+		log.info("CategoryController - post detail");
+	}
+	
+	// 장바구니 get
+	@GetMapping("/cart")
+	public void getCart(MemberDTO vo, HttpSession session, HttpServletRequest req) throws Exception {
+		log.info("CategoryController - get cart");
+	}
+
+	// 장바구니 post
+	@PostMapping("/cart")
+	public void postCart(HttpSession session, HttpServletRequest req) throws Exception {
+		log.info("CategoryController - post cart");
+	}
+	
+	// 주문 get
+	@GetMapping("/order")
+	public void getOrder(MemberDTO vo, HttpSession session, HttpServletRequest req) throws Exception {
+		log.info("CategoryController - get order");
+	}
+
+	// 주문 post
+	@PostMapping("/order")
+	public void postOrder(HttpSession session, HttpServletRequest req) throws Exception {
+		log.info("CategoryController - post order");
 	}
 }

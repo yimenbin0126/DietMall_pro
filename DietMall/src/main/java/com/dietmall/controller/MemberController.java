@@ -40,13 +40,13 @@ public class MemberController {
 	// 로그인 get
 	@GetMapping("/login")
 	public void getLogin() throws Exception {
-		log.info("get login");
+		log.info("MemberController - get login");
 	}
 
 	// 로그인 post
 	@PostMapping("/login")
 	public String postLogin(MemberDTO vo, HttpServletRequest req, RedirectAttributes rttr) throws Exception {
-		log.info("post login");
+		log.info("MemberController - post login");
 
 		// 로그인 할 세션 값을 불러옴
 		HttpSession session = req.getSession();
@@ -79,7 +79,7 @@ public class MemberController {
 	// 로그아웃 get
 	@GetMapping("/logout")
 	public String logout(HttpSession session) throws Exception {
-		log.info("get logout");
+		log.info("MemberController - get logout");
 		session.invalidate();
 
 		return "redirect:/main";
@@ -89,7 +89,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/idChk")
 	public int idChk(@RequestBody MemberDTO vo) throws Exception {
-		log.info("post idChk");
+		log.info("MemberController - post idChk");
 		String id = vo.getUserId();
 		MemberDTO voNew = new MemberDTO();
 		voNew.setUserId(id);
@@ -111,7 +111,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/emailChk")
 	public int emailChk(@RequestBody MemberDTO vo) throws Exception {
-		log.info("post emailChk");
+		log.info("MemberController - post emailChk");
 		MemberDTO voNew = new MemberDTO();
 		voNew.setUserEmail(vo.getUserEmail());
 		log.info(vo.getUserEmail() + " - 이메일 체크시작");
@@ -121,26 +121,26 @@ public class MemberController {
 	// 회원가입 선택 get
 	@GetMapping("/join")
 	public void getJoin() throws Exception {
-		log.info("get join");
+		log.info("MemberController - get join");
 	}
 
 	// 회원가입 선택 get
 	@GetMapping("/join-detail")
 	public void getJoinDetail(MemberDTO vo) throws Exception {
-		log.info("get join-detail");
+		log.info("MemberController - get join-detail");
 	}
 
 	// 회원가입 선택 (1) - 카카오 (GET)
 	@GetMapping("/join-detail-kakao")
 	public void kakaoGetJoinDetail(@RequestParam String code) throws Exception {
-		log.info("get join-detail-kakao");
+		log.info("MemberController - get join-detail-kakao");
 
 	}
 
 	// 회원가입 선택 (1) - 카카오 (POST)
 	@PostMapping("/join-detail-kakao")
 	public Map<String, Object> kakaoPostJoinDetail(@RequestBody MemberDTO vo) throws Exception {
-		log.info("post join-detail-kakao");
+		log.info("MemberController - post join-detail-kakao");
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 
 		// 아이디 체크
@@ -156,7 +156,7 @@ public class MemberController {
 	// 회원가입 선택 (1) - 카카오 set (POST)
 	@PostMapping("/join-detail-kakao-set")
 	public void kakaoPostJoinDetailSet(MemberDTO vo) throws Exception {
-		log.info("post join-detail-kakao-set");
+		log.info("MemberController - post join-detail-kakao-set");
 		service.join(vo);
 		log.info("회원가입 성공 - 카카오");
 	}
@@ -164,7 +164,7 @@ public class MemberController {
 	// 회원가입 선택 (2) - 다이어터몰 post
 	@PostMapping("/join-detail")
 	public String postJoinDetail(MemberDTO vo) throws Exception {
-		log.info("post join-detail");
+		log.info("MemberController - post join-detail");
 
 		log.info(vo.toString());
 		int id_re = service.idChk(vo);
@@ -192,20 +192,20 @@ public class MemberController {
 	// 회원가입 완료 get
 	@GetMapping("/joinEnd")
 	public void getJoinEnd(MemberDTO vo) throws Exception {
-		log.info("get joinEnd");
+		log.info("MemberController - get joinEnd");
 	}
 
 	// 회원가입 완료 post
 	@PostMapping("/joinEnd")
 	public void postJoinEnd(MemberDTO vo) throws Exception {
-		log.info("post joinEnd");
+		log.info("MemberController - post joinEnd");
 	}
 
 	// 그 외 기능
 	// 아이디/비밀번호 찾기 get
 	@GetMapping("/idpsCheck")
 	public void getIdpsCheck(MemberDTO vo) throws Exception {
-		log.info("get idpsCheck");
+		log.info("MemberController - get idpsCheck");
 	}
 
 	// 아이디/비밀번호 찾기 post
@@ -213,7 +213,7 @@ public class MemberController {
 	public ModelAndView postIdpsCheck(
 			@RequestParam(value = "idpw_find", required = false) String idpw_find,
 			MemberDTO vo, HttpServletResponse response) throws Exception {
-		log.info("post idpsCheck");
+		log.info("MemberController - post idpsCheck");
 		// 아이디, 비밀번호 타입 체크
 		if (idpw_find.equals("id") && service.findidChk_same(vo) == 1) {
 			return idCheck_mail(vo);
@@ -232,7 +232,7 @@ public class MemberController {
 
 	// 아이디 찾기 - 인증코드 발송
 	public ModelAndView idCheck_mail(MemberDTO vo) throws Exception {
-		log.info("idCheck_mail");
+		log.info("MemberController - idCheck_mail");
 		// 아이디 찾기 - 인증코드 메일로 보내기
 		// 아이디 값 가져오기
 		String id = service.findidChk_id(vo);
@@ -252,7 +252,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("/idCheck_code")
 	public String idCheck_code(@RequestBody MemberDTO vo) throws Exception {
-		log.info("idCheck_code");
+		log.info("MemberController - idCheck_code");
 		// 아이디 찾기 - 인증코드 메일로 보내기
 		// 아이디 값 가져오기
 		String id = service.findidChk_id(vo);
@@ -265,7 +265,7 @@ public class MemberController {
 
 	// 비밀번호 찾기 - 메일 발송
 	public ModelAndView pwdCheck_mail(MemberDTO vo) throws Exception {
-		log.info("pwdCheck_mail");
+		log.info("MemberController - pwdCheck_mail");
 		// 메일 보내기
 		service.sendEmail_findpw(vo);
 		// 뷰 전달

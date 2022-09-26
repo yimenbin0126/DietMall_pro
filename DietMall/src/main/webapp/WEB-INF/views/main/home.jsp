@@ -10,12 +10,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>다이어터몰</title>
 <link href="/resources/css/main/home.css" rel="stylesheet">
+<link href="/resources/css/nav/header.css" rel="stylesheet">
+<link href="/resources/css/nav/footer.css" rel="stylesheet">
 
 </head>
 
 <body>
 
-	<!-- 헤더 -->
+	<!-- 헤더 시작 -->
 	<header>
 		<!-- 상단 -->
 		<form id="fir_header_admin" name='mainForm' method="post">
@@ -32,11 +34,11 @@
 				</c:if>
 				<li><a href="mypage.html">마이페이지</a></li>
 				<li><a href="contact.html">고객센터</a></li>
-				<%@include file="../nav/header.jsp"%>
 			</ul>
 		</form>
+		<%@include file="../nav/header.jsp"%>
 	</header>
-
+	<!-- 헤더 끝 -->
 
 	<!-- 섹션 -->
 	<section>
@@ -49,7 +51,6 @@
 
 			<div id="best_item">
 				<h1>베스트 상품</h1>
-
 			</div>
 
 			<div id="advert_one">
