@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="itemMapper">
+
+	<!-- 상품 게시판 작성 -->
+	<insert id="insert_item_board">
+		INSERT INTO item_board (
+		item_bno
+		, item_name
+		, item_type
+		, origin_price
+		, sale_yn
+		, sale_percent
+		, category_type
+		, like_num
+		, item_title_img
+		, item_content_img
+		)
+		VALUES(
+		#{item_bno}
+		, #{item_name}
+		, 'basic'
+		, #{origin_price}
+		, #{sale_yn}
+		, #{sale_percent}
+		, #{category_type}
+		, 0
+		, #{item_title_img}
+		, #{item_content_img}
+		)
+	</insert>
+	
+	<!-- 상품 게시판 - 수정 -->
+	<update id="update_item_board">
+		UPDATE item_board
+			SET item_name = #{item_name},
+			item_type = #{item_type},
+			origin_price = #{origin_price},
+			sale_yn = #{sale_yn},
+			sale_percent = #{sale_percent},
+			like_num = #{like_num},
+			item_title_img = #{item_title_img},
+			item_content_img = #{item_content_img}
+		WHERE item_bno = #{item_bno}
+	</update>
+	
+	<!-- 상품 게시판 - 삭제 -->
+	<delete id="delete_buy_item">
+		DELETE 
+		FROM item_board
+		WHERE item_bno = #{item_bno}
+	</delete>	
+	
+	<!-- 상품 게시판 - 상세 불러오기 -->
+	<select id="select_item_board" resultType="com.dietmall.DTO.ItemboardDTO">
+		SELECT * 
+		FROM item_board 
+		WHERE item_bno = #{item_bno}
+	</select>
+	
+	<!-- 상품 게시판 - 시퀀스 -->
+	<select id="sequence_item_board" resultType="int">
+		SELECT item_board_item_bno_SEQUENCE.nextval AS item_bno FROM dual
+	</select>
+	
+	<!-- 상품 게시판 목록 갯수 불러오기 : 페이징 -->
+	<select id="item_board_paging_count" resultType="_int">
+		SELECT
+			count(*)
+		from
+			(
+			SELECT
+			rownum r, item_bno, item_name, item_type, origin_price 
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+			from (
+				SELECT rownum, item_bno, item_name, item_type, origin_price 
+				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+				FROM item_board
+				<choose>
+					<when test="category_type != 'all'">
+						where category_type = #{category_type}
+					</when>
+				</choose>
+				ORDER BY
+				<choose>
+					<when test="standard == 'new'">
+						item_bno desc
+					</when>
+					<when test="standard == 'price_down'">
+						origin_price, item_bno DESC
+					</when>
+					<when test="standard == 'price_up'">
+						origin_price desc, item_bno DESC
+					</when>
+				</choose>
+			)
+		)
+	</select>
+	
+	<!-- 상품 게시판 목록 불러오기 : 페이징 -->
+	<select id="item_board_paging" resultType="com.dietmall.DTO.ItemboardDTO">
+		SELECT
+			item_bno, item_name, item_type, origin_price 
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+		from
+			(
+			SELECT
+			rownum r, item_bno, item_name, item_type, origin_price 
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+			from (
+				SELECT rownum, item_bno, item_name, item_type, origin_price 
+				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+				FROM item_board
+				<choose>
+					<when test="category_type != 'all'">
+						where category_type = #{category_type}
+					</when>
+				</choose>
+				ORDER BY
+				<choose>
+					<when test="standard == 'new'">
+						item_bno desc
+					</when>
+					<when test="standard == 'price_down'">
+						(origin_price - origin_price * (sale_percent / 100)), item_bno DESC
+					</when>
+					<when test="standard == 'price_up'">
+						(origin_price - origin_price * (sale_percent / 100)) desc, item_bno DESC
+					</when>
+				</choose>
+			)
+		)
+		WHERE r
+		BETWEEN #{board_NowStartBno} AND #{board_NowEndBno} 
+	</select>
+	
+	<!-- 리뷰 게시판 - 별점 -->
+	<select id="select_item_board_avg_etc_star" resultType="_int">
+		SELECT
+			AVG(etc_star)
+		FROM item_etc_board 
+		WHERE item_bno = #{item_bno}
+	</select>
+	
+	<!-- 리뷰, QnA 그외 게시판 -->
+	<insert id="insert_item_etc_board">
+		INSERT INTO item_etc_board (
+		etc_board_bno
+		, item_bno
+		, userno
+		, userid
+		, origin_bno
+		, etc_title
+		, etc_content
+		, etc_reply_type
+		, etc_star
+		, create_time
+		, board_type
+		, img_name
+		)
+		VALUES(
+		#{etc_board_bno}
+		, #{item_bno}
+		, #{userno}
+		, #{userid}
+		, #{origin_bno}
+		, #{etc_title}
+		, #{etc_content}
+		, #{etc_reply_type}
+		, #{etc_star}
+		, (TO_CHAR(sysdate + (INTERVAL '9' HOUR), 'YYYY-MM-DD HH24:MI'))
+		, #{board_type}
+		, #{img_name}
+		)
+	</insert>
+	
+	<!-- 리뷰, QnA 그외 게시판 - 전체 삭제 -->
+	<delete id="delete_all_item_etc_board">
+		DELETE 
+		FROM item_etc_board
+		WHERE item_bno = #{item_bno}
+	</delete>	
+	
+	<!-- 리뷰, QnA 그외 게시판 - 삭제 -->
+	<delete id="delete_item_etc_board">
+		DELETE 
+		FROM item_etc_board
+		WHERE item_bno = #{item_bno}
+		AND etc_board_bno = #{etc_board_bno}
+	</delete>	
+	
+	<!-- 리뷰, QnA 그외 게시판 - 수정 -->
+	<update id="update_item_etc_board">
+		UPDATE item_etc_board
+			SET etc_title = #{etc_title},
+			etc_content = #{etc_content},
+			img_name = #{img_name}
+		WHERE item_bno = #{item_bno}
+		AND etc_board_bno = #{etc_board_bno}
+	</update>
+	
+	<!-- 상품 게시판 - 상세 불러오기 -->
+	<select id="select_item_etc_board" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+		SELECT * 
+		FROM item_etc_board 
+		WHERE item_bno = #{item_bno}
+		AND etc_board_bno = #{etc_board_bno}
+	</select>
+	
+	<!-- 리뷰 게시판 목록 갯수 불러오기 : 페이징 -->
+	<select id="item_etc_board_review_paging_count" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+		SELECT
+			count(*)
+		from
+			(
+			SELECT
+			rownum r, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+			, create_time, etc_reply_type, etc_star, board_type, img_name
+			from (
+				SELECT rownum, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title,
+				etc_content, create_time, etc_reply_type, etc_star, board_type, img_name
+				FROM item_etc_board
+				WHERE item_bno = #{item_bno}
+				AND
+				(
+				board_type = 'review'
+				OR
+				board_type = 'review_reply'
+				)
+				ORDER BY origin_bno DESC, etc_board_bno
+			)
+		)
+	</select>
+	
+	<!-- 리뷰 게시판 목록 불러오기 : 페이징 -->
+	<select id="item_etc_board_review_paging" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+		SELECT
+			etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+			, create_time, etc_reply_type, etc_star, board_type, img_name
+		from
+			(
+			SELECT
+			rownum r, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+			, create_time, etc_reply_type, etc_star, board_type, img_name
+			from (
+				SELECT rownum, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+				, create_time, etc_reply_type, etc_star, board_type, img_name
+				FROM item_etc_board
+				WHERE item_bno = #{item_bno}
+				AND
+				(
+				board_type = 'review'
+				OR
+				board_type = 'review_reply'
+				)
+				ORDER BY origin_bno DESC, etc_board_bno
+			)
+		)
+		WHERE r
+		BETWEEN #{board_NowStartBno} AND #{board_NowEndBno} 
+	</select>
+	
+	<!-- QnA 게시판 목록 갯수 불러오기 : 페이징 -->
+	<select id="item_etc_board_QnA_paging_count" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+		SELECT
+			count(*)
+		from
+			(
+			SELECT
+			rownum r, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+			, create_time, etc_reply_type, etc_star, board_type, img_name
+			from (
+				SELECT rownum, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+				, create_time, etc_reply_type, etc_star, board_type, img_name
+				FROM item_etc_board
+				WHERE item_bno = #{item_bno}
+				AND
+				(
+				board_type = 'QnA'
+				OR
+				board_type = 'QnA_reply'
+				)
+				ORDER BY origin_bno DESC, etc_board_bno
+			)
+		)
+	</select>
+	
+	<!-- QnA 게시판 목록 불러오기 : 페이징 -->
+	<select id="item_etc_board_QnA_paging" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+		SELECT
+			etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+			, create_time, etc_reply_type, etc_star, board_type, img_name
+		from
+			(
+			SELECT
+			rownum r, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+			, create_time, etc_reply_type, etc_star, board_type, img_name
+			from (
+				SELECT rownum, etc_board_bno, item_bno, userno, userid, origin_bno, etc_title, etc_content
+				, create_time, etc_reply_type, etc_star, board_type, img_name
+				FROM item_etc_board
+				WHERE item_bno = #{item_bno}
+				AND
+				(
+				board_type = 'QnA'
+				OR
+				board_type = 'QnA_reply'
+				)
+				ORDER BY origin_bno DESC, etc_board_bno
+			)
+		)
+		WHERE r
+		BETWEEN #{board_NowStartBno} AND #{board_NowEndBno} 
+	</select>
+	
+	<!-- 리뷰, QnA 그외 게시판 - 시퀀스 -->
+	<select id="sequence_item_etc_board" resultType="int">
+		SELECT item_etc_board_etc_board_bno_SEQUENCE.nextval AS etc_board_bno FROM dual
+	</select>
+	
+	<!-- 그외상세설명 -->
+	<insert id="insert_item_content_board">
+		INSERT INTO item_content_board(
+		item_bno
+		, delivery_content
+		, free_type
+		, item_sum
+		, item_keep
+		, food_type
+		, made_by
+		, nutition
+		, call_num
+		, delivery_guide
+		, exchange_con
+		)
+		VALUES(
+		#{item_bno}
+		, #{delivery_content}
+		, #{free_type}
+		, #{item_sum}
+		, #{item_keep}
+		, #{food_type}
+		, #{made_by}
+		, #{nutition}
+		, #{call_num}
+		, #{delivery_guide}
+		, #{exchange_con}
+		)
+	</insert>
+	
+	<!-- 그외상세설명 - 수정 -->
+	<update id="update_item_content_board">
+		UPDATE item_content_board
+		SET delivery_content = #{delivery_content},
+		delivery_content = #{delivery_content},
+		free_type = #{free_type},
+		item_sum = #{item_sum},
+		item_keep = #{item_keep},
+		food_type = #{food_type},
+		made_by = #{made_by},
+		nutition = #{nutition},
+		call_num = #{call_num},
+		delivery_guide = #{delivery_guide},
+		exchange_con = #{exchange_con}
+		WHERE item_bno = #{item_bno}
+	</update>
+	
+	<!-- 그외상세설명 - 삭제 -->
+	<delete id="delete_item_content_board">
+		DELETE 
+		FROM item_content_board
+		WHERE item_bno = #{item_bno}
+	</delete>
+	
+	<!-- 그외상세설명 - 불러오기 -->
+	<select id="select_item_content_board" resultType="com.dietmall.DTO.ItemContentBoardDTO">
+		SELECT * 
+		FROM item_content_board 
+		WHERE item_bno = #{item_bno}
+	</select>
+	
+	<!-- 찜 테이블 생성 -->
+	<insert id="insert_like_YN_table">
+		INSERT INTO like_YN_table(
+		item_bno
+		, userno
+		, like_yn
+		)
+		VALUES(
+		#{item_bno}
+		, #{userno}
+		, 'Y'
+		)
+	</insert>
+	
+	<!-- 찜 테이블 - 전체삭제 (상품) -->
+	<delete id="delete_all_like_YN_table">
+		DELETE 
+		FROM like_YN_table
+		WHERE item_bno = #{item_bno}
+	</delete>
+	
+	<!-- 찜 테이블 - 삭제 -->
+	<delete id="delete_like_YN_table">
+		DELETE 
+		FROM like_YN_table
+		WHERE item_bno = #{item_bno}
+		AND userno = #{userno}
+	</delete>
+	
+	<!-- 찜 테이블 - 불러오기 -->
+	<select id="load_like_YN_table" resultType="com.dietmall.DTO.LikeYNtableDTO">
+		SELECT * 
+		FROM like_YN_table 
+		WHERE userno = #{userno}
+		AND item_bno = #{item_bno}
+	</select>
+	
+	<!-- 찜 증가 - 찜 -->
+	<update id="update_likeup_like_YN_table">
+		UPDATE like_YN_table
+		SET like_yn = 'Y'
+		WHERE userno = #{userno}
+		AND item_bno = #{item_bno}
+	</update>
+	
+	<!-- 찜 감소 - 찜 -->
+	<update id="update_likedown_like_YN_table">
+		UPDATE like_YN_table
+		SET like_yn = 'N'
+		WHERE userno = #{userno}
+		AND item_bno = #{item_bno}
+	</update>
+	
+	<!-- 찜 증가 - 상품 -->
+	<update id="update_likeup_item_board">
+		UPDATE item_board
+		SET like_num = #{like_num}
+		WHERE userno = #{userno}
+		AND item_bno = #{item_bno}
+	</update>
+	
+	<!-- 찜 감소 - 상품 -->
+	<update id="update_likedown_item_board">
+		UPDATE item_board
+		SET like_num = #{like_num}
+		WHERE userno = #{userno}
+		AND item_bno = #{item_bno}
+	</update>
+	
+</mapper>

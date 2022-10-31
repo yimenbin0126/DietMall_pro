@@ -32,8 +32,6 @@
 					<li>${member.userName}님 환영합니다.</li>
 					<li><a href="member/logout">로그아웃</a></li>
 				</c:if>
-				<li><a href="mypage.html">마이페이지</a></li>
-				<li><a href="contact.html">고객센터</a></li>
 			</ul>
 		</form>
 		<%@include file="../nav/header.jsp"%>

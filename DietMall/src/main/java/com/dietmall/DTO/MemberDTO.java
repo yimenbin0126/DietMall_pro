@@ -4,84 +4,68 @@ import java.sql.Date;
 
 public class MemberDTO {
 
-	private String userId;
-	private String kakaoId;
-	private String userPass;
-	private String userName;
-	private String userBirth;
-	private String userGender;
-	private String userEmail;
-	private String userTel;
-
-	public String getUserId() {
-		return userId;
+	private int userno;
+	private String userid;
+	private String userpass;
+	private String username;
+	private String userbirth;
+	private String usergender;
+	private String useremail;
+	private String usertel;
+	
+	public int getUserno() {
+		return userno;
 	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserno(int userno) {
+		this.userno = userno;
 	}
-
-	public String getKakaoId() {
-		return kakaoId;
+	public String getUserid() {
+		return userid;
 	}
-
-	public void setKakaoId(String kakaoId) {
-		this.kakaoId = kakaoId;
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
-
-	public String getUserPass() {
-		return userPass;
+	public String getUserpass() {
+		return userpass;
 	}
-
-	public void setUserPass(String userPass) {
-		this.userPass = userPass;
+	public void setUserpass(String userpass) {
+		this.userpass = userpass;
 	}
-
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-
-	public String getUserBirth() {
-		return userBirth;
+	public String getUserbirth() {
+		return userbirth;
 	}
-
-	public void setUserBirth(String userBirth) {
-		this.userBirth = userBirth;
+	public void setUserbirth(String userbirth) {
+		this.userbirth = userbirth;
 	}
-
-	public String getUserGender() {
-		return userGender;
+	public String getUsergender() {
+		return usergender;
 	}
-
-	public void setUserGender(String userGender) {
-		this.userGender = userGender;
+	public void setUsergender(String usergender) {
+		this.usergender = usergender;
 	}
-
-	public String getUserEmail() {
-		return userEmail;
+	public String getUseremail() {
+		return useremail;
 	}
-
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
+	public void setUseremail(String useremail) {
+		this.useremail = useremail;
 	}
-
-	public String getUserTel() {
-		return userTel;
+	public String getUsertel() {
+		return usertel;
 	}
-
-	public void setUserTel(String userTel) {
-		this.userTel = userTel;
+	public void setUsertel(String usertel) {
+		this.usertel = usertel;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "MemberVO [userId=" + userId + ", kakaoId=" + kakaoId + ", userPass=" + userPass + ", userName="
-				+ userName + ", userBirth=" + userBirth + ", userGender=" + userGender + ", userEmail=" + userEmail
-				+ ", userTel=" + userTel + "]";
+		return "MemberDTO [userno=" + userno + ", userid=" + userid + ", userpass=" + userpass + ", username="
+				+ username + ", userbirth=" + userbirth + ", usergender=" + usergender + ", useremail=" + useremail
+				+ ", usertel=" + usertel + "]";
 	}
-
 }

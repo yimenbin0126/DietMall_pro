@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"
+    import="java.util.*, com.dietmall.DTO.CartDTO"
+    %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
 <html lang="ko">
@@ -44,18 +46,18 @@
 
 		<!-- 왼쪽 카데고리 -->
 		<div class="nav">
-			<div class="nav_all">전체카데고리</div>
+			<div class="nav_all" onclick="location.href='/category/all?page_NowBno=1&category_type=all'">전체카데고리</div>
 			<!-- 간편 요리 -->
-			<div class="nav_category">간편 요리</div>
-			<div class="category_content_list">· 닭가슴살</div>
-			<div class="category_content_list">· 도시락</div>
-			<div class="category_content_list">· 샐러드</div>
-			<div class="category_content_list">· 구독 식품</div>
+			<div class="nav_category" onclick="location.href='/category/all?page_NowBno=1&category_type=basic_food'">간편 요리</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=basic_food_chicken'">· 닭가슴살</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=basic_food_box'">· 도시락</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=basic_food_salad'">· 샐러드</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=basic_food_sub'">· 구독 식품</div>
 			<!-- 보조 식품 -->
-			<div class="nav_category">보조 식품</div>
-			<div class="category_content_list">· 간식</div>
-			<div class="category_content_list">· 견과류</div>
-			<div class="category_content_list">· 영양제</div>
+			<div class="nav_category" onclick="location.href='/category/all?page_NowBno=1&category_type=etc_food'">보조 식품</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=etc_food_snack'">· 간식</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=etc_food_penut'">· 견과류</div>
+			<div class="category_content_list" onclick="location.href='/category/all?page_NowBno=1&category_type=etc_food_pill'">· 영양제</div>
 		</div>
 
 		<!-- 오른쪽 컨텐츠 -->
@@ -80,30 +82,52 @@
 						<li>배송비</li>
 						<li>합계</li>
 					</ul>
+					<%
+						List<CartDTO> order_dto_list = new ArrayList<CartDTO>();
+						if (request.getAttribute("cart_dto_list")!= null
+								|| ((ArrayList<CartDTO>)request.getAttribute("cart_dto_list")).size()!=0){
+							order_dto_list = (ArrayList<CartDTO>)request.getAttribute("cart_dto_list");
+							for (int i=0; i<order_dto_list.size(); i++) {
+								CartDTO c_dto = new CartDTO();
+								c_dto = order_dto_list.get(i);
+								if (c_dto.getSale_yn().equals("N")){
+									// 세일 여부
+					%>
 					<ul>
 						<li><input type="checkbox"></li>
-						<li><img src="/resources/image/category/food.png"></li>
+						<li><img src="/resources/image/category/<%=c_dto.getItem_title_img()%>"></li>
 						<li>
-							<div>제목제목상품명목제목상품명목제목상품명</div>
-							<div>상품갯수</div>
+							<div><%=c_dto.getItem_name()%></div>
+							<div><%=c_dto.getItem_num()%></div>
 						</li>
-						<li>19,000</li>
-						<li>2</li>
-						<li>3,000</li>
-						<li>38,000</li>
+						<li><%=c_dto.getOrigin_price()%></li>
+						<li><%=c_dto.getItem_num()%></li>
+						<li><%=c_dto.getDelivery_fee()%></li>
+						<li><%=c_dto.getBuy_sum()%></li>
 					</ul>
+					<%
+								} else {
+					%>
 					<ul>
 						<li><input type="checkbox"></li>
-						<li><img src="/resources/image/category/food.png"></li>
+						<li><img src="/resources/image/category/<%=c_dto.getItem_title_img()%>"></li>
 						<li>
-							<div>제목제목상품명</div>
-							<div>상품갯수</div>
+							<div><%=c_dto.getItem_name()%></div>
+							<div><%=c_dto.getItem_num()%></div>
 						</li>
-						<li>19,000</li>
-						<li>2</li>
-						<li>3,000</li>
-						<li>38,000</li>
+						<li>
+							<div><%=c_dto.getOrigin_price()%></div>
+							<div><%=c_dto.getBuy_sum()%></div>
+						</li>
+						<li><%=c_dto.getItem_num()%></li>
+						<li><%=c_dto.getDelivery_fee()%></li>
+						<li><%=c_dto.getBuy_sum()%></li>
 					</ul>
+					<%
+								}
+							}
+						}
+					%>
 				</div>
 				<!-- 결과 -->
 				<div class="content_result">
@@ -115,21 +139,21 @@
 					</ul>
 					<ul>
 						<li>
-							<span>38,0000</span>
+							<span>0</span>
 							<span>원</span>
 						</li>
 						<li>
 							<span>+</span>
-							<span>3,0000</span>
+							<span>0</span>
 							<span>원</span>
 						</li>
 						<li>
 							<span>-</span>
-							<span>2,0000</span>
+							<span>0</span>
 							<span>원</span>
 						</li>
 						<li>
-							<span>63,0000</span>
+							<span>0</span>
 							<span>원</span>
 						</li>
 					</ul>

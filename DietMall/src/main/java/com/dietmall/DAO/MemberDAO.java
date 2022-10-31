@@ -4,22 +4,16 @@ import com.dietmall.DTO.MemberDTO;
 
 public interface MemberDAO {
 
-	// 회원가입 - 카카오
-	public void joinKakao(MemberDTO vo) throws Exception;
-
-	// 로그인 - 카카오
-//	public MemberVO loginKakao(MemberVO vo) throws Exception;
-
-	// 아이디 확인 - 카카오
-	public int idChkKakao(MemberDTO vo);
-
-	// 일반
 	// 회원가입
 	public void join(MemberDTO vo) throws Exception;
 
 	// 로그인
-	public MemberDTO load_MemberDTO(MemberDTO vo) throws Exception;
+	// 아이디로 회원정보 불러오기
+	public MemberDTO load_id_MemberDTO(MemberDTO vo) throws Exception;
 
+	// 회원번호로 회원정보 불러오기
+	public MemberDTO load_userno_MemberDTO(MemberDTO vo) throws Exception;
+	
 	// 검사
 	// 아이디 확인
 	public int idChk(MemberDTO vo) throws Exception;

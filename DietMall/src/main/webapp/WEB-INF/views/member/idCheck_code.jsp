@@ -9,7 +9,7 @@
 <title>로그인</title>
 <link href="/resources/css/member/idCheck_code.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="/resources/js/idCheck_code.js" ></script>
+<script type="text/javascript" src="/resources/js/member/idCheck_code.js" ></script>
 </head>
 <body>
 	<header>

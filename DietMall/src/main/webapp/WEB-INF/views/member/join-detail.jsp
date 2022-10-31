@@ -10,7 +10,7 @@
     <title>회원가입</title>
     <link href="/resources/css/member/join-detail.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="/resources/js/join-detail.js"></script>
+    <script type="text/javascript" src="/resources/js/member/join-detail.js"></script>
 </head>
 
 <body>		

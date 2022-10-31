@@ -3,8 +3,8 @@ package com.dietmall.service;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,29 +19,10 @@ public class MemberServiceImpl implements MemberService {
 	BCryptPasswordEncoder pwdEncoder;
 	
 	@Autowired
-	private MailSender mailSender;
+	private JavaMailSenderImpl mailSender;
 	
 	@Autowired
 	private MemberDAO dao;
-
-	// 카카오
-	// 회원가입 - 카카오
-	@Override
-	public void joinKakao(MemberDTO vo) throws Exception {
-		dao.join(vo);
-	}
-
-	// 로그인 - 카카오
-//	@Override
-//	public MemberVO loginKakao(MemberVO vo) throws Exception {
-//		return dao.login(vo);
-//	}
-
-	// 아이디 확인 - 카카오
-	@Override
-	public int idChkKakao(MemberDTO vo) throws Exception {
-		return dao.idChkKakao(vo);
-	}
 
 	// 회원가입 - 일반
 	@Override
@@ -50,9 +31,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	// 로그인 - 일반
-	@Override
-	public MemberDTO load_MemberDTO(MemberDTO vo) throws Exception {
-		return dao.load_MemberDTO(vo);
+	// 아이디로 회원정보 불러오기
+	public MemberDTO load_id_MemberDTO(MemberDTO vo) throws Exception {
+		return dao.load_id_MemberDTO(vo);
+	}
+	
+	// 회원번호로 회원정보 불러오기
+	public MemberDTO load_userno_MemberDTO(MemberDTO vo) throws Exception {
+		return dao.load_userno_MemberDTO(vo);
 	}
 
 	// 아이디 확인 - 일반
@@ -99,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
 		String title = "[다이어터몰] 인증코드 발송 메일입니다.";
 		String msg = "고객님의 인증코드는 "+code+" 입니다.\n";
 		msg += "홈페이지로 돌아가 인증을 진행해주세요.";
-		mailDTO.setToAddress(vo.getUserEmail());
+		mailDTO.setToAddress(vo.getUseremail());
 		mailDTO.setTitle(title);
 		mailDTO.setMessage(msg);
 		smm.setTo(mailDTO.getToAddress());
@@ -148,7 +134,7 @@ public class MemberServiceImpl implements MemberService {
 		
 		// 임시 비밀번호를 회원 비밀번호에 암호화
 		String pwd = pwdEncoder.encode(code);
-		vo.setUserPass(pwd);
+		vo.setUserpass(pwd);
 		// 회원 정보에 저장
 		update_MemberDTO(vo);
 		
@@ -156,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
 		String title = "[다이어터몰] 임시 비밀번호 발송 메일입니다.";
 		String msg = "고객님의 임시 비밀번호는 " + code + " 입니다.\n";
 		msg += "홈페이지로 돌아가 로그인을 진행해주세요.";
-		mailDTO.setToAddress(vo.getUserEmail());
+		mailDTO.setToAddress(vo.getUseremail());
 		mailDTO.setTitle(title);
 		mailDTO.setMessage(msg);
 		smm.setTo(mailDTO.getToAddress());

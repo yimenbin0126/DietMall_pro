@@ -4,9 +4,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>
+			/WEB-INF/spring/root-context.xml,
+			/WEB-INF/spring/spring-security.xml
+		</param-value>
 	</context-param>
 
 	<!-- Processes application requests -->
@@ -17,7 +24,6 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
 				/WEB-INF/spring/appServlet/servlet-context.xml
-				/WEB-INF/spring/spring-security.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -28,14 +34,8 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	
-		<!-- Creates the Spring Container shared by all Servlets and Filters -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
 	
-
-	
-	<!-- 인코딩 UTF-8 -->
+	<!-- 한글 인코딩 UTF-8 -->
     <filter> 
         <filter-name>encodingFilter</filter-name> 
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> 

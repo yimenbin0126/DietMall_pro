@@ -10,7 +10,7 @@
 <link href="/resources/css/member/idpsCheck.css" rel="stylesheet">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="../resources/js/idpsCheck.js"></script>
+<script type="text/javascript" src="../resources/js/member/idpsCheck.js"></script>
 </head>
 <body>
 	<header>

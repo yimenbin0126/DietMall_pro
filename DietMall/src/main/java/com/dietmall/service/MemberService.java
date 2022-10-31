@@ -1,25 +1,19 @@
 package com.dietmall.service;
 
-import com.dietmall.DTO.MailDTO;
 import com.dietmall.DTO.MemberDTO;
 
 public interface MemberService {
-
-	// 회원가입 - 카카오
-	public void joinKakao(MemberDTO vo) throws Exception;
-
-	// 로그인 - 카카오
-//	public MemberVO loginKakao(MemberVO vo) throws Exception;
-
-	// 아이디 확인 - 카카오
-	public int idChkKakao(MemberDTO vo) throws Exception;
 
 	// 회원가입 - 일반
 	public void join(MemberDTO vo) throws Exception;
 
 	// 로그인 - 일반
-	public MemberDTO load_MemberDTO(MemberDTO vo) throws Exception;
+	// 아이디로 회원정보 불러오기
+	public MemberDTO load_id_MemberDTO(MemberDTO vo) throws Exception;
 
+	// 회원번호로 회원정보 불러오기
+	public MemberDTO load_userno_MemberDTO(MemberDTO vo) throws Exception;
+	
 	// 아이디 확인 - 일반
 	public int idChk(MemberDTO vo) throws Exception;
 

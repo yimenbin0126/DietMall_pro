@@ -1,0 +1,10 @@
+$(function () {
+    click();
+});
+
+function click() {
+
+  
+}
+
+

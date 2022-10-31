@@ -12,26 +12,6 @@ public class MemberDAOimpl implements MemberDAO {
 	@Autowired
 	private SqlSession sql;
 
-	// 카카오
-	// 회원가입 - 카카오
-	@Override
-	public void joinKakao(MemberDTO vo) throws Exception {
-		sql.insert("memberMapper.join", vo);
-	}
-
-	// 로그인 - 카카오
-//	@Override
-//	public MemberVO loginKakao(MemberVO vo) throws Exception{
-//		return sql.selectOne("memberMapper.login", vo);
-//	}
-
-	// 아이디 확인 - 카카오
-	@Override
-	public int idChkKakao(MemberDTO vo) {
-		return sql.selectOne("memberMapper.idChkKakao", vo);
-	}
-
-	// 일반
 	// 회원가입
 	@Override
 	public void join(MemberDTO vo) throws Exception {
@@ -39,9 +19,16 @@ public class MemberDAOimpl implements MemberDAO {
 	}
 
 	// 로그인
+	// 아이디로 회원정보 불러오기
 	@Override
-	public MemberDTO load_MemberDTO(MemberDTO vo) throws Exception {
-		return sql.selectOne("memberMapper.load_MemberDTO", vo);
+	public MemberDTO load_id_MemberDTO(MemberDTO vo) throws Exception {
+		return sql.selectOne("memberMapper.load_id_MemberDTO", vo);
+	}
+	
+	// 회원번호로 회원정보 불러오기
+	@Override
+	public MemberDTO load_userno_MemberDTO(MemberDTO vo) throws Exception {
+		return sql.selectOne("memberMapper.load_userno_MemberDTO", vo);
 	}
 
 	// 검사

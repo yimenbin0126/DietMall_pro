@@ -8,7 +8,7 @@
 <title>회원가입</title>
 <link href="/resources/css/member/join.css" rel="stylesheet">
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-<script type="text/javascript" src="/resources/js/join.js"></script>
+<script type="text/javascript" src="/resources/js/member/join.js"></script>
 
 </head>
 <body>

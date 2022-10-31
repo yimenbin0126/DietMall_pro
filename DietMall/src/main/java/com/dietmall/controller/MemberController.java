@@ -51,11 +51,18 @@ public class MemberController {
 		// 로그인 할 세션 값을 불러옴
 		HttpSession session = req.getSession();
 		// 사용자 로그인 정보를 서버에 저장 (해당 사용자정보에 맞는 값을 돌려줌 = 없으면 null 반환)
-		MemberDTO login = service.load_MemberDTO(vo);
+		MemberDTO login = service.load_id_MemberDTO(vo);
 		if (login != null) {
 			// 패스워드 확인
-			// DB에 저장된 암호화 == 내가 작성한 암호
-			boolean pwdMatch = pwdEncoder.matches(vo.getUserPass(), login.getUserPass());
+			boolean pwdMatch = false;
+			// 관리자면 패스워드 일반적으로 체크
+			if (vo.getUserid().equals("admin")) {
+				pwdMatch = vo.getUserpass().equals(login.getUserpass());
+			} else {
+				// DB에 저장된 암호화 == 내가 작성한 암호
+				pwdMatch = pwdEncoder.matches(vo.getUserpass(), login.getUserpass());
+			}
+			// 체크한 참/거짓
 			if (login != null && pwdMatch == true) {
 				// login 객체를 세션에 반영 (로그인 활성화)
 				session.setAttribute("member", login);
@@ -73,7 +80,7 @@ public class MemberController {
 			return "redirect:/member/login";
 		}
 
-		return "redirect:/main";
+		return "redirect:/main/home";
 	}
 
 	// 로그아웃 get
@@ -82,7 +89,7 @@ public class MemberController {
 		log.info("MemberController - get logout");
 		session.invalidate();
 
-		return "redirect:/main";
+		return "redirect:/main/home";
 	}
 
 	// 아이디 중복체크
@@ -90,9 +97,9 @@ public class MemberController {
 	@PostMapping("/idChk")
 	public int idChk(@RequestBody MemberDTO vo) throws Exception {
 		log.info("MemberController - post idChk");
-		String id = vo.getUserId();
+		String id = vo.getUserid();
 		MemberDTO voNew = new MemberDTO();
-		voNew.setUserId(id);
+		voNew.setUserid(id);
 		log.info(id + " - 아이디 체크시작");
 		return service.idChk(voNew);
 	}
@@ -102,8 +109,8 @@ public class MemberController {
 	@PostMapping("/passChk")
 	public boolean passChk(MemberDTO vo) throws Exception {
 
-		MemberDTO login = service.load_MemberDTO(vo);
-		boolean pwdChk = pwdEncoder.matches(vo.getUserPass(), login.getUserPass());
+		MemberDTO login = service.load_id_MemberDTO(vo);
+		boolean pwdChk = pwdEncoder.matches(vo.getUserpass(), login.getUserpass());
 		return pwdChk;
 	}
 
@@ -113,8 +120,8 @@ public class MemberController {
 	public int emailChk(@RequestBody MemberDTO vo) throws Exception {
 		log.info("MemberController - post emailChk");
 		MemberDTO voNew = new MemberDTO();
-		voNew.setUserEmail(vo.getUserEmail());
-		log.info(vo.getUserEmail() + " - 이메일 체크시작");
+		voNew.setUseremail(vo.getUseremail());
+		log.info(vo.getUseremail() + " - 이메일 체크시작");
 		return service.emailChk(voNew);
 	}
 
@@ -128,37 +135,6 @@ public class MemberController {
 	@GetMapping("/join-detail")
 	public void getJoinDetail(MemberDTO vo) throws Exception {
 		log.info("MemberController - get join-detail");
-	}
-
-	// 회원가입 선택 (1) - 카카오 (GET)
-	@GetMapping("/join-detail-kakao")
-	public void kakaoGetJoinDetail(@RequestParam String code) throws Exception {
-		log.info("MemberController - get join-detail-kakao");
-
-	}
-
-	// 회원가입 선택 (1) - 카카오 (POST)
-	@PostMapping("/join-detail-kakao")
-	public Map<String, Object> kakaoPostJoinDetail(@RequestBody MemberDTO vo) throws Exception {
-		log.info("MemberController - post join-detail-kakao");
-		Map<String, Object> resultMap = new HashMap<String, Object>();
-
-		// 아이디 체크
-		if (service.idChkKakao(vo) == 1) {
-			resultMap.put("result", "pass");
-		} else if (service.idChkKakao(vo) == 0) {
-			resultMap.put("result", "join");
-		}
-
-		return resultMap;
-	}
-
-	// 회원가입 선택 (1) - 카카오 set (POST)
-	@PostMapping("/join-detail-kakao-set")
-	public void kakaoPostJoinDetailSet(MemberDTO vo) throws Exception {
-		log.info("MemberController - post join-detail-kakao-set");
-		service.join(vo);
-		log.info("회원가입 성공 - 카카오");
 	}
 
 	// 회원가입 선택 (2) - 다이어터몰 post
@@ -177,8 +153,8 @@ public class MemberController {
 			} else if (id_re == 0 && email_re == 0) {
 				// 아이디가 없을 경우
 				// 패스워드 저장 전 암호화
-				String pwd = pwdEncoder.encode(vo.getUserPass());
-				vo.setUserPass(pwd); // DB에 저장
+				String pwd = pwdEncoder.encode(vo.getUserpass());
+				vo.setUserpass(pwd); // DB에 저장
 				service.join(vo);
 				log.info("회원가입 성공 - 다이어터몰");
 				return "/member/joinEnd";
@@ -218,7 +194,7 @@ public class MemberController {
 		if (idpw_find.equals("id") && service.findidChk_same(vo) == 1) {
 			return idCheck_mail(vo);
 		} else if (idpw_find.equals("pass") && service.findpwChk_email(vo) != null) {
-			MemberDTO vo_new = service.load_MemberDTO(vo);
+			MemberDTO vo_new = service.load_id_MemberDTO(vo);
 			return pwdCheck_mail(vo_new);
 		} else {
 			log.info("에러");
@@ -236,7 +212,7 @@ public class MemberController {
 		// 아이디 찾기 - 인증코드 메일로 보내기
 		// 아이디 값 가져오기
 		String id = service.findidChk_id(vo);
-		vo.setUserId(id);
+		vo.setUserid(id);
 		// 인증코드 발급
 		String code = service.sendEmail_findid(vo);
 		// 뷰 전달
@@ -256,7 +232,7 @@ public class MemberController {
 		// 아이디 찾기 - 인증코드 메일로 보내기
 		// 아이디 값 가져오기
 		String id = service.findidChk_id(vo);
-		vo.setUserId(id);
+		vo.setUserid(id);
 		// 인증코드 발급
 		String code = service.sendEmail_findid(vo);
 

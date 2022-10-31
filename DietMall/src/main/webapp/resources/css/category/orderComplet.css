@@ -1,0 +1,163 @@
+
+/* 본문 */
+.con_selction {
+	display: flex;
+	justify-content: center;
+}
+
+/* 왼쪽 카데고리 */
+.nav {
+	width: 200px;
+	text-align: left;
+	text-indent: 20px;
+}
+
+.nav div {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+/* 왼쪽 카데고리 - 전체 */
+.nav_all, .nav_category {
+	font-weight: bold;
+}
+
+.nav_all {
+	border-top: 1px solid #154d2e;
+	color: white;
+	background-color: #206f43;
+}
+
+/* 왼쪽 카데고리 - 대분류 */
+.nav_category {
+	color: white;
+	background-color: gray;
+}
+
+/* 왼쪽 카데고리 - 소분류 */
+.category_content_list {
+	color: black;
+	background-color: rgb(230,230,230);
+	border-bottom: 1px solid lightgray;
+	text-indent: 30px;
+}
+
+
+/* 오른쪽 컨텐츠 - 하단 여백 */
+.right_content_bottom {
+	height: 150px;
+}
+
+/* 오른쪽 컨텐츠 - 상단 */
+.right_content {
+	width: 880px;
+	margin: 100px 0px 20px 80px;
+}
+
+/* 상단 */
+/* 상단 - 제목 */
+.c_header_logo {
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	padding-bottom: 30px;
+}
+
+.r_content_header_content .complet_message {
+	font-weight: bold;
+	font-size: 40px;
+}
+
+
+/* 오른쪽 컨텐츠 - 구매 */
+.r_content_buy input {
+	text-align: center;
+	margin-top: 5px;
+	color: white;
+	border: none;
+	font-size: 20px;
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	background-color: #206f43;
+	width: 500px;
+}
+
+.r_content_buy {
+	margin-top: 40px;
+}
+
+
+/* 주문 폼 */
+/* 제목 */
+.r_content {
+	margin-top: 80px;	
+}
+
+.orderform_title {
+	font-weight: bold;
+	font-size: 25px;
+	margin-bottom: 20px;
+}
+
+.orderform_must_input {
+	text-align: left;
+	font-size: 12px;
+	font-weight: bold;
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
+.orderform_must_input span:first-child,
+.input_must {
+	color: red;
+}
+
+/* 주문 폼 테이블 */
+/* 배송지 테이블 */
+.content_table {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+	border-collapse: collapse;
+	width: 880px;
+}
+
+/* 배송지 선택 */
+.o_delivery {
+	border-collapse: collapse;
+	width: 880px;
+}
+
+.content_table tr {
+	height: 40px;
+	border-bottom: 1px solid lightgray;
+}
+
+.content_table tr th {
+	color: rgb(70,70,70);
+	font-size: 13px;
+	width: 180px;
+	border-right:1px solid lightgray;
+	background-color:rgb(245,245,245);
+}
+
+.content_table tr td input,
+.o_delivery tr td input {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border: 1px solid lightgray;
+}
+
+.content_table tr td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+/* 왼쪽 여백 추가 */
+.content_table tr td div
+ {
+	margin-left: 15px;
+}
+
+

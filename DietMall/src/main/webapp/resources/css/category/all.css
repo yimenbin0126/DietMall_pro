@@ -24,26 +24,127 @@
 
 .nav_all {
 	color: white;
-	background-color: black;
+	background-color: #206f43;
 }
 
 /* 왼쪽 카데고리 - 대분류 */
 .nav_category {
 	color: white;
-	background-color: gray;
+	background-color: rgb(170,170,170);
 }
 
 /* 왼쪽 카데고리 - 소분류 */
 .category_content_list {
 	color: black;
-	background-color: lightgray;
+	background-color: #e3e3e3;
 	border-bottom: 1px solid gray;
 	text-indent: 30px;
 }
 
-
 /* 오른쪽 컨텐츠 */
-.content div {
+.content {
+	width: 800px;
+	display: flex;
+	padding: 0px 0px 20px 60px;
+}
+
+.con_content div {
+	text-align: left;
+	margin-right: 15px;
+}
+
+/* 오른쪽 컨텐츠 - 제목 */
+.con_title {
+	font-weight: bold;
+	font-size: 30px;
+	text-align: left;
+	padding: 50px 0px 40px 60px;
+}
+
+/* 오른쪽 컨텐츠 - 글쓰기 */
+.hidden_write input {
+	margin-top: 40px;
+	padding: 10px 30px 10px 30px;
+	font-weight: bold;
+	font-size: 15px;
+	color: white;
+	background-color: black;
+}
+
+/* 오른쪽 컨텐츠 - 정렬 기준 */
+.con_standard {
+	display: flex;
+	justify-content: right;
+	font-weight: bold;
+	padding-right: 30px;
+	padding-bottom: 20px;
+}
+
+.con_standard div:not(:last-Child) {
+	padding-right: 20px;
+}
+
+/* 오른쪽 컨텐츠 - 상품 사진 */
+.items_img img {
+	width: 300px;
+	height: 300px;
+	padding-bottom: 15px;
+}
+
+/* 오른쪽 컨텐츠 - 상품 제목 */
+.items_title {
+	font-size: 13px;
+	padding-bottom: 10px;
+}
+
+/* 오른쪽 컨텐츠 - 상품 가격 */
+.origin_price {
+	font-weight: bold;
+}
+
+/* 오른쪽 컨텐츠 - 상품 할인 */
+.sale_percent {
+	display: flex;
+	align-items: center;
+}
+
+.sale_percent .percent {
+	color: red;
+	font-weight: bold;
+	padding-right: 5px;	
+}
+
+.percent_price {
+	text-decoration:line-through;
+	font-size: 13px;
+	color: gray;
+}
+
+/* 오른쪽 컨텐츠 - 상품 원가 */
+.origin_price {
+	font-size: 17px;
+}
+
+/* 오른쪽 컨텐츠 - 신상품, 인기 */
+.items_new_best {
+	margin-top: 20px;
+}
+
+.items_new_best span {
+	font-size: 12px;
+	font-weight: bold;
+	padding: 10px;
+	border-radius: 4px;
+}
+
+.items_new {
+	color: green;
+	background-color: yellow;
+}
+
+.items_best {
+	color: white;
+	background-color: red;
 }
 
 /* 오른쪽 컨텐츠 - 하단 여백 */
