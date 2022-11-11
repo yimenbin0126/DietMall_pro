@@ -17,6 +17,7 @@
 		, like_num
 		, item_title_img
 		, item_content_img
+		, item_date
 		)
 		VALUES(
 		#{item_bno}
@@ -29,6 +30,7 @@
 		, 0
 		, #{item_title_img}
 		, #{item_content_img}
+		, sysdate
 		)
 	</insert>
 	
@@ -41,8 +43,18 @@
 			sale_yn = #{sale_yn},
 			sale_percent = #{sale_percent},
 			like_num = #{like_num},
-			item_title_img = #{item_title_img},
-			item_content_img = #{item_content_img}
+			<choose>
+				<when test='item_title_img != "nofile" and item_content_img != "nofile"'>
+					item_title_img = #{item_title_img},
+					item_content_img = #{item_content_img}
+				</when>
+				<when test='item_title_img == "nofile" and item_content_img != "nofile"'>
+					item_content_img = #{item_content_img}
+				</when>
+				<when test='item_title_img != "nofile" and item_content_img == "nofile"'>
+					item_title_img = #{item_title_img}
+				</when>
+			</choose>
 		WHERE item_bno = #{item_bno}
 	</update>
 	
@@ -65,6 +77,42 @@
 		SELECT item_board_item_bno_SEQUENCE.nextval AS item_bno FROM dual
 	</select>
 	
+	<!-- 메인 : 상품 게시판 목록 불러오기 -->
+	<select id="main_item_board" resultType="com.dietmall.DTO.ItemboardDTO">
+		SELECT
+			item_bno, item_name, item_type, origin_price 
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
+		from
+			(
+			SELECT
+			rownum r, item_bno, item_name, item_type, origin_price 
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
+			from (
+				SELECT rownum, item_bno, item_name, item_type, origin_price 
+				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
+				FROM item_board
+				<choose>
+					<when test='sale_yn == "Y"'>
+						where sale_yn = 'Y'
+						ORDER BY
+						sale_percent DESC, item_bno DESC
+					</when>
+					<when test="item_type == 'new'">
+						ORDER BY
+						item_bno desc
+					</when>
+					<when test="item_type == 'best'">
+						ORDER BY
+						like_num desc,
+						item_bno desc
+					</when>
+				</choose>
+			)
+		)
+		WHERE r
+		BETWEEN #{start} AND #{end} 
+	</select>
+	
 	<!-- 상품 게시판 목록 갯수 불러오기 : 페이징 -->
 	<select id="item_board_paging_count" resultType="_int">
 		SELECT
@@ -73,25 +121,50 @@
 			(
 			SELECT
 			rownum r, item_bno, item_name, item_type, origin_price 
-			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
 			from (
 				SELECT rownum, item_bno, item_name, item_type, origin_price 
-				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
 				FROM item_board
 				<choose>
-					<when test="category_type != 'all'">
+					<when test="category_type == 'basic_food'">
+						where category_type in(
+						'basic_food_chicken'
+						, 'basic_food_box'
+						, 'basic_food_salad'
+						, 'basic_food_sub'
+						)
+					</when>
+					<when test="category_type == 'etc_food'">
+						where category_type in(
+						'etc_food_snack'
+						, 'etc_food_penut'
+						, 'etc_food_pill'
+						)
+					</when>
+					<when test="category_type != 'all' and (category_type != 'basic_food' or category_type != 'etc_food')">
 						where category_type = #{category_type}
 					</when>
 				</choose>
-				ORDER BY
+				<choose>
+					<when test="category_type != 'all' and search_type != ''">
+						AND instr(item_name, #{search_type}) > 0
+					</when>
+					<when test="category_type == 'all' and search_type != ''">
+						where instr(item_name, #{search_type}) > 0
+					</when>
+				</choose>
 				<choose>
 					<when test="standard == 'new'">
+						ORDER BY
 						item_bno desc
 					</when>
 					<when test="standard == 'price_down'">
+						ORDER BY
 						origin_price, item_bno DESC
 					</when>
 					<when test="standard == 'price_up'">
+						ORDER BY
 						origin_price desc, item_bno DESC
 					</when>
 				</choose>
@@ -103,19 +176,42 @@
 	<select id="item_board_paging" resultType="com.dietmall.DTO.ItemboardDTO">
 		SELECT
 			item_bno, item_name, item_type, origin_price 
-			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
 		from
 			(
 			SELECT
 			rownum r, item_bno, item_name, item_type, origin_price 
-			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+			, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
 			from (
 				SELECT rownum, item_bno, item_name, item_type, origin_price 
-				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img
+				, sale_YN, sale_percent, category_type, like_num, item_title_img, item_content_img, item_date
 				FROM item_board
 				<choose>
-					<when test="category_type != 'all'">
+					<when test="category_type == 'basic_food'">
+						where category_type in(
+						'basic_food_chicken'
+						, 'basic_food_box'
+						, 'basic_food_salad'
+						, 'basic_food_sub'
+						)
+					</when>
+					<when test="category_type == 'etc_food'">
+						where category_type in(
+						'etc_food_snack'
+						, 'etc_food_penut'
+						, 'etc_food_pill'
+						)
+					</when>
+					<when test="category_type != 'all' and (category_type != 'basic_food' or category_type != 'etc_food')">
 						where category_type = #{category_type}
+					</when>
+				</choose>
+				<choose>
+					<when test="category_type != 'all' and search_type != ''">
+						AND instr(item_name, #{search_type}) > 0
+					</when>
+					<when test="category_type == 'all' and search_type != ''">
+						where instr(item_name, #{search_type}) > 0
 					</when>
 				</choose>
 				ORDER BY
@@ -354,7 +450,6 @@
 	<update id="update_item_content_board">
 		UPDATE item_content_board
 		SET delivery_content = #{delivery_content},
-		delivery_content = #{delivery_content},
 		free_type = #{free_type},
 		item_sum = #{item_sum},
 		item_keep = #{item_keep},
@@ -438,16 +533,16 @@
 	<update id="update_likeup_item_board">
 		UPDATE item_board
 		SET like_num = #{like_num}
-		WHERE userno = #{userno}
-		AND item_bno = #{item_bno}
+		, item_type = #{item_type}
+		WHERE item_bno = #{item_bno}
 	</update>
 	
 	<!-- 찜 감소 - 상품 -->
 	<update id="update_likedown_item_board">
 		UPDATE item_board
 		SET like_num = #{like_num}
-		WHERE userno = #{userno}
-		AND item_bno = #{item_bno}
+		, item_type = #{item_type}
+		WHERE item_bno = #{item_bno}
 	</update>
 	
 </mapper>

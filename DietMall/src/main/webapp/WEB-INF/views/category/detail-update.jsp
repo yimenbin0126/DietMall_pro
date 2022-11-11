@@ -17,6 +17,7 @@
     <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script type="text/javascript" src="../resources/js/category/detail-update.js"></script>
+	<script type="text/javascript" src="../resources/js/nav/header.js"></script>
 </head>
 
 <body>
@@ -27,16 +28,15 @@
 			<ul>
 				<!-- 로그인이 안되있을 때 -->
 				<c:if test="${member == null}">
-					<li><a href="member/login">로그인</a></li>
-					<li><a href="member/join">회원가입</a></li>
+					<li><a href="/member/login">로그인</a></li>
+					<li><a href="/member/join-detail">회원가입</a></li>
 				</c:if>
 				<!-- 로그인이 되있을 때 -->
 				<c:if test="${member != null}">
-					<li>${member.userName}님 환영합니다.</li>
-					<li><a href="member/logout">로그아웃</a></li>
+					<li>${member.username}님 환영합니다.</li>
+					<li><a href="/member/logout">로그아웃</a></li>
+					<li><a href="/category/cart">장바구니</a></li>
 				</c:if>
-				<li><a href="mypage.html">마이페이지</a></li>
-				<li><a href="contact.html">고객센터</a></li>
 			</ul>
 		</form>
 		<%@include file="../nav/header.jsp"%>
@@ -49,7 +49,7 @@
 
 		<%
 			ItemboardDTO ib_dto = new ItemboardDTO();
-			ib_dto = (ItemboardDTO)request.getAttribute("category_type");
+			ib_dto = (ItemboardDTO)request.getAttribute("ib_dto");
 			ItemContentBoardDTO icb_dto = new ItemContentBoardDTO();
 			icb_dto = (ItemContentBoardDTO)request.getAttribute("icb_dto");
 			String category_type = ib_dto.getCategory_type();
@@ -83,14 +83,17 @@
 		<!-- 오른쪽 컨텐츠 -->
 		<div class="right_content">
 			<h2 style="padding-top:100px;">상품 글 수정</h2>
-			<form name="form_insert" id="form_insert" enctype="multipart/form-data">
-			<input type="hidden" name="item_bno" id="category_type_id" value="<%=ib_dto.getItem_bno()%>">
+			<form name="form_update" id="form_update" enctype="multipart/form-data">
+			<input type="hidden" name="item_bno" id="item_bno" value="<%=ib_dto.getItem_bno()%>">
+			<input type="hidden" name="category_type" id="category_type" value="<%=ib_dto.getCategory_type()%>">
+			<input type="hidden" name="item_type" id="item_type" value="<%=ib_dto.getItem_type()%>">
 			<!-- 상단 -->
 			<div class="s_header">
 				<!-- 이미지 -->
 				<div class="s_header_image">
 					<div>
-						<img class="header_img_preview">
+						<img class="header_img_preview" src="/category/load-image?fileName=<%=ib_dto.getItem_title_img()%>"
+						style="width:400px; height:400px;">
 					</div>
 					<div>
 						<input type="file" name="item_title_img" id="shi_file" accept=".jpg, .jpeg, .png" value="<%=ib_dto.getItem_title_img()%>">
@@ -126,10 +129,6 @@
 							placeholder="상품의 원가를 적어주세요.(1000원 이상)" onfocus="this.placeholder=''"
 							onblur="this.placeholder='상품의 원가를 적어주세요.(1000원 이상)'"></div>
 						</div>
-						<div class="sale_price">
-							<span class="origin_price">0</span> <span
-								class="origin_price_text">원</span>
-						</div>
 					</div>
 					<!-- 배송정보 -->
 					<div class="h_pay_delivery_content">
@@ -143,7 +142,7 @@
 					<!-- 배송비 -->
 					<div class="h_pay_delivery_price">
 						<div class="d_content_top">
-							<span>택배 배송 </span> <span>0<span>원</span></span>
+							<span>택배 배송 </span>
 						</div>
 						<div class="d_content_bottom">
 							<div>제주 추가 10,000원 · 도서지역 2,000원 추가</div>
@@ -160,7 +159,8 @@
 				<!-- 상품 설명 - 이미지 -->
 				<div class="s_middle_detail_image">
 					<div>
-						<img class="middle_img_preview">
+						<img class="middle_img_preview" src="/category/load-image?fileName=<%=ib_dto.getItem_content_img()%>"
+						style="width:880px;">
 					</div>
 					<div>
 						<input type="file" name="item_content_img" value="<%=ib_dto.getItem_content_img()%>" id="middle_file" accept=".jpg, .jpeg, .png"
@@ -222,13 +222,13 @@
 						</tr>
 					</table>
 				</div>
-
+				
 				<!-- 상품 설명 - 배송 안내 -->
 				<div class="section_detail_delivery">
 					<div class="s_delivery_title">배송 안내</div>
-					<textarea id="sdd_delivery_guide" name="delivery_guide" value="<%=icb_dto.getDelivery_guide()%>" wrap="hard"
+					<textarea id="sdd_delivery_guide" name="delivery_guide" wrap="hard"
 					placeholder="ex) 5만원 이상 구매시 무료배송입니다." onfocus="this.placeholder=''"
-					onblur="this.placeholder='ex) 5만원 이상 구매시 무료배송입니다.'"></textarea>
+					onblur="this.placeholder='ex) 5만원 이상 구매시 무료배송입니다.'"><%=icb_dto.getDelivery_guide()%></textarea>
 				</div>
 			</div>
 
@@ -237,9 +237,9 @@
 				<!-- 제목 -->
 				<div class="footer_e_title">반품/교환 정보</div>
 				<div class="footer_e_content">
-					<textarea id="sdd_exchange_con" name="exchange_con" value="<%=icb_dto.getExchange_con()%>" wrap="hard"
+					<textarea id="sdd_exchange_con" name="exchange_con" wrap="hard"
 					placeholder="ex) 교환 반품을 원하시면 일주일 내에 연락 주세요." onfocus="this.placeholder=''"
-					onblur="this.placeholder='ex) 교환 반품을 원하시면 일주일 내에 연락 주세요.'"></textarea>
+					onblur="this.placeholder='ex) 교환 반품을 원하시면 일주일 내에 연락 주세요.'"><%=icb_dto.getExchange_con()%></textarea>
 				</div>
 			</div>
 			

@@ -59,6 +59,28 @@ ul li {
 	list-style: none;
 }
 
+.c_header_group {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+/* 선택상품 삭제 */
+.c_header_del {
+	font-size: 13px;
+	font-weight: bold;
+	color: white;
+	background-color: gray;
+	padding: 10px;
+	border-radius: 3px;
+}
+
+.cart_blank {
+	margin: 0 auto;
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
 .r_content_header .c_header_logo {
 	font-size: 30px;
 	font-weight: bold;

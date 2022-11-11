@@ -68,6 +68,12 @@
 	font-size: 40px;
 }
 
+.r_content_header_content .image img {
+	width: 80px;
+	height: 80px;
+	margin-bottom: 20px;
+}
+
 
 /* 오른쪽 컨텐츠 - 구매 */
 .r_content_buy input {
@@ -157,7 +163,39 @@
 /* 왼쪽 여백 추가 */
 .content_table tr td div
  {
-	margin-left: 15px;
+	margin-left: 10px;
+}
+
+.c_table_money td,
+.c_table_delivery td,
+.c_table_pay td {
+	padding-left: 10px;
+}
+
+/* 구매 상품 */
+.t_items_name {
+	font-weight: bold;
+}
+
+.t_items_price {
+	font-weight: bold;
+	color: red;
+}
+
+.t_items_class,
+.t_delivery_post, .t_delivery_address,
+.t_delivery_address_detail,
+.t_pay_card, .t_pay_date,
+.c_table_money td div {
+	font-size: 13px;
+}
+
+.t_items_price {
+	padding-bottom: 10px;
 }
 
 
+.t_money_result {
+	font-weight: bold;
+	color: red;
+}

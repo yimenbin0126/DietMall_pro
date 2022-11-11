@@ -42,20 +42,36 @@
 	text-indent: 30px;
 }
 
-
 /* 오른쪽 컨텐츠 - 하단 여백 */
+.right_content {
+	width:970px;
+}
+
 .right_content_bottom {
 	height: 80px;
 }
 
+/* 상품 이미지 */
+.s_header_image img {
+	width: 400px;
+	height: 400px;
+}
+
+/* 상품 설명이미지 */
+.s_middle_detail_image img {
+	width: 880px;
+}
+
 /* 오른쪽 컨텐츠 - 결제 */
 .s_header {
+	width: 900px;
 	display:flex;
 	border: 1px solid lightgray;
 	margin: 100px 0px 20px 80px;
 }
 
 .s_header_pay {
+	width: 100%;
 	text-align: left;
 	border-left: 1px solid lightgray;
 	padding: 30px 30px 0px 30px;
@@ -232,7 +248,7 @@
 .section_pick_category div {
 	font-size: 13px;
 	font-weight: bold;
-	width: 200px;
+	width: 202px;
 	border-right: 1px solid lightgray;
 	padding:10px;
 	background-color: rgb(230,230,230);
@@ -317,12 +333,12 @@
 	text-align: left;
 	font-weight: bold;
 	font-size: 20px;
-	padding: 40px 0px 20px 0px;
-	border-bottom: 1px solid lightgray;
+	padding: 40px 0px 15px 0px;
 }
 
 /* 리뷰 기준 */
 .f_review_standard {
+	border-top: 1px solid lightgray;
 	font-weight:bold;
 	font-size: 13px;
 	text-align: left;
@@ -445,13 +461,18 @@
 	padding-bottom: 10px;
 }
 
-.s_footer_write_button {
+.s_footer_write_button,
+.r_w_c_btn input {
 	font-size: 14px;
 	padding: 15px;
 	margin-bottom: 10px;
 	width: 130px;
 	color: white;
 	background-color: black;
+}
+
+.r_w_c_btn {
+	text-align: left;
 }
 
 /* QnA - 내용 */
@@ -509,4 +530,80 @@
 .footer_e_content p {
 	padding: 5px 0px 5px 10px; 
 	font-size: 13px;
+}
+
+/* 페이징 */
+.e_paging div {
+	cursor: pointer;
+}
+
+#e_paging_review {
+	border-top: 1px solid lightgray;
+}
+
+.e_paging {
+	padding-top: 10px;
+	margin-bottom: 40px;
+	display: flex;
+	justify-content: center;
+}
+
+.e_paging div:not(.e_paging_btnright) {
+	margin-right: 10px;
+}
+
+.e_paging_num {
+	display: flex;
+}
+
+.e_paging_num a {
+	color: black;
+	margin-right: 10px;
+	background-color: lightgray;	
+}
+
+.e_paging_num a:last-child {
+	margin-right: 0px;
+}
+
+
+.e_paging_btnleft, .e_paging_btnright {
+	font-weight: bold;
+	color: #b4b4b4;
+	border: 1px solid #b4b4b4;
+	background-color: white;	
+}
+
+.e_paging_btnleft, .e_paging_btnright, .e_paging_num div,
+.e_paging_num a {
+	text-decoration: none;
+	font-weight: bold;
+	padding: 7px;
+	width: 20px;
+	text-align:center;
+}
+
+#page_NowBno {
+	font-weight: bold;
+	color:white;
+	background-color: #b4b4b4;
+}
+
+/* 버튼 */
+.pp_btn_up_del {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 60px;
+}
+
+.pp_update_btn, .pp_delete_btn {
+	font-size: 17px;
+	font-weight: bold;
+	padding: 15px 30px 15px 30px;
+	background-color: #b4b4b4;
+	color: white;
+}
+
+.pp_delete_btn {
+	margin-left: 10px;
 }

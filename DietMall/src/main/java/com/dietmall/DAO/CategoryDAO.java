@@ -2,11 +2,13 @@ package com.dietmall.DAO;
 
 import java.util.List;
 
+import com.dietmall.DTO.BuyDeliveryBoard;
 import com.dietmall.DTO.BuyItemDTO;
 import com.dietmall.DTO.ItemContentBoardDTO;
 import com.dietmall.DTO.ItemEtcBoardDTO;
 import com.dietmall.DTO.ItemboardDTO;
 import com.dietmall.DTO.LikeYNtableDTO;
+import com.dietmall.DTO.MainDTO;
 import com.dietmall.DTO.PagingViewDTO;
 
 public interface CategoryDAO {
@@ -26,11 +28,20 @@ public interface CategoryDAO {
 	// 상품 게시판 시퀀스
 	public int sequence_item_board() throws Exception;
 	
+	// 상품 게시판 목록 불러오기 : 메인
+	public List<ItemboardDTO> main_item_board(MainDTO main_dto) throws Exception;
+	
 	// 상품 게시판 목록 불러오기 : 페이징
 	public List<ItemboardDTO> item_board_paging(PagingViewDTO pv_dto) throws Exception;
 	
+	// 상품 게시판 목록 불러오기 : 갯수
+	public int item_board_paging_count(PagingViewDTO pv_dto) throws Exception;
+	
 	// 리뷰 게시판 갯수
 	public int item_etc_board_review_paging_count(ItemEtcBoardDTO ieb_dto) throws Exception;
+	
+	// qna 갯수
+	public int item_etc_board_QnA_paging_count(ItemEtcBoardDTO ieb_dto) throws Exception;
 	
 	// 리뷰, QnA 그외 게시판 작성
 	public void insert_item_etc_board(ItemEtcBoardDTO ieb_dto) throws Exception;
@@ -90,10 +101,10 @@ public interface CategoryDAO {
 	public void update_likedown_like_YN_table(LikeYNtableDTO lyn_dto) throws Exception;
 	
 	// 찜 증가 - 상품
-	public void update_likeup_item_board(LikeYNtableDTO lyn_dto) throws Exception;
+	public void update_likeup_item_board(ItemboardDTO ib_dto) throws Exception;
 	
 	// 찜 감소 - 상품
-	public void update_likedown_item_board(LikeYNtableDTO lyn_dto) throws Exception;
+	public void update_likedown_item_board(ItemboardDTO ib_dto) throws Exception;
 	
 	// 결제
 	// 결제 테이블 생성
@@ -108,15 +119,27 @@ public interface CategoryDAO {
 	// 결제 테이블 - 장바구니 불러오기
 	public List<BuyItemDTO> load_buy_item_N(BuyItemDTO bi_dto) throws Exception;
 	
+	// 결제 테이블 - 장바구니 유무 확인
+	public BuyItemDTO load_buy_item_N_yn(BuyItemDTO bi_dto) throws Exception;
+	
 	// 결제 테이블 - 결제 불러오기
 	public List<BuyItemDTO> load_buy_item_M(BuyItemDTO bi_dto) throws Exception;
+	
+	// 결제 테이블 - 결제 완료 불러오기
+	public List<BuyItemDTO> load_buy_item_Y(BuyItemDTO bi_dto) throws Exception;
 	
 	// 결제 테이블 - 결제 완료 표시
 	public void update_buy_yn_Y(BuyItemDTO bi_dto) throws Exception;
 	
+	// 결제 테이블 - 삭제
+	public void delete_buy_item(BuyItemDTO bi_dto) throws Exception;
+	
 	// 결제 테이블 - 수정 (상품 갯수)
 	public void update_buy_item(BuyItemDTO bi_dto) throws Exception;
 	
-	// 결제 테이블 - 삭제
-	public void delete_buy_item(BuyItemDTO bi_dto) throws Exception;
+	// 배송지 테이블 생성
+	public void insert_buy_delivery(BuyDeliveryBoard bdb_dto) throws Exception;
+	
+	// 배송지 테이블 - 불러오기
+	public BuyDeliveryBoard load_buy_delivery(BuyDeliveryBoard bdb_dto) throws Exception;
 }

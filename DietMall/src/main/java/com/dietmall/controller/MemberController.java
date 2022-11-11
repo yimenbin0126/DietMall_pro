@@ -56,7 +56,19 @@ public class MemberController {
 			// 패스워드 확인
 			boolean pwdMatch = false;
 			// 관리자면 패스워드 일반적으로 체크
-			if (vo.getUserid().equals("admin")) {
+			if (vo.getUserid().equals("admin")
+					|| vo.getUserid().equals("guest0")
+					|| vo.getUserid().equals("guest1")
+					|| vo.getUserid().equals("guest2")
+					|| vo.getUserid().equals("guest3")
+					|| vo.getUserid().equals("guest4")
+					|| vo.getUserid().equals("guest5")
+					|| vo.getUserid().equals("guest6")
+					|| vo.getUserid().equals("guest7")
+					|| vo.getUserid().equals("guest8")
+					|| vo.getUserid().equals("guest9")
+					|| vo.getUserid().equals("guest10")
+					) {
 				pwdMatch = vo.getUserpass().equals(login.getUserpass());
 			} else {
 				// DB에 저장된 암호화 == 내가 작성한 암호

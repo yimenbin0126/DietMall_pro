@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
-    import="java.util.*, com.dietmall.DTO.ItemboardDTO, com.dietmall.DTO.ItemContentBoardDTO, com.dietmall.DTO.ItemEtcBoardDTO"
+    import="java.util.*, com.dietmall.DTO.ItemboardDTO, com.dietmall.DTO.MemberDTO, com.dietmall.DTO.LikeYNtableDTO,
+    com.dietmall.DTO.PagingViewDTO, com.dietmall.DTO.ItemContentBoardDTO, com.dietmall.DTO.ItemEtcBoardDTO"
     %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
     
 <html lang="ko">
 
@@ -14,6 +16,10 @@
     <link href="/resources/css/category/detail.css" rel="stylesheet">
     <link href="/resources/css/nav/header.css" rel="stylesheet">
     <link href="/resources/css/nav/footer.css" rel="stylesheet">
+    <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../resources/js/category/detail.js"></script>
+	<script type="text/javascript" src="../resources/js/nav/header.js"></script>
 </head>
 
 <body>
@@ -24,16 +30,15 @@
 			<ul>
 				<!-- 로그인이 안되있을 때 -->
 				<c:if test="${member == null}">
-					<li><a href="member/login">로그인</a></li>
-					<li><a href="member/join">회원가입</a></li>
+					<li><a href="/member/login">로그인</a></li>
+					<li><a href="/member/join-detail">회원가입</a></li>
 				</c:if>
 				<!-- 로그인이 되있을 때 -->
 				<c:if test="${member != null}">
-					<li>${member.userName}님 환영합니다.</li>
-					<li><a href="member/logout">로그아웃</a></li>
+					<li>${member.username}님 환영합니다.</li>
+					<li><a href="/member/logout">로그아웃</a></li>
+					<li><a href="/category/cart">장바구니</a></li>
 				</c:if>
-				<li><a href="mypage.html">마이페이지</a></li>
-				<li><a href="contact.html">고객센터</a></li>
 			</ul>
 		</form>
 		<%@include file="../nav/header.jsp"%>
@@ -42,9 +47,6 @@
 
 	<%
 		// 값 불러오기
-		int page_NowBno = (int)request.getAttribute("page_NowBno");
-		String category_type = (String)request.getAttribute("category_type");
-		String standard = (String)request.getAttribute("standard");
 		// 상품 게시판
 		ItemboardDTO ib_dto = new ItemboardDTO();
 		ib_dto = (ItemboardDTO)request.getAttribute("ib_dto");
@@ -79,7 +81,7 @@
 			<div class="s_header">
 				<!-- 이미지 -->
 				<div class="s_header_image">
-					<img src="/resources/image/category/food.png">
+					<img src="/category/load-image?fileName=<%=ib_dto.getItem_title_img()%>">
 				</div>
 				<!-- 결제 -->
 				<div class="s_header_pay">
@@ -95,6 +97,7 @@
 							<c:if test="${etc_star == 3}">★★★☆☆</c:if>
 							<c:if test="${etc_star == 2}">★★☆☆☆</c:if>
 							<c:if test="${etc_star == 1}">★☆☆☆☆</c:if>
+							<c:if test="${etc_star == 0}">☆☆☆☆☆</c:if>
 						</span> 
 						<span class="s_num"><%=etc_star%></span>
 					</div>
@@ -104,19 +107,23 @@
 							int sale_price = 0;
 							// 세일 여부
 							if (ib_dto.getSale_yn().equals("Y")) {
+								sale_price = ib_dto.getOrigin_price() - (int)(ib_dto.getOrigin_price()*(ib_dto.getSale_percent()*0.01));
 						%>
 						<!-- 상품 할인율, 원가, 할인가격 -->
 						<div class="items_price_sale">
 							<div class="sale_percent">
-							<%
-								sale_price = ib_dto.getOrigin_price() - ib_dto.getOrigin_price()*(ib_dto.getSale_percent()/100);
-							%>
 								<span class="percent"><%=ib_dto.getSale_percent()%>%</span>
-								<span class="percent_price"><%=ib_dto.getOrigin_price()%></span>
+								<input type="hidden" class="p_price" value="<%=ib_dto.getOrigin_price()%>">
+								<span class="percent_price">
+									<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=ib_dto.getOrigin_price()%>" />
+								</span>
 							</div>
 							<div class="sale_price">
-								<span class="origin_price"><%=sale_price%></span> <span
-									class="origin_price_text">원</span>
+								<input type="hidden" class="o_price" value="<%=sale_price%>">
+								<span class="origin_price">
+									<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=sale_price%>" />
+								</span>
+								<span class="origin_price_text">원</span>
 							</div>
 						</div>
 						<%
@@ -125,7 +132,10 @@
 						%>
 						<!-- 원가 - 할인 안할때 -->
 						<div class="items_price">
-							<span class="origin_price"><%=ib_dto.getOrigin_price()%></span> <span
+							<input type="hidden" class="o_price" value="<%=ib_dto.getOrigin_price()%>">
+							<span class="origin_price">
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=ib_dto.getOrigin_price()%>" />
+							</span> <span
 								class="origin_price_text">원</span>
 						</div>
 						<%
@@ -155,7 +165,13 @@
 								delevery_price = 2000;
 							}
 						%>
-							<span>택배 배송 </span> <span>| <%=delevery_price%>원</span> <span>· <%=delevery_content%></span>
+							<input type="hidden" class="delevery_price" value="<%=delevery_price%>">
+							<span><b>택배 배송</b> | </span> 
+							<span class="delivery_pr">
+								<input type="hidden" class="deli_price" value="<%=delevery_price%>">
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=delevery_price%>" />
+							</span>
+							<span>원</span> <span>· <%=delevery_content%></span>
 						</div>
 						<div class="d_content_bottom">
 							<div>제주 추가 10,000원 · 도서지역 2,000원 추가</div>
@@ -170,9 +186,12 @@
 					</div>
 					<!-- 총 상품 금액 -->
 					<div class="h_pay_items_price">
+						<input type="hidden" class="final_price" value="<%=sale_price%>">
 						<div class="i_price_all_title">총 상품 금액</div>
 						<div class="i_price_all_content">
-							<span>합계</span> <span><%=sale_price%></span> <span>원</span>
+							<span>합계</span> <span class="final_items_price">
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=sale_price%>" />
+							</span> <span>원</span>
 						</div>
 					</div>
 					<!-- 구매하기 버튼 -->
@@ -187,9 +206,35 @@
 					<!-- 장바구니 담기 -->
 					<div class="h_pay_cart">장바구니 담기</div>
 					<!-- 찜하기 -->
-					<div class="h_pay_wish">
-						<span class="wish_text">♥ 찜하기</span> <span class="wish_num"><%=ib_dto.getLike_num()%></span>
+					<%
+						String like_heart = "♡";
+						String like_yn = "N";
+						if (session.getAttribute("member") != null){
+							if (request.getAttribute("lyn_dto")!=null){
+								LikeYNtableDTO lyn_dto = new LikeYNtableDTO();
+								lyn_dto = (LikeYNtableDTO)request.getAttribute("lyn_dto");	
+								if (lyn_dto.getLike_yn()!=null
+										&& lyn_dto.getLike_yn().equals("Y")){
+									like_heart = "♥";
+									like_yn = "Y";
+								}
+							}
+						
+					%>
+					<div class="h_pay_wish" id="h_pay_wish_y">
+						<input type="hidden" id="h_p_wish_yn" value="<%=like_yn%>">
+						<span class="wish_text"><%=like_heart%></span> <span class="wish_span">찜하기</span> <span class="wish_num"><%=ib_dto.getLike_num()%></span>
 					</div>
+					<%
+						} else {
+					%>
+					<div class="h_pay_wish" id="h_pay_wish_n" onClick="alert('로그인 후에 가능합니다.');">
+						<input type="hidden" id="h_p_wish_yn" value="<%=like_yn%>">
+						<span class="wish_text"><%=like_heart%></span> <span class="wish_span">찜하기</span> <span class="wish_num"><%=ib_dto.getLike_num()%></span>
+					</div>
+					<%
+						}
+					%>
 				</div>
 			</div>
 			<%
@@ -205,19 +250,25 @@
 			%>
 			<!-- 고정 카데고리 -->
 			<div class="section_pick_category">
-				<div class="p_category_items_btn">상품 설명</div>
-				<div class="p_category_review_btn">
-					<span>리뷰</span> <span><%=review_sum%></span>
+				<div class="p_category_items_btn"
+				onClick="location.href='#section_middle_detail'">
+					상품 설명
 				</div>
-				<div class="p_category_QnA_btn">QnA</div>
-				<div class="p_category_replace_btn">반품/교환 정보</div>
+				<div class="p_category_review_btn"
+				onClick="location.href='#section_footer_review'">
+					<span>리뷰</span> <span class="review_sum"><%=review_sum%></span>
+				</div>
+				<div class="p_category_QnA_btn"
+				onClick="location.href='#section_footer_QnA'">QnA</div>
+				<div class="p_category_replace_btn"
+				onClick="location.href='#section_footer_exchange'">반품/교환 정보</div>
 			</div>
 
 			<!-- 상품 설명 -->
-			<div class="section_middle_detail">
+			<div class="section_middle_detail" id="section_middle_detail">
 				<!-- 상품 설명 - 이미지 -->
 				<div class="s_middle_detail_image">
-					<img src="/resources/image/category/<%=ib_dto.getItem_title_img()%>">
+					<img src="/category/load-image?fileName=<%=ib_dto.getItem_content_img()%>">
 				</div>
 
 				<!-- 상품 설명 - 상품 정보 -->
@@ -250,7 +301,12 @@
 						</tr>
 					</table>
 				</div>
-
+				
+				<%
+					// 글쓰기 줄바꿈 보이게 저장
+					icb_dto.setDelivery_guide(icb_dto.getDelivery_guide().replace("\r\n", "<br>"));
+					icb_dto.setExchange_con(icb_dto.getExchange_con().replace("\r\n", "<br>"));
+				%>
 				<!-- 상품 설명 - 배송 안내 -->
 				<div class="section_detail_delivery">
 					<div class="s_delivery_title">배송 안내</div>
@@ -259,11 +315,38 @@
 			</div>
 
 			<!-- 리뷰 -->
-			<div class="section_footer_review">
+			<div class="section_footer_review" id="section_footer_review">
 				<!-- 리뷰 건수 -->
 				<div class="f_review_num">
 					<span>리뷰</span> <span><%=review_sum%></span> <span>개</span>
 				</div>
+				<%
+					MemberDTO m_dto = new MemberDTO();
+					m_dto = (MemberDTO)session.getAttribute("member");
+					if (m_dto !=null){
+				%>
+				<input type="hidden" id="m_dto_userid" value="<%=m_dto.getUserid()%>">
+				<!-- 리뷰 작성하기 -->
+				<div class="r_write_content">
+					<!-- 리뷰 버튼 -->
+					<div class="r_w_c_btn" id="r_w_c_btn_y">
+						<input type="button" value="리뷰 작성하기">
+					</div>
+				</div>
+				<%
+					} else {
+				%>
+				<input type="hidden" id="m_dto_userid" value="">
+				<!-- 리뷰 작성하기 (로그인 x) -->
+				<div class="r_write_content">
+					<!-- 리뷰 버튼 -->
+					<div class="r_w_c_btn" id="r_w_c_btn_n"">
+						<input type="button" value="리뷰 작성하기" onClick="alert('로그인 후 작성이 가능합니다.');">
+					</div>
+				</div>
+				<%
+					}
+				%>
 				<!-- 리뷰 기준 -->
 				<div class="f_review_standard">
 					<span class="frs_new">최신순</span> <span>|</span>
@@ -279,12 +362,12 @@
 								ItemEtcBoardDTO ieb_dto = new ItemEtcBoardDTO();
 								ieb_dto = review_ieb_dto_list.get(i);
 					%>
+					<!-- 리뷰 상단 -->
+					<%
+							if (ieb_dto.getBoard_type().equals("review")){
+					%>
 					<!-- 리뷰 내용 -->
 					<div class="r_content">
-						<!-- 리뷰 상단 -->
-						<%
-								if (ieb_dto.getBoard_type().equals("review")){
-						%>
 						<div class="r_content_top">
 							<!-- 상단 - 별점 -->
 							<div class="c_top_star">
@@ -307,18 +390,50 @@
 						<div class="r_content_middle">
 							<!-- 리뷰 내용 - 이미지 -->
 							<div class="c_middle_image">
-								<img src="/resources/image/category/food.png">
+								<img src="/category/load-image?fileName=<%=ieb_dto.getImg_name()%>">
 							</div>
 							<!-- 리뷰 내용 - 글내용 -->
 							<div class="c_middle_detail">
 								<%=ieb_dto.getEtc_content()%>
 							</div>
+							<input type="hidden" class="hidden_img_name" value="<%=ieb_dto.getImg_name()%>">
 						</div>
+						<%
+							if (m_dto !=null){
+						%>
+						<!-- 답글, 수정, 삭제 -->
+						<div class="r_content_btn">
+							<%
+								if(m_dto.getUserid().equals("admin")){
+							%>
+							<!-- 답글 -->
+							<div class="r_c_btn_reply">
+								답글
+							</div>
+							<%
+								}
+								if(m_dto.getUserid().equals(ieb_dto.getUserid())){
+							%>
+							<!-- 수정 -->
+							<div class="r_c_btn_update">
+								수정
+							</div>
+							<!-- 삭제 -->
+							<div class="r_c_btn_delete">
+								삭제
+							</div>
+							<%
+									}
+							%>
+						</div>
+						<%
+							}
+						%>
 					</div>
-					<!-- 리뷰 내용 - 답변 -->
 					<%
 								}else if (ieb_dto.getBoard_type().equals("review_reply")){
 					%>
+					<!-- 리뷰 내용 - 답변 -->
 					<div class="c_answer">
 						<!-- 답변 - 리뷰 -->
 						<div class="answer_review">
@@ -330,30 +445,97 @@
 								<%=ieb_dto.getEtc_content()%>
 							</div>
 						</div>
+						<%
+							if (m_dto !=null
+							&& m_dto.getUserid().equals(ieb_dto.getUserid())){
+						%>
+						<!-- 수정, 삭제 -->
+						<div class="answer_btn">
+							<!-- 수정 -->
+							<div class="a_btn_update">
+								수정
+							</div>
+							<!-- 삭제 -->
+							<div class="a_btn_delete">
+								삭제
+							</div>
+						</div>
+						<%
+							}
+						%>
 					</div>
 					<%
+								}
 							}
+						} else {
 					%>
+					<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">등록된 게시물이 없습니다.</div>
 					<%
-								
+						}
+					%>
+				</div>
+				<!-- 페이징 시작 -->
+				<div class="e_paging" id="e_paging_review">
+					<%
+						PagingViewDTO pv_dto_review = new PagingViewDTO();
+						pv_dto_review = (PagingViewDTO)request.getAttribute("pv_dto_review");
+						// 클릭 가능 여부
+						if (pv_dto_review.isPage_prev()){
+					%>
+					<div onclick="location.href='/category/all?page_NowBno_r=<%=pv_dto_review.getPage_StartBno()-5%>&standard=<%=pv_dto_review.getStandard()%>'"
+					 class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>
+					<%
+						} else {
+					%>
+					<div onclick="alert('첫 페이지 입니다.');"
+					 class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>
+					<%
+						}
+					%>
+					<div class="e_paging_num">
+					<%
+						// 첫 번호, 마지막 번호
+						int page_StartBno_r = pv_dto_review.getPage_StartBno();
+						int page_EndBno_r = pv_dto_review.getPage_EndBno();
+						// 현재 번호
+						for (int j=page_StartBno_r; j <= page_EndBno_r; j++) {
+							if(j==pv_dto_review.getPage_NowBno()){									
+					%>
+						<a id="page_NowBno"><%=j%></a>
+					<%
+							} else {
+					%>
+						<a href="/category/all?page_NowBno_r=<%=j%>
+						&standard=<%=pv_dto_review.getStandard()%>"
+						class="page_Bno" id="page_Bno<%=j%>"><%=j%></a>
+					<%
 							}
 						}
 					%>
-					<!-- 이미지 -->
-					<!-- 페이지 -->
-					<div class="f_review_page">
-						<div class="r_page_left">&lt;</div>
-						<div class="r_page_num">1</div>
-						<div class="f_review_right">&gt;</div>
 					</div>
+					<%
+						// 클릭 가능 여부
+						if (pv_dto_review.isPage_next()){
+					%>
+					<div onclick="location.href='/category/all?page_NowBno_r=<%=pv_dto_review.getPage_EndBno()+1%>&standard=<%=pv_dto_review.getStandard()%>'"
+					class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>
+					<%
+						} else {
+					%>
+					<div onclick="alert('마지막 페이지 입니다.');"
+					 class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>
+					<%
+						}
+					%>
 				</div>
+				<!-- 페이징 끝 -->
 			</div>
 			<!-- QnA -->
-			<div class="section_footer_QnA">
+			<div class="section_footer_QnA" id="section_footer_QnA">
 				<!-- QnA - 상단 -->
 				<div class="f_QnA_header">
 					<div class="s_footer_title">QnA</div>
-					<div class="s_footer_content">설명설명설명 QNA 서렴ㅇ</div>
+					<div class="s_footer_content">고객분들의 건의와 1:1 QnA 상담을 진행할 수 있습니다.</div>
 					<div class="s_footer_write_button">상품 QnA 작성하기</div>
 				</div>
 				<!-- QnA - 내용 -->
@@ -374,12 +556,12 @@
 					</ul>
 					<%
 						} else {
-							for(int i=0; i<qna_ieb_dto_list.size(); i++){
+							for(int k=0; k<qna_ieb_dto_list.size(); k++){
 								ItemEtcBoardDTO ieb_dto = new ItemEtcBoardDTO();
-								ieb_dto = qna_ieb_dto_list.get(i);
+								ieb_dto = qna_ieb_dto_list.get(k);
 								String userid_update = ieb_dto.getUserid();
 								userid_update = userid_update.substring(0,3);
-								for (int j=3; j<userid_update.length(); j++){
+								for (int l=3; l<userid_update.length(); l++){
 									userid_update += "*";
 								}
 					%>
@@ -395,20 +577,90 @@
 					%>
 				</div>
 				<!-- 페이지 -->
-				<div class="f_review_page">
-					<div class="r_page_left">&lt;</div>
-					<div class="r_page_num">1</div>
-					<div class="f_review_right">&gt;</div>
+				<div class="e_paging">
+					<%
+						PagingViewDTO pv_dto_qna = new PagingViewDTO();
+						pv_dto_qna = (PagingViewDTO)request.getAttribute("pv_dto_qna");
+						// 클릭 가능 여부
+						if (pv_dto_qna.isPage_prev()){
+					%>
+					<div onclick="location.href='/category/all?page_NowBno_q=<%=pv_dto_qna.getPage_StartBno()-5%>&standard=<%=pv_dto_qna.getStandard()%>'"
+					 class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>
+					<%
+						} else {
+					%>
+					<div onclick="alert('첫 페이지 입니다.');"
+					 class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>
+					<%
+						}
+					%>
+					<div class="e_paging_num">
+					<%
+						// 첫 번호, 마지막 번호
+						int page_StartBno_q = pv_dto_qna.getPage_StartBno();
+						int page_EndBno_q = pv_dto_qna.getPage_EndBno();
+						// 현재 번호
+						for (int a=page_StartBno_q; a <= page_EndBno_q; a++) {
+							if(a==page_EndBno_q){									
+					%>
+						<a id="page_NowBno"><%=a%></a>
+					<%
+							} else {
+					%>
+						<a href="/category/all?page_NowBno_q=<%=a%>
+						&standard=<%=pv_dto_qna.getStandard()%>"
+						class="page_Bno" id="page_Bno<%=a%>"><%=a%></a>
+					<%
+							}
+						}
+					%>
+					</div>
+					<%
+						// 클릭 가능 여부
+						if (pv_dto_qna.isPage_next()){
+					%>
+					<div onclick="location.href='/category/all?page_NowBno_q=<%=pv_dto_qna.getPage_EndBno()+1%>&standard=<%=pv_dto_qna.getStandard()%>'"
+					class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>
+					<%
+						} else {
+					%>
+					<div onclick="alert('마지막 페이지 입니다.');"
+					 class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>
+					<%
+						}
+					%>
 				</div>
+				
 			</div>
 			<!-- 반품/교환 정보 -->
-			<div class="section_footer_exchange">
+			<div class="section_footer_exchange" id="section_footer_exchange">
 				<!-- 제목 -->
 				<div class="footer_e_title">반품/교환 정보</div>
 				<div class="footer_e_content">
 					<p><%=icb_dto.getExchange_con()%></p>
 				</div>
 			</div>
+
+			<input type="hidden" id="item_bno" name="item_bno" value="<%=ib_dto.getItem_bno()%>">
+			<%
+				if(m_dto != null){
+					if(m_dto.getUserid().equals("admin")){
+			%>
+			<!-- 버튼 -->
+			<div class="pp_btn_up_del">
+				<!-- 글수정 -->
+				<div class="pp_update_btn">
+					글 수정
+				</div>
+				<!-- 글삭제 -->
+				<div class="pp_delete_btn">
+					글 삭제
+				</div>
+			</div>
+			<%
+					}
+				}
+			%>
 		</div>
 
 		<!-- 하단 여백 -->
@@ -416,12 +668,65 @@
 	</section>
 
 	<!-- 푸터 -->
-    <footer>
-        <div>
-            2022. 다이어터몰<br>
-            Tel. 041-4242-4242
-        </div>
+    <footer style="color:rgb(50,50,50);">
+    	<div style="display:flex; justify-content: center;">
+	        <div style="text-align: left;">
+	        	<div style="font-size:15px; font-weight:bold; color:rgb(20,20,20);">고객다이어터센터</div>
+	        	<div style="display:flex; font-size:20px; font-weight:bold; margin-top:3px;">
+		            <div style="color:rgb(20,20,20);">(주) 다이어터몰</div>
+		            <div style="color:rgb(20,20,20); margin-left: 3px;">1666-1111</div>
+	        	</div>
+	        	<div style="display:flex; margin-top:10px;">
+	        		<div style="font-weight:bold; font-size:14px; padding:7px; border: 1px solid gray;">카카오톡 문의</div>
+	        		<div style="margin-left:6px;">
+	        			<div style="font-size:12px;">월-토요일 : 오전9시~오후4시</div>
+	        			<div style="font-size:12px;">일/공휴일 : 오전9시~오후1시</div>
+	        		</div>
+	        	</div>
+	        	<div style="display:flex; margin-top:10px;">
+	        		<div style="font-weight:bold; font-size:14px; padding:7px; border: 1px solid gray;">1:1 문의</div>
+	        		<div style="margin-left:6px;">
+	        			<div style="font-size:12px;">월-토요일 : 오전10시~오후4시</div>
+	        			<div style="font-size:12px;">일/공휴일 : 오전9시~오후1시</div>
+	        		</div>
+	        	</div>
+	        	<div style="display:flex; margin-top:10px;">
+	        		<div style="font-weight:bold; font-size:14px; padding:7px; border: 1px solid gray;">그 외 문의</div>
+	        		<div style="margin-left:6px;">
+	        			<div style="font-size:12px;">월-토요일 : 오전11시~오후4시</div>
+	        			<div style="font-size:12px;">일/공휴일 : 오전9시~오후1시</div>
+	        		</div>
+	        	</div>
+	        </div>
+	        <div style="text-align: left; margin-left: 60px;">
+	        	<div style="color:rgb(20,20,20); font-size: 13px; font-weight:bold;">
+	        		다이어터몰소개 | 다이어터몰소개영상 | 인재채용 | 이용약관 | 개인정보처리방침 | 이용안내
+	        	</div>
+	        	<div>
+	        		<p style="font-size: 12px; padding-bottom:1px; padding-top:2px; ">법인명 : (주) 다이어터몰 | 사업자등록번호 222-22-22222</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">통신판매업 : 제 2022-서울서울 호 | 개인정보보호책임자 : 모리</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">주소 : 서울서울시 특별구 특별로 111, 11층(특별동) | 대표이사 : 모리</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">입점문의 : 입점문의하기 | 제휴문의 : dietmall_b@gggg.com</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">채용문의 : dietmall@gggg.com</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">채용문의 : dietmall@gggg.com</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">채용문의 : dietmall@gggg.com</p>
+	        		<p style="font-size: 12px; padding-bottom:1px;">채용문의 : dietmall@gggg.com</p>
+	        		<p style="font-size: 12px;">fax : 070 - 0000 - 3065</p>
+	        	</div>
+	        </div>
+    	</div>
+    	<div style="display:flex; justify-content: center; margin-top:30px;">
+    		<div style="text-align: center;">
+	    		<p style="font-size: 12px; padding-bottom:1px;">· 5만원 이상 구매시 무료 배송입니다. · 교환 반품을 원하시면 일주일 내에 연락 주세요. 5만원 이상 구매시 무료 배송입니다. 5만원 이상 구매시 무료 배송입니다.</p>
+	    		<p style="font-size: 12px; padding-bottom:1px;">· 10만원 이상 구매시도 무료 배송입니다. · 교환 반품을 원하시면 일주일 내에 연락 주세요. 5만원 이상 구매시 무료 배송입니다. 5만원 이상 구매시 무료 배송입니다.</p>
+	    		<p style="font-size: 12px; padding-bottom:1px;">· 예쁘게 포장되어 보내드립니다. · 교환 반품을 원하시면 일주일 내에 연락 주세요. 5만원 이상 구매시 무료 배송입니다. 5만원 이상 구매시 무료 배송입니다.</p>
+	    		<p style="font-size: 12px; padding-bottom:1px;">· 사과잼은 국산이므로 배송 시간에 영향을 주지 않습니다. · 교환 반품을 원하시면 일주일 내에 연락 주세요. 5만원 이상 구매시 무료 배송입니다. 5만원 이상 구매시 무료 배송입니다.</p>
+	    		<p style="font-size: 12px; padding-bottom:1px;">· 사과잼은 국산이므로 배송 시간에 영향을 주지 않습니다. · 교환 반품을 원하시면 일주일 내에 연락 주세요. 5만원 이상 구매시 무료 배송입니다. 5만원 이상 구매시 무료 배송입니다.</p>
+	    		<p style="font-size: 12px; padding-bottom:1px;">· 안전운전을 주 원칙으로 배송됩니다. · 교환 반품을 원하시면 일주일 내에 연락 주세요. 5만원 이상 구매시 무료 배송입니다. 5만원 이상 구매시 무료 배송입니다.</p>
+    		</div>
+    	</div>
     </footer>
+    <!-- 푸터 끝 -->
 </body>
 
 </html>

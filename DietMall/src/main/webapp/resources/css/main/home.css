@@ -1,23 +1,68 @@
 
 /* 본문 */
 #main_page{
-    background-color: aqua;
 }
 
-#main_page div {
-    padding-top: 50px;
+#hd_slide {
     padding-bottom: 50px;
+}
+
+#best_item, #sale_item, #advert_one,
+#advert_two, #new_item {
+    padding-top: 50px;	
+    padding-bottom: 50px;
+}
+
+section h1 {
+    padding-bottom: 40px;
+}
+
+.items_title {
+	width: 300px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 13px;
+}
+
+.sale_percent {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.sale_percent .percent {
+	font-weight: bold;
+	color: red;
+}
+
+.sale_percent .percent_price {
+	font-size: 13px;
+	text-decoration: line-through;
+	color: gray;
+}
+
+.sale_price, .origin_price {
+	font-weight: bold;	
 }
 
 /* 메인 이미지 슬라이드 */
 #hd_slide img{
     width: 100%;
-    height: 600px;
+    height: 400px;
 }
 
 /* 베스트 상품 */
-#best_item {
-    
+.sale_item_list,
+.new_item_list,
+.best_item_list{
+	display: flex;
+	justify-content: center;
+}
+
+.sale_items_content,
+.best_items_content,
+.new_items_content {
+	text-align: left;
+	margin-right: 15px;
 }
 
 /* 광고1 */
@@ -27,6 +72,11 @@
 }
 
 /* 세일상품 */
+.items_img img {
+	padding-bottom: 10px;
+	width: 300px;
+	height: 300px;
+}
 
 
 /* 광고2 */

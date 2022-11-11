@@ -16,12 +16,12 @@
 	<header>
 		<!-- 버튼(로그인 홈페이지로) -->
 		<div id="goto_login">
-			<input type="button" onClick="location.href='login'"
+			<input type="button" onClick="location.href='/member/login'"
 				value="< 로그인 홈페이지로">
 		</div>
 		<!-- 로고(메인 홈페이지로) -->
 		<div id="main_logo">
-			<a href="main">다이어터몰</a>
+			<a href="/main/home">다이어터몰</a>
 		</div>
 		<hr>
 	</header>

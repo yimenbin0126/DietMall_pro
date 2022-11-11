@@ -55,6 +55,7 @@ function middle_file() {
 
 function form() {
 	document.querySelector('.pp_write_btn').addEventListener('click',(e)=>{
+		console
 			e.preventDefault();
 	        // 폼 변수 저장
     		var formData = new FormData(form_insert);

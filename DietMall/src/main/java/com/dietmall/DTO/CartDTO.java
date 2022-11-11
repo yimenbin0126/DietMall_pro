@@ -12,14 +12,14 @@ public class CartDTO {
 	private int item_num;
 	// 배송비
 	private int delivery_fee;
-	// 최종가
-	private int buy_sum;
-	// 멤버번호
-	private int userno;
+	// 세일 퍼센트
+	private int sale_percent;
 	// 세일 여부
 	private String sale_yn;
 	// 상품 원가
 	private int origin_price;
+	// 멤버번호
+	private int userno;
 	
 	public int getBuy_bno() {
 		return buy_bno;
@@ -39,11 +39,11 @@ public class CartDTO {
 	public void setDelivery_fee(int delivery_fee) {
 		this.delivery_fee = delivery_fee;
 	}
-	public int getBuy_sum() {
-		return buy_sum;
+	public int getSale_percent() {
+		return sale_percent;
 	}
-	public void setBuy_sum(int buy_sum) {
-		this.buy_sum = buy_sum;
+	public void setSale_percent(int sale_percent) {
+		this.sale_percent = sale_percent;
 	}
 	public int getUserno() {
 		return userno;
@@ -79,8 +79,7 @@ public class CartDTO {
 	@Override
 	public String toString() {
 		return "CartDTO [buy_bno=" + buy_bno + ", item_title_img=" + item_title_img + ", item_name=" + item_name
-				+ ", item_num=" + item_num + ", delivery_fee=" + delivery_fee + ", buy_sum=" + buy_sum + ", userno="
-				+ userno + ", sale_yn=" + sale_yn + ", origin_price=" + origin_price + "]";
+				+ ", item_num=" + item_num + ", delivery_fee=" + delivery_fee + ", sale_percent=" + sale_percent
+				+ ", sale_yn=" + sale_yn + ", origin_price=" + origin_price + ", userno=" + userno + "]";
 	}
-	
 }

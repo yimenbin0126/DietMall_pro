@@ -23,7 +23,7 @@
         </div>
         <!-- 로고(메인 홈페이지로) -->
         <div id="main_logo">
-            <a href="main.html">다이어터몰</a>
+            <a href="/main/home">다이어터몰</a>
         </div>
         <hr>
     </header>
@@ -38,12 +38,12 @@
 
             <div id="login_header">
                 <div id="log">
-                    <input type="text" name="userId" placeholder="아이디" onfocus="this.placeholder=''"
+                    <input type="text" name="userid" placeholder="아이디" onfocus="this.placeholder=''"
                         onblur="this.placeholder='아이디'">
                 </div>
 
                 <div id="pass">
-                    <input type="password" name="userPass" placeholder="비밀번호" onfocus="this.placeholder=''"
+                    <input type="password" name="userpass" placeholder="비밀번호" onfocus="this.placeholder=''"
                         onblur="this.placeholder='비밀번호'">
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     <div id="log_ing">
                         <label id="log_auto"><input type="checkbox" name="remember-me" value="log_ing_auto">자동
                             로그인</label>
-                        <label id="log_check"><a href="idpsCheck" id="log_check">아이디/비밀번호 찾기</a></label>
+                        <label id="log_check"><a href="/member/idpsCheck" id="log_check">아이디/비밀번호 찾기</a></label>
                     </div>
 
                     <div id="log_button">
@@ -73,7 +73,7 @@
                 <div id="log_to_link">
                     
                     <div id="to_join">
-                        <a href="join">이 곳은 처음이신가요? 회원가입하기</a>
+                        <a href="/member/join-detail">이 곳은 처음이신가요? 회원가입하기</a>
                     </div>
                  </div>
             </div>

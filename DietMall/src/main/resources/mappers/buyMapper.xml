@@ -43,6 +43,16 @@
 		ORDER BY buy_item_order
 	</select>
 	
+	<!-- 결제 테이블 - 장바구니 유무 확인 -->
+	<select id="load_buy_item_N_yn" resultType="com.dietmall.DTO.BuyItemDTO">
+		SELECT *
+		FROM buy_item 
+		WHERE userno = #{userno}
+		AND item_bno = #{item_bno}
+		AND buy_yn = 'N'
+		ORDER BY buy_item_order
+	</select>
+	
 	<!-- 결제 테이블 - 결제 불러오기 -->
 	<select id="load_buy_item_M" resultType="com.dietmall.DTO.BuyItemDTO">
 		SELECT *
@@ -58,7 +68,16 @@
 		SET buy_yn = 'Y'
 		WHERE userno = #{userno}
 		AND buy_bno = #{buy_bno}
-	</update>	
+	</update>
+	
+	<!-- 결제 테이블 - 결제 완료 불러오기 -->
+	<select id="load_buy_item_Y" resultType="com.dietmall.DTO.BuyItemDTO">
+		SELECT *
+		FROM buy_item 
+		WHERE userno = #{userno}
+		AND buy_yn = 'Y'
+		ORDER BY buy_item_order
+	</select>	
 	
 	<!-- 결제 테이블 - 수정 (상품 갯수) -->
 	<update id="update_buy_item">
@@ -75,5 +94,40 @@
 		WHERE userno = #{userno}
 		AND buy_bno = #{buy_bno}
 	</delete>	
+	
+	<!-- 배송지 테이블 -->
+	<insert id="insert_buy_delivery">
+		INSERT INTO buy_delivery_board(
+		userno
+		, delivery_post
+		, delivery_address
+		, delivery_address_detail
+		, pay_card
+		, money_all
+		, money_delivery
+		, money_sale
+		, money_result
+		, pay_date
+		)
+		VALUES(
+		#{userno}
+		, #{delivery_post}
+		, #{delivery_address}
+		, #{delivery_address_detail}
+		, #{pay_card}
+		, #{money_all}
+		, #{money_delivery}
+		, #{money_sale}
+		, #{money_result}
+		, #{pay_date}
+		)
+	</insert>
+	
+	<!-- 배송지 테이블 - 불러오기 -->
+	<select id="load_buy_delivery" resultType="com.dietmall.DTO.BuyDeliveryBoard">
+		SELECT *
+		FROM buy_delivery_board 
+		WHERE userno = #{userno}
+	</select>
 	
 </mapper>

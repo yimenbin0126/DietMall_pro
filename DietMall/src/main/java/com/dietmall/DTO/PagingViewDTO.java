@@ -31,6 +31,8 @@ public class PagingViewDTO {
 	private int board_NowStartBno;
 	// 현재 페이지의 게시물 목록 끝번호
 	private int board_NowEndBno;
+	// 검색 값
+	private String search_type;
 	
 	public PagingViewDTO () {
 	}
@@ -109,7 +111,7 @@ public class PagingViewDTO {
 		
 		// 게시물 번호 설정
 		// 현재 페이지의 게시물 목록 시작번호
-		setBoard_NowStartBno((this.page_NowBno)*(board_NowBnoSize)-4);
+		setBoard_NowStartBno((this.page_NowBno)*(board_NowBnoSize)-5);
 		// 현재 페이지의 게시물 목록 끝번호
 		if((this.page_NowBno)*(board_NowBnoSize)>board_AllCount) {
 			setBoard_NowEndBno(board_AllCount);
@@ -196,12 +198,17 @@ public class PagingViewDTO {
 	public void setBoard_NowEndBno(int board_NowEndBno) {
 		this.board_NowEndBno = board_NowEndBno;
 	}
-	
 	public String getStandard() {
 		return standard;
 	}
 	public void setStandard(String standard) {
 		this.standard = standard;
+	}
+	public String getSearch_type() {
+		return search_type;
+	}
+	public void setSearch_type(String search_type) {
+		this.search_type = search_type;
 	}
 	
 	@Override
@@ -211,6 +218,7 @@ public class PagingViewDTO {
 				+ ", page_RangeSize=" + page_RangeSize + ", page_AllCount=" + page_AllCount + ", page_prev=" + page_prev
 				+ ", page_next=" + page_next + ", board_NowBnoSize=" + board_NowBnoSize + ", board_AllCount="
 				+ board_AllCount + ", board_NowStartBno=" + board_NowStartBno + ", board_NowEndBno=" + board_NowEndBno
-				+ "]";
+				+ ", search_type=" + search_type + "]";
 	}
+	
 }

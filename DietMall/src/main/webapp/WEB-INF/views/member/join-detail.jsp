@@ -17,7 +17,7 @@
     <header>
         <!-- 뒤로 가기 -->
         <div id="goto_main">
-            <input type="button" onClick="location.href='join'" value="< 뒤로 가기">
+            <input type="button" onClick="location.href='/member/login'" value="< 뒤로 가기">
         </div>
 
         <!-- 제목 -->

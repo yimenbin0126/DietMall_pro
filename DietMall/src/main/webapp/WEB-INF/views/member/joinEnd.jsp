@@ -14,7 +14,7 @@
     이제 더 많은 컨텐츠를 즐기실 수 있습니다!<br>
     편하게 둘러보세요!
     <p>
-    <form action="/main" method="post">
+    <form action="/main/home" method="post">
 	    <input type="submit" value="메인 홈페이지로">
     </form>
 </body>

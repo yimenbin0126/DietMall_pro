@@ -3,7 +3,6 @@
 /* 섹션 */
 section {
     margin: 0 auto;
-    background-color: aqua;
 }
 
 #section_header {
@@ -14,12 +13,65 @@ section {
     font-size: 30px;
 }
 
-
-
 #section_mid_content {
     padding-top: 100px;
 }
 
+#section_header_content {
+	display:flex;
+	justify-content: center;
+}
+
+.best_item_list {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.best_items_content .items_img img {
+	padding-bottom: 10px;
+	width: 300px;
+	height: 300px;
+}
+
+.best_items_content {
+	text-align: left;
+	margin-right: 20px;
+	padding-bottom: 40px;
+}
+
+.items_title {
+	width: 300px;
+	font-size: 13px;
+	margin-bottom: 12px;
+}
+
+.origin_price {
+	font-weight: bold;
+}
+
+.sale_percent {
+	display: flex;
+	align-items: center;
+}
+
+/* 가격 */
+.sale_percent {
+	display: flex;
+	align-items: center;
+}
+
+.sale_percent .percent {
+	color: red;
+	font-weight: bold;
+	padding-right: 5px;	
+}
+
+.percent_price {
+	text-decoration:line-through;
+	font-size: 13px;
+	color: gray;
+}
 
 
 /* 랭크 top3 세일품목 */
