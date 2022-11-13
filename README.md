@@ -18,7 +18,7 @@
 ### 쇼핑몰 메인
 - 베스트, 세일, 신상품순 나열
 <br>
-<img width="700" src="https://user-images.githubusercontent.com/93369732/201511810-5ed535aa-0a06-430a-8bfb-1219506fcd9b.png">
+<img width="400" src="https://user-images.githubusercontent.com/93369732/201511810-5ed535aa-0a06-430a-8bfb-1219506fcd9b.png">
 <br>
 <br>
 
@@ -32,8 +32,15 @@
 
 ##### 상세보기
 
-<img width="700" src="https://user-images.githubusercontent.com/93369732/201514742-17e144e5-5f5d-4f7f-8fa1-13147fce3089.png">
+<img width="700" src="https://user-images.githubusercontent.com/93369732/201515115-a63750e0-e413-4147-bec8-616965f05c1b.gif">
 
+<br>
+<br>
+
+### 장바구니
+- 장바구니 담기/결제
+<br>
+<img width="700" src="https://user-images.githubusercontent.com/93369732/201518707-186183a1-e8e0-4e93-bc0c-f030dc41c675.gif">
 <br>
 <br>
 
@@ -41,31 +48,27 @@
 - 로그인/로그아웃
 - 회원가입, 아이디/비밀번호 찾기 페이지로 이동 가능
 <br>
-<img width="700" src="https://user-images.githubusercontent.com/93369732/199641704-1218fb62-2541-4e0b-b319-3572dfa97bff.gif">
+<img width="700" src="https://user-images.githubusercontent.com/93369732/201515892-49622c15-5eba-412f-9fa6-e86ef04a7a53.gif">
 <br>
 <br>
 
 ### 회원가입
-- 회원 가입 할 수 있는 페이지 - 필수 값만으로 가입 가능
+- 회원 가입 할 수 있는 페이지
 
-  - 필수 값 : 아이디, 비밀번호, 닉네임, 이메일, 전화번호, 본인의 키
-  - 필수가 아닌 값 : 이름, 생년월일, 성별, 프로필사진(기본 프로필)
 - 유효성 검사
 
   - 에러 표시 : 통과 안될시 빨간줄의 에러, 회원가입 버튼 클릭 시 에러 메시지.
-  - 검사 : 서버/클라이언트 동시에 유효성 검사, 아이디/닉네임 중복 체크
+  - 검사 : 아이디/이메일 중복 체크
 
-##### 아이디, 닉네임 중복 확인. 프로필 이미지 추가
-
-<img width="700" src="https://user-images.githubusercontent.com/93369732/199642238-25ce0a7e-b599-4723-805e-60f9855b5230.gif">
+<img width="700" src="https://user-images.githubusercontent.com/93369732/201515829-f5d414db-a5a6-4567-bc4a-5c87b5e09f14.gif">
 
 <br>
 <br>
 
 ### 아이디/비밀번호 찾기
-- 메일의 인증코드 확인 후 비밀번호 변경
+- 인증코드 메일 발송
 
-<img width="700" src="https://user-images.githubusercontent.com/93369732/199642026-0a4862b5-2b0b-4e48-bf63-58e3588d6d05.gif">
+<img width="700" src="https://user-images.githubusercontent.com/93369732/201516961-a54dd567-14fe-487c-97a8-a51ee472aa68.gif">
 <br>
 
 <br>
