@@ -389,9 +389,15 @@
 						<!-- 리뷰 내용 -->
 						<div class="r_content_middle">
 							<!-- 리뷰 내용 - 이미지 -->
+							<%
+								if(ieb_dto.getImg_name()!=null){
+							%>
 							<div class="c_middle_image">
 								<img src="/category/load-image?fileName=<%=ieb_dto.getImg_name()%>">
 							</div>
+							<%
+								}
+							%>
 							<!-- 리뷰 내용 - 글내용 -->
 							<div class="c_middle_detail">
 								<%=ieb_dto.getEtc_content()%>
@@ -403,6 +409,8 @@
 						%>
 						<!-- 답글, 수정, 삭제 -->
 						<div class="r_content_btn">
+							<input type="hidden" value="<%=ieb_dto.getEtc_board_bno()%>">
+							<input type="hidden" value="<%=ieb_dto.getItem_bno()%>">
 							<%
 								if(m_dto.getUserid().equals("admin")){
 							%>
@@ -451,6 +459,8 @@
 						%>
 						<!-- 수정, 삭제 -->
 						<div class="answer_btn">
+							<input type="hidden" value="<%=ieb_dto.getEtc_board_bno()%>">
+							<input type="hidden" value="<%=ieb_dto.getItem_bno()%>">
 							<!-- 수정 -->
 							<div class="a_btn_update">
 								수정
@@ -476,57 +486,59 @@
 				</div>
 				<!-- 페이징 시작 -->
 				<div class="e_paging" id="e_paging_review">
-					<%
-						PagingViewDTO pv_dto_review = new PagingViewDTO();
-						pv_dto_review = (PagingViewDTO)request.getAttribute("pv_dto_review");
-						// 클릭 가능 여부
-						if (pv_dto_review.isPage_prev()){
-					%>
-					<div onclick="location.href='/category/all?page_NowBno_r=<%=pv_dto_review.getPage_StartBno()-5%>&standard=<%=pv_dto_review.getStandard()%>'"
-					 class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>
-					<%
-						} else {
-					%>
-					<div onclick="alert('첫 페이지 입니다.');"
-					 class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>
-					<%
-						}
-					%>
-					<div class="e_paging_num">
-					<%
-						// 첫 번호, 마지막 번호
-						int page_StartBno_r = pv_dto_review.getPage_StartBno();
-						int page_EndBno_r = pv_dto_review.getPage_EndBno();
-						// 현재 번호
-						for (int j=page_StartBno_r; j <= page_EndBno_r; j++) {
-							if(j==pv_dto_review.getPage_NowBno()){									
-					%>
-						<a id="page_NowBno"><%=j%></a>
-					<%
+					<div class="e_paging_re">
+						<%
+							PagingViewDTO pv_dto_review = new PagingViewDTO();
+							pv_dto_review = (PagingViewDTO)request.getAttribute("pv_dto_review");
+						%>
+						<input type="hidden" id="page_NowBno_r" value="<%=pv_dto_review.getPage_NowBno()%>">
+						<input type="hidden" id="standard_r" value="<%=pv_dto_review.getStandard()%>">
+						<%
+							// 클릭 가능 여부
+							if (pv_dto_review.isPage_prev()){
+						%>
+						<div class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>
+						<%
 							} else {
-					%>
-						<a href="/category/all?page_NowBno_r=<%=j%>
-						&standard=<%=pv_dto_review.getStandard()%>"
-						class="page_Bno" id="page_Bno<%=j%>"><%=j%></a>
-					<%
+						%>
+						<div onclick="alert('첫 페이지 입니다.');"
+						 class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>
+						<%
 							}
-						}
-					%>
+						%>
+						<div class="e_paging_num">
+						<%
+							// 첫 번호, 마지막 번호
+							int page_StartBno_r = pv_dto_review.getPage_StartBno();
+							int page_EndBno_r = pv_dto_review.getPage_EndBno();
+							// 현재 번호
+							for (int j=page_StartBno_r; j <= page_EndBno_r; j++) {
+								if(j==pv_dto_review.getPage_NowBno()){									
+						%>
+							<a id="page_NowBno"><%=j%></a>
+						<%
+								} else {
+						%>
+							<a href="#" class="page_Bno" id="page_Bno<%=j%>"><%=j%></a>
+						<%
+								}
+							}
+						%>
+						</div>
+						<%
+							// 클릭 가능 여부
+							if (pv_dto_review.isPage_next()){
+						%>
+						<div class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>
+						<%
+							} else {
+						%>
+						<div onclick="alert('마지막 페이지 입니다.');"
+						 class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>
+						<%
+							}
+						%>
 					</div>
-					<%
-						// 클릭 가능 여부
-						if (pv_dto_review.isPage_next()){
-					%>
-					<div onclick="location.href='/category/all?page_NowBno_r=<%=pv_dto_review.getPage_EndBno()+1%>&standard=<%=pv_dto_review.getStandard()%>'"
-					class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>
-					<%
-						} else {
-					%>
-					<div onclick="alert('마지막 페이지 입니다.');"
-					 class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>
-					<%
-						}
-					%>
 				</div>
 				<!-- 페이징 끝 -->
 			</div>
@@ -582,9 +594,12 @@
 						PagingViewDTO pv_dto_qna = new PagingViewDTO();
 						pv_dto_qna = (PagingViewDTO)request.getAttribute("pv_dto_qna");
 						// 클릭 가능 여부
+					%>
+					<input type="hidden" id="page_NowBno_q" value="<%=pv_dto_qna.getPage_NowBno()%>">
+					<%
 						if (pv_dto_qna.isPage_prev()){
 					%>
-					<div onclick="location.href='/category/all?page_NowBno_q=<%=pv_dto_qna.getPage_StartBno()-5%>&standard=<%=pv_dto_qna.getStandard()%>'"
+					<div onclick="location.href='/category/detail?item_bno=<%=ib_dto.getItem_bno()%>&page_NowBno_q=<%=pv_dto_qna.getPage_StartBno()-5%>&standard=<%=pv_dto_qna.getStandard()%>'"
 					 class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>
 					<%
 						} else {
@@ -607,7 +622,7 @@
 					<%
 							} else {
 					%>
-						<a href="/category/all?page_NowBno_q=<%=a%>
+						<a href="/category/detail?item_bno=<%=ib_dto.getItem_bno()%>&page_NowBno_q=<%=a%>
 						&standard=<%=pv_dto_qna.getStandard()%>"
 						class="page_Bno" id="page_Bno<%=a%>"><%=a%></a>
 					<%
@@ -619,7 +634,7 @@
 						// 클릭 가능 여부
 						if (pv_dto_qna.isPage_next()){
 					%>
-					<div onclick="location.href='/category/all?page_NowBno_q=<%=pv_dto_qna.getPage_EndBno()+1%>&standard=<%=pv_dto_qna.getStandard()%>'"
+					<div onclick="location.href='/category/detail?item_bno=<%=ib_dto.getItem_bno()%>&page_NowBno_q=<%=pv_dto_qna.getPage_EndBno()+1%>&standard=<%=pv_dto_qna.getStandard()%>'"
 					class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>
 					<%
 						} else {

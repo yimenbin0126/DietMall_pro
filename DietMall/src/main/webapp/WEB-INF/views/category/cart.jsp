@@ -129,7 +129,7 @@
 						<li>
 							<div><%=c_dto.getItem_name()%></div>
 						</li>
-						<li class="buy_sum_val" value="<%=buy_sum%>">
+						<li class="buy_sum_val" value="<%=origin_sum%>">
 							<div style="color:rgb(190,190,190); text-decoration: line-through;">
 							<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=c_dto.getOrigin_price()%>" /></div>
 							<div><fmt:formatNumber type="number" maxFractionDigits="3" value="<%=sale_price%>" /></div>

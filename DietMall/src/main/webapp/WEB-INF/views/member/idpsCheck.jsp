@@ -46,14 +46,14 @@
 				<div id="id_header">
 					<div id="id_name">
 						<h4 class="title">이름</h4>
-						<input type="text" name="userName" id="input_id_name" placeholder="실명을 입력해주세요."
+						<input type="text" name="username" id="input_id_name" placeholder="실명을 입력해주세요."
 							onfocus="this.placeholder=''" 
 							onblur="this.placeholder='실명을 입력해주세요.'">
 					</div>
 
 					<div id="id_email">
 						<h4 class="title">이메일</h4>
-						<input type="text" name="userEmail" id="input_id_email" placeholder="ex. dietmall@gmail.com"
+						<input type="text" name="useremail" id="input_id_email" placeholder="ex. dietmall@gmail.com"
 							onfocus="this.placeholder=''"
 							onblur="this.placeholder='ex. dietmall@gmail.com'">
 					</div>
@@ -79,7 +79,7 @@
 				</div>
 				<div id="pass_header">
 					<h4 class="title">아이디</h4>
-					<input type="text" name="userId" id="input_pass_id" placeholder="아이디를 입력해주세요."
+					<input type="text" name="userid" id="input_pass_id" placeholder="아이디를 입력해주세요."
 						onfocus="this.placeholder=''"
 						onblur="this.placeholder='아이디를 입력해주세요.'">
 				</div>

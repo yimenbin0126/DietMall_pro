@@ -5,8 +5,8 @@ public class PagingViewDTO {
 	// 게시물에서 가져올 값
 	private String category_type; // 카데고리
 	private int item_bno; // 상품번호
-	// 조회수, 좋아요순
-	// view, like
+	// 조회수, 좋아요순 (view, like)
+	// 최신순, 평점 높은순, 평점 낮은 순 (new, star_high, star_low)
 	private String standard;
 	
 	// 현재 페이지

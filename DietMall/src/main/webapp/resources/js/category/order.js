@@ -128,7 +128,7 @@ function order() {
 			buy_bno = $(this).children().eq(0).val();
 			data_name = $(this).children().eq(2).children().val();
 			data_num = $(this).children().eq(2).val();
-			data_sum = $(this).children().eq(3).val();
+			data_sum = $(this).children().eq(6).val();
 			item_ = {
 				buy_bno : buy_bno,
 				item_name : data_name,

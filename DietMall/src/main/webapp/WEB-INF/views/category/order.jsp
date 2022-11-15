@@ -105,7 +105,7 @@
 						<li class="sale_sum_val" value="<%=0%>"><%=o_dto.getItem_num()%></li>
 						<li class="delivery_fee_val" value="<%=o_dto.getDelivery_fee()%>">
 						<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=o_dto.getDelivery_fee()%>" /></li>
-						<li><fmt:formatNumber type="number" maxFractionDigits="3" value="<%=buy_sum%>" /></li>
+						<li value="<%=buy_sum%>"><fmt:formatNumber type="number" maxFractionDigits="3" value="<%=buy_sum%>" /></li>
 					</ul>
 					<%
 								} else {
@@ -120,7 +120,7 @@
 						<li value="<%=o_dto.getItem_num()%>">
 							<div><%=o_dto.getItem_name()%></div>
 						</li>
-						<li class="buy_sum_val" value="<%=buy_sum%>">
+						<li class="buy_sum_val" value="<%=origin_sum%>">
 							<div style="color:rgb(190,190,190); text-decoration: line-through;">
 							<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=o_dto.getOrigin_price()%>" /></div>
 							<div><fmt:formatNumber type="number" maxFractionDigits="3" value="<%=sale_price%>" /></div>
@@ -128,7 +128,7 @@
 						<li class="sale_sum_val" value="<%=sale_sum%>"><%=o_dto.getItem_num()%></li>
 						<li class="delivery_fee_val" value="<%=o_dto.getDelivery_fee()%>">
 						<fmt:formatNumber type="number" maxFractionDigits="3" value="<%=o_dto.getDelivery_fee()%>" /></li>
-						<li><fmt:formatNumber type="number" maxFractionDigits="3" value="<%=buy_sum%>" /></li>
+						<li value="<%=buy_sum%>"><fmt:formatNumber type="number" maxFractionDigits="3" value="<%=buy_sum%>" /></li>
 					</ul>
 					<%
 								}

@@ -42,17 +42,17 @@
 			origin_price = #{origin_price},
 			sale_yn = #{sale_yn},
 			sale_percent = #{sale_percent},
-			like_num = #{like_num},
+			like_num = #{like_num}
 			<choose>
 				<when test='item_title_img != "nofile" and item_content_img != "nofile"'>
-					item_title_img = #{item_title_img},
+					, item_title_img = #{item_title_img},
 					item_content_img = #{item_content_img}
 				</when>
 				<when test='item_title_img == "nofile" and item_content_img != "nofile"'>
-					item_content_img = #{item_content_img}
+					, item_content_img = #{item_content_img}
 				</when>
 				<when test='item_title_img != "nofile" and item_content_img == "nofile"'>
-					item_title_img = #{item_title_img}
+					, item_title_img = #{item_title_img}
 				</when>
 			</choose>
 		WHERE item_bno = #{item_bno}
@@ -306,7 +306,7 @@
 	</select>
 	
 	<!-- 리뷰 게시판 목록 갯수 불러오기 : 페이징 -->
-	<select id="item_etc_board_review_paging_count" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+	<select id="item_etc_board_review_paging_count" resultType="_int">
 		SELECT
 			count(*)
 		from
@@ -351,7 +351,18 @@
 				OR
 				board_type = 'review_reply'
 				)
-				ORDER BY origin_bno DESC, etc_board_bno
+				ORDER BY
+				<choose>
+					<when test="standard == 'new'">
+						origin_bno DESC, etc_board_bno
+					</when>
+					<when test="standard == 'star_high'">
+						etc_star desc, origin_bno DESC, etc_board_bno
+					</when>
+					<when test="standard == 'star_low'">
+						etc_star, origin_bno DESC, etc_board_bno
+					</when>
+				</choose>
 			)
 		)
 		WHERE r
@@ -359,7 +370,7 @@
 	</select>
 	
 	<!-- QnA 게시판 목록 갯수 불러오기 : 페이징 -->
-	<select id="item_etc_board_QnA_paging_count" resultType="com.dietmall.DTO.ItemEtcBoardDTO">
+	<select id="item_etc_board_QnA_paging_count" resultType="_int">
 		SELECT
 			count(*)
 		from

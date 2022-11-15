@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -113,6 +114,8 @@ public class CategoryController {
 	public String getDetail(
 			@RequestParam(value="page_NowBno_r", defaultValue="1") int page_NowBno_r,
 			@RequestParam(value="page_NowBno_q", defaultValue="1") int page_NowBno_q,
+			@RequestParam(value="standard_r", defaultValue="new") String standard_r,
+			@RequestParam(value="standard_q", defaultValue="new") String standard_q,
 			@RequestParam int item_bno,
 			Model model,
 			HttpSession session, HttpServletRequest req) throws Exception {
@@ -153,6 +156,7 @@ public class CategoryController {
 		ieb_dto_r.setItem_bno(item_bno);
 		PagingViewDTO pv_dto_review = new PagingViewDTO(c_service.item_etc_board_review_paging_count(ieb_dto_r), page_NowBno_r);
 		pv_dto_review.setItem_bno(item_bno);
+		pv_dto_review.setStandard(standard_r);
 		review_ieb_dto_list = c_service.item_etc_board_review_paging(pv_dto_review);
 		// 뷰에 값 넘기기
 		model.addAttribute("lyn_dto", lyn_dto);
@@ -433,14 +437,14 @@ public class CategoryController {
 	}
 	
 	// 리뷰 게시판 생성
-	@ResponseBody
-	@PostMapping(path="/review-insert", produces="application/text;charset=utf-8")
-	public List<HashMap<String,Object>> postReview_insert(
+	@PostMapping(path="/review-insert", produces="application/json;charset=utf-8")
+	public @ResponseBody List<HashMap<String,Object>> postReview_insert(
 			HttpSession session, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		log.info("CategoryController - postReview_insert");
 		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
 		// 파일 경로
 		String savePath = "C:\\dietmall_file";
 		// 파일 크기 15MB
@@ -464,21 +468,55 @@ public class CategoryController {
 		m_dto = (MemberDTO)session.getAttribute("member");
 		ieb_dto.setUserno(m_dto.getUserno());
 		ieb_dto.setUserid(m_dto.getUserid());
+		// 리뷰 작성
+		c_service.insert_item_etc_board(ieb_dto);
 		// 리뷰 갯수
-		ItemEtcBoardDTO ieb_dto_ = new ItemEtcBoardDTO();
-		int review_sum = c_service.item_etc_board_review_paging_count(ieb_dto_);
+		int review_sum = c_service.item_etc_board_review_paging_count(ieb_dto);
 		// 리뷰 리스트
 		List<ItemEtcBoardDTO> review_ieb_dto_list = new ArrayList<ItemEtcBoardDTO>();
-		PagingViewDTO pv_dto_review = new PagingViewDTO();
-		pv_dto_review.setPage_NowBno(1);
+		PagingViewDTO pv_dto_review = new PagingViewDTO(review_sum,1);
 		pv_dto_review.setItem_bno(Integer.valueOf(multi.getParameter("item_bno")));
 		review_ieb_dto_list = c_service.item_etc_board_review_paging(pv_dto_review);
 		// json 전달
 		List<HashMap<String, Object>> map_list = new ArrayList<HashMap<String,Object>>();
 		for (int i=0; i<review_ieb_dto_list.size(); i++) {
 			ItemEtcBoardDTO ieb_dto__ = new ItemEtcBoardDTO();
-			HashMap<String, Object> map = new HashMap<String, Object>();
 			ieb_dto__ = review_ieb_dto_list.get(i);
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("review_dto", ieb_dto__);
+			map_list.add(map);
+		}
+		return map_list;
+	}
+	
+	// 리뷰 삭제 post
+	@PostMapping(path="/review-delete", produces="application/json;charset=utf-8")
+	public @ResponseBody List<HashMap<String,Object>> postReview_delete(
+			HttpSession session,
+			HttpServletRequest request
+			) throws Exception {
+		log.info("CategoryController - postReview_delete");
+		request.setCharacterEncoding("utf-8");
+		int etc_board_bno = Integer.valueOf(request.getParameter("etc_board_bno"));
+		int item_bno = Integer.valueOf(request.getParameter("item_bno"));
+		// 게시물 삭제
+		ItemEtcBoardDTO ieb_dto = new ItemEtcBoardDTO();
+		ieb_dto.setEtc_board_bno(etc_board_bno);
+		ieb_dto.setItem_bno(item_bno);
+		c_service.delete_item_etc_board(ieb_dto);
+		// 리뷰 갯수
+		int review_sum = c_service.item_etc_board_review_paging_count(ieb_dto);
+		// 리뷰 리스트
+		List<ItemEtcBoardDTO> review_ieb_dto_list = new ArrayList<ItemEtcBoardDTO>();
+		PagingViewDTO pv_dto_review = new PagingViewDTO(review_sum,1);
+		pv_dto_review.setItem_bno(item_bno);
+		review_ieb_dto_list = c_service.item_etc_board_review_paging(pv_dto_review);
+		// json 전달
+		List<HashMap<String, Object>> map_list = new ArrayList<HashMap<String,Object>>();
+		for (int i=0; i<review_ieb_dto_list.size(); i++) {
+			ItemEtcBoardDTO ieb_dto__ = new ItemEtcBoardDTO();
+			ieb_dto__ = review_ieb_dto_list.get(i);
+			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("review_dto", ieb_dto__);
 			map_list.add(map);
 		}
@@ -600,6 +638,46 @@ public class CategoryController {
 		}
 	}
 	
+	// 리뷰 페이징
+	@PostMapping(path="/review-paging", produces="application/json;charset=utf-8")
+	public @ResponseBody List<List<HashMap<String,Object>>> postReview_paging(
+			@RequestBody Map<String, String> param,
+			HttpSession session, HttpServletRequest request) throws Exception {
+		log.info("CategoryController - postReview_paging");
+		request.setCharacterEncoding("utf-8");
+		// 값 불러오기
+		int item_bno = Integer.valueOf(param.get("item_bno"));
+		int page_NowBno_r = Integer.valueOf(param.get("page_NowBno_r"));
+		String standard_r = param.get("standard_r");
+		// 리뷰 갯수
+		ItemEtcBoardDTO ieb_dto = new ItemEtcBoardDTO();
+		ieb_dto.setItem_bno(item_bno);
+		int review_sum = c_service.item_etc_board_review_paging_count(ieb_dto);
+		// 리뷰 리스트
+		List<ItemEtcBoardDTO> review_ieb_dto_list = new ArrayList<ItemEtcBoardDTO>();
+		PagingViewDTO pv_dto_review = new PagingViewDTO(review_sum, page_NowBno_r);
+		pv_dto_review.setItem_bno(item_bno);
+		pv_dto_review.setStandard(standard_r);
+		review_ieb_dto_list = c_service.item_etc_board_review_paging(pv_dto_review);
+		// json 전달
+		List<List<HashMap<String, Object>>> map_list_group = new ArrayList<List<HashMap<String,Object>>>();
+		List<HashMap<String, Object>> map_list_r = new ArrayList<HashMap<String,Object>>();
+		List<HashMap<String, Object>> map_list_p = new ArrayList<HashMap<String,Object>>();
+		for (int i=0; i<review_ieb_dto_list.size(); i++) {
+			ItemEtcBoardDTO ieb_dto__ = new ItemEtcBoardDTO();
+			ieb_dto__ = review_ieb_dto_list.get(i);
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("review_dto", ieb_dto__);
+			map_list_r.add(map);
+		}
+		HashMap<String, Object> map_p = new HashMap<String, Object>();
+		map_p.put("review_paging", pv_dto_review);
+		map_list_p.add(map_p);
+		map_list_group.add(map_list_r);
+		map_list_group.add(map_list_p);
+		return map_list_group;
+	}
+	
 	// 주문 get
 	@GetMapping("/order")
 	public String getOrder(
@@ -691,7 +769,7 @@ public class CategoryController {
 				// 배송지 등 정보
 				BuyDeliveryBoard bdb_dto = new BuyDeliveryBoard();
 				bdb_dto.setDelivery_post(map.get("delivery_post"));
-				bdb_dto.setDelivery_address(map.get("delivery_address_detail"));
+				bdb_dto.setDelivery_address(map.get("delivery_address"));
 				bdb_dto.setDelivery_address_detail(map.get("delivery_address_detail"));
 				bdb_dto.setPay_card(map.get("pay_card"));
 				// 현재시간
@@ -742,7 +820,7 @@ public class CategoryController {
 			o_dto.setItem_name(ib_dto.getItem_name());
 			// 세일 여부
 			if (ib_dto.getSale_yn().equals("Y")) {
-				o_dto.setItem_price(ib_dto.getOrigin_price() - (int)(ib_dto.getOrigin_price()*(ib_dto.getSale_percent()*0.01))* bi_dto_.getItem_num());
+				o_dto.setItem_price(ib_dto.getOrigin_price() - (int)((ib_dto.getOrigin_price()*(ib_dto.getSale_percent()*0.01)) * bi_dto_.getItem_num()));
 			} else {
 				o_dto.setItem_price(ib_dto.getOrigin_price()* bi_dto_.getItem_num());
 			}

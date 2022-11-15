@@ -95,6 +95,7 @@
 							for (int i=0; i<o_dto_list.size(); i++){
 								OrderDTO o_dto = new OrderDTO();
 								o_dto = o_dto_list.get(i);
+								System.out.println(o_dto.getItem_price());
 						%>
 							<div class="t_items_class">
 								<div class="t_items_name"><%=o_dto.getItem_name()%></div>

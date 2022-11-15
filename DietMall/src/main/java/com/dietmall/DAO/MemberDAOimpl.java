@@ -15,6 +15,8 @@ public class MemberDAOimpl implements MemberDAO {
 	// 회원가입
 	@Override
 	public void join(MemberDTO vo) throws Exception {
+		int userno = sql.selectOne("memberMapper.sequence_t_member");
+		vo.setUserno(userno);
 		sql.insert("memberMapper.join", vo);
 	}
 

@@ -93,21 +93,13 @@ public class CategoryDAOimpl implements CategoryDAO {
 	// 리뷰 게시판 갯수
 	public int item_etc_board_review_paging_count(ItemEtcBoardDTO ieb_dto) throws Exception {
 		log.info("CategoryDAOimpl - item_etc_board_review_paging_count");
-		int result = 0;
-		if (sql.selectOne("itemMapper.item_etc_board_review_paging_count", ieb_dto) != null) {
-			result = sql.selectOne("itemMapper.item_etc_board_review_paging_count", ieb_dto);
-		}
-		return result;
+		return sql.selectOne("itemMapper.item_etc_board_review_paging_count", ieb_dto);
 	}
 	
 	// qna 갯수
 	public int item_etc_board_QnA_paging_count(ItemEtcBoardDTO ieb_dto) throws Exception {
 		log.info("CategoryDAOimpl - item_etc_board_review_paging_count");
-		int result = 0;
-		if (sql.selectOne("itemMapper.item_etc_board_QnA_paging_count", ieb_dto) != null) {
-			result = sql.selectOne("itemMapper.item_etc_board_QnA_paging_count", ieb_dto);
-		}
-		return result;
+		return sql.selectOne("itemMapper.item_etc_board_QnA_paging_count", ieb_dto);
 	}
 	
 	// 리뷰, QnA 그외 게시판 - 전체 삭제

@@ -193,15 +193,15 @@ function review () {
 	if (document.querySelector('#r_w_c_btn_y input')){
 		document.querySelector('#r_w_c_btn_y input').addEventListener('click',()=>{
 			var html_ = "";
-			if(!document.querySelector('.review_w_c_write')){
+			if(!document.querySelector('#form_review_insert')){
 				html_ = '<form name="form_review_insert" id="form_review_insert" enctype="multipart/form-data">';
 				html_ += '<div class="review_w_c_write">';
 				html_ += '<h3>리뷰 작성하기</h3>';
 				html_ += '<div class="r_w_c_select">';
 				html_ += '<input type="hidden" class="r_w_c_item_bno" name="item_bno" value="';
-				html_ += $('#item_bno').val()+'"';
-				html_ += '<input type="hidden" class="select_choice_val" name="etc_star">';
-				html_ += '<select class="star_choice">';
+				html_ += $('#item_bno').val()+'">';
+				html_ += '<input type="hidden" id="review_select_choice_val" name="etc_star">';
+				html_ += '<select class="star_choice" style="color:red;">';
 				html_ += '<option value="5" selected>★★★★★</option>';
 				html_ += '<option value="4">★★★★☆</option>';
 				html_ += '<option value="3">★★★☆☆</option>';
@@ -226,121 +226,138 @@ function review () {
 				html_ += '</form>';
 				// 뒤에 요소 추가
 				$("#r_w_c_btn_y").after(html_);
+				review ();
 			} else {
 				alert('아직 작성하지 않은 글이 존재합니다.');
 			}
 		});
-	
 	}
-	
 	// 리뷰 작성시
-	if(document.querySelector('.review_w_c_write')){
+	if(document.querySelector('.c_w_content_btn button')){
 		document.querySelector('.c_w_content_btn button').addEventListener('click',()=>{
-			// 별점
-			document.querySelector('.select_choice_val').value = $('.star_choice option:selected').val();			
-			var formData = new FormData(form_review_insert);
-			$.ajax({
-	            url: "/category/review-insert",
-	            type: "POST",
-	            cache: false,
-	            dataType:'json',
-	            contentType: false,
-          		processData: false,
-	            data: formData,
-	            success: function(data){
-	            	var review_list;
-	            	var _html = '';
-	            	// 기존 삭제
-	            	if (data.length >= 1) {
-		            	$('.f_review_content').innerText = "";
-	            	} else {
-	            		_html += '<div>존재하는 게시물이 없습니다.</div>';
-			            $('.f_review_content').append(_html);
-	            	}
-	            	for(var i=0; i<data.length; i++){
-		            	review_list = data.review_dto[i];
-		            	// 리뷰
-		            	if (review_list.board_type == "review"){
-			            	// 리뷰 내용 업데이트
-			            	_html += '<div class="r_content">';
-			            	_html += '<div class="r_content_top">';
-			            	_html += '<div class="c_top_star">';
-			            	_html += '<span>';
-			            	_html += '<c:set var="_etc_star" value="'+review_list.etc_star+'" />';
-			            	_html += '<c:if test="${_etc_star == 5}">★★★★★</c:if>';
-			            	_html += '<c:if test="${_etc_star == 4}">★★★★☆</c:if>';
-			            	_html += '<c:if test="${_etc_star == 3}">★★★☆☆</c:if>';
-			            	_html += '<c:if test="${_etc_star == 2}">★★☆☆☆</c:if>';
-			            	_html += '<c:if test="${_etc_star == 1}">★☆☆☆☆</c:if>';
-			            	_html += '</span>';
-			            	_html += ' <span>'+review_list.etc_star+'</span>';
-			            	_html += '</div>';
-			            	_html += '<div class="c_top_date">';
-			            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
-			            	_html += '</div>';
-			            	_html += '</div>';
-			            	_html += '<div class="r_content_middle">';
-			            	_html += '<div class="c_middle_image">';
-			            	_html += '<img src="/resources/image/category/food.png">';
-			            	_html += '</div>';
-			            	_html += '<div class="c_middle_detail">';
-			            	_html += review_list.etc_content;
-			            	_html += '</div>';
-			            	_html += '</div>';
-			            	_html += '<div class="r_content_btn">';
-			            	// 로그인한 값 확인
-			            	if (document.querySelector('#m_dto_userid').value != ""){
-				            	_html += '<div class="r_content_btn">';
-			            		if (document.querySelector('#m_dto_userid').value == "admin"){
-					            	_html += '<div class="r_c_btn_reply">';
-					            	_html += '답글';
+			if (document.querySelector('#w_c_textarea').value==""){
+				alert('리뷰를 작성해주세요.');
+			} else {
+				// 별점
+				var star_ = $('.star_choice option:selected').val();
+				document.querySelector('#review_select_choice_val').value = star_;			
+				var formData = new FormData(form_review_insert);
+				$.ajax({
+		            url: "/category/review-insert",
+		            type: "POST",
+		            cache: false,
+		            dataType:'json',
+		            contentType: false,
+	          		processData: false,
+		            data: formData,
+		            success: function(data){
+		            	var review_list;
+		            	var _html = '';
+		            	// 기존 삭제
+		            	if (data.length < 1) {
+				            $('#form_review_insert').remove();
+		            		_html += '<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">존재하는 게시물이 없습니다.</div>';
+		            		document.querySelector('.f_review_content').innerText = "";
+				            $('.f_review_content').append(_html);
+		            	} else {
+				            $('#form_review_insert').remove();
+			            	document.querySelector('.f_review_content').innerText = "";
+			            	for(var i=0; i<data.length; i++){
+				            	review_list = data[i].review_dto;
+				            	var etc_star_str = "";
+				            	// 리뷰
+				            	if (review_list.board_type == "review"){
+					            	// 리뷰 내용 업데이트
+					            	_html += '<div class="r_content">';
+					            	_html += '<div class="r_content_top">';
+					            	_html += '<div class="c_top_star">';
+					            	_html += '<span>';
+					            	if (review_list.etc_star==5){
+					            		etc_star_str = "★★★★★";
+					            	} else if (review_list.etc_star==4){
+					            		etc_star_str = "★★★★☆";
+					            	} else if (review_list.etc_star==3){
+					            		etc_star_str = "★★★☆☆";
+					            	} else if (review_list.etc_star==2){
+					            		etc_star_str = "★★☆☆☆";
+					            	} else if (review_list.etc_star==1){
+					            		etc_star_str = "★☆☆☆☆";
+					            	}
+					            	_html += etc_star_str;
+					            	_html += '</span>';
+					            	_html += ' <span>'+review_list.etc_star+'</span>';
 					            	_html += '</div>';
-			            		}
-			            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
-					            	_html += '<div class="r_c_btn_update">';
-					            	_html += '수정';
+					            	_html += '<div class="c_top_date">';
+					            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
 					            	_html += '</div>';
-					            	_html += '<div class="r_c_btn_delete">';
-					            	_html += '삭제';
 					            	_html += '</div>';
-			            		}
-				            	_html += '</div>';
+					            	_html += '<div class="r_content_middle">';
+					            	if (review_list.img_name != undefined){
+						            	_html += '<div class="c_middle_image">';
+						            	_html += '<img src="/category/load-image?fileName='+review_list.img_name+'">';
+						            	_html += '</div>';
+					            	}
+					            	_html += '<div class="c_middle_detail">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""){
+						            	_html += '<div class="r_content_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+					            		if (document.querySelector('#m_dto_userid').value == "admin"){
+							            	_html += '<div class="r_c_btn_reply">';
+							            	_html += '답글';
+							            	_html += '</div>';
+					            		}
+					            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
+							            	_html += '<div class="r_c_btn_update">';
+							            	_html += '수정';
+							            	_html += '</div>';
+							            	_html += '<div class="r_c_btn_delete">';
+							            	_html += '삭제';
+							            	_html += '</div>';
+					            		}
+						            	_html += '</div>';
+					            	}
+						           	_html += '</div>';
+				            	} else if (review_list.board_type == "review_reply"){
+				            		// 리뷰 내용 변경
+					            	_html += '<div class="c_answer">';
+					            	_html += '<div class="answer_review">';
+					            	_html += '<div class="answer_writer">';
+					            	_html += '<div>'+review_list.userid+'</div>';
+					            	_html += '<div>'+review_list.create_time+'</div>';
+					            	_html += '</div>';
+					            	_html += '<div class="answer_content">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""
+					            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
+						            	_html += '<div class="answer_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+						            	_html += '<div class="a_btn_update">';
+						            	_html += '수정';
+						            	_html += '</div>';
+						            	_html += '<div class="a_btn_delete">';
+						            	_html += '삭제';
+						            	_html += '</div>';
+						            	_html += '</div>';
+					            	}
+					            	_html += '</div>';
+				            		// 새로운 내용 추가
+				            	}
 			            	}
-			            	_html += '</div>';
-			            	_html += '';
-			            	// 새로운 내용 추가
-			            	$('.f_review_content').append(_html);
-		            	} else if (review_list.board_type == "review_reply"){
-		            		// 리뷰 내용 변경
-			            	_html += '<div class="c_answer">';
-			            	_html += '<div class="answer_review">';
-			            	_html += '<div class="answer_writer">';
-			            	_html += '<div>'+review_list.userid+'</div>';
-			            	_html += '<div>'+review_list.create_time+'</div>';
-			            	_html += '</div>';
-			            	_html += '<div class="answer_content">';
-			            	_html += review_list.etc_content;
-			            	_html += '</div>';
-			            	_html += '</div>';
-			            	// 로그인한 값 확인
-			            	if (document.querySelector('#m_dto_userid').value != ""
-			            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
-				            	_html += '<div class="answer_btn">';
-				            	_html += '<div class="a_btn_update">';
-				            	_html += '수정';
-				            	_html += '</div>';
-				            	_html += '<div class="a_btn_delete">';
-				            	_html += '삭제';
-				            	_html += '</div>';
-				            	_html += '</div>';
-			            	}
-			            	_html += '</div>';
-		            		// 새로운 내용 추가
-			            	$('.f_review_content').append(_html);
-		            	} 
-	            	}
-	            }
-	        }); 
+		            		$('.f_review_content').append(_html);
+		            	}
+				        review();
+		            }
+		        });
+	        } // if 끝 
 		});
 	}
 	
@@ -376,7 +393,7 @@ function review () {
 		});
 	}
 	
-	// 리뷰 수정시
+	// 리뷰 수정 완료시
 	if(document.querySelector('.r_c_update_btn .r_c_u_btn_complet')){
 		document.querySelector('.r_c_update_btn .r_c_u_btn_complet').addEventListener('click',()=>{
 			// 별점
@@ -391,106 +408,783 @@ function review () {
           		processData: false,
 	            data: formData,
 	            success: function(data){
-	            	var review_list;
-	            	var _html = '';
-	            	// 기존 삭제
-	            	if (data.length >= 1) {
-		            	$('.f_review_content').innerText = "";
-	            	} else {
-	            		_html += '<div>존재하는 게시물이 없습니다.</div>';
-			            $('.f_review_content').append(_html);
-	            	}
-	            	for(var i=0; i<data.length; i++){
-		            	review_list = data.review_dto[i];
-		            	// 리뷰
-		            	if (review_list.board_type == "review"){
-			            	// 리뷰 내용 업데이트
-			            	_html += '<div class="r_content">';
-			            	_html += '<div class="r_content_top">';
-			            	_html += '<div class="c_top_star">';
-			            	_html += '<span>';
-			            	_html += '<c:set var="_etc_star" value="'+review_list.etc_star+'" />';
-			            	_html += '<c:if test="${_etc_star == 5}">★★★★★</c:if>';
-			            	_html += '<c:if test="${_etc_star == 4}">★★★★☆</c:if>';
-			            	_html += '<c:if test="${_etc_star == 3}">★★★☆☆</c:if>';
-			            	_html += '<c:if test="${_etc_star == 2}">★★☆☆☆</c:if>';
-			            	_html += '<c:if test="${_etc_star == 1}">★☆☆☆☆</c:if>';
-			            	_html += '</span>';
-			            	_html += ' <span>'+review_list.etc_star+'</span>';
-			            	_html += '</div>';
-			            	_html += '<div class="c_top_date">';
-			            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
-			            	_html += '</div>';
-			            	_html += '</div>';
-			            	_html += '<div class="r_content_middle">';
-			            	_html += '<div class="c_middle_image">';
-			            	_html += '<img src="/resources/image/category/food.png">';
-			            	_html += '</div>';
-			            	_html += '<div class="c_middle_detail">';
-			            	_html += review_list.etc_content;
-			            	_html += '</div>';
-			            	_html += '</div>';
-			            	_html += '<div class="r_content_btn">';
-			            	// 로그인한 값 확인
-			            	if (document.querySelector('#m_dto_userid').value != ""){
-				            	_html += '<div class="r_content_btn">';
-			            		if (document.querySelector('#m_dto_userid').value == "admin"){
-					            	_html += '<div class="r_c_btn_reply">';
-					            	_html += '답글';
+		            	var review_list;
+		            	var _html = '';
+		            	// 기존 삭제
+		            	if (data.length < 1) {
+				            $('#form_review_insert').remove();
+		            		_html += '<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">존재하는 게시물이 없습니다.</div>';
+		            		document.querySelector('.f_review_content').innerText = "";
+				            $('.f_review_content').append(_html);
+		            	} else {
+				            $('#form_review_insert').remove();
+			            	document.querySelector('.f_review_content').innerText = "";
+			            	for(var i=0; i<data.length; i++){
+				            	review_list = data[i].review_dto;
+				            	var etc_star_str = "";
+				            	// 리뷰
+				            	if (review_list.board_type == "review"){
+					            	// 리뷰 내용 업데이트
+					            	_html += '<div class="r_content">';
+					            	_html += '<div class="r_content_top">';
+					            	_html += '<div class="c_top_star">';
+					            	_html += '<span>';
+					            	if (review_list.etc_star==5){
+					            		etc_star_str = "★★★★★";
+					            	} else if (review_list.etc_star==4){
+					            		etc_star_str = "★★★★☆";
+					            	} else if (review_list.etc_star==3){
+					            		etc_star_str = "★★★☆☆";
+					            	} else if (review_list.etc_star==2){
+					            		etc_star_str = "★★☆☆☆";
+					            	} else if (review_list.etc_star==1){
+					            		etc_star_str = "★☆☆☆☆";
+					            	}
+					            	_html += etc_star_str;
+					            	_html += '</span>';
+					            	_html += ' <span>'+review_list.etc_star+'</span>';
 					            	_html += '</div>';
-			            		}
-			            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
-					            	_html += '<div class="r_c_btn_update">';
-					            	_html += '수정';
+					            	_html += '<div class="c_top_date">';
+					            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
 					            	_html += '</div>';
-					            	_html += '<div class="r_c_btn_delete">';
-					            	_html += '삭제';
 					            	_html += '</div>';
-			            		}
-				            	_html += '</div>';
+					            	_html += '<div class="r_content_middle">';
+					            	if (review_list.img_name != undefined){
+						            	_html += '<div class="c_middle_image">';
+						            	_html += '<img src="/category/load-image?fileName='+review_list.img_name+'">';
+						            	_html += '</div>';
+					            	}
+					            	_html += '<div class="c_middle_detail">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""){
+						            	_html += '<div class="r_content_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+					            		if (document.querySelector('#m_dto_userid').value == "admin"){
+							            	_html += '<div class="r_c_btn_reply">';
+							            	_html += '답글';
+							            	_html += '</div>';
+					            		}
+					            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
+							            	_html += '<div class="r_c_btn_update">';
+							            	_html += '수정';
+							            	_html += '</div>';
+							            	_html += '<div class="r_c_btn_delete">';
+							            	_html += '삭제';
+							            	_html += '</div>';
+					            		}
+						            	_html += '</div>';
+					            	}
+						           	_html += '</div>';
+				            	} else if (review_list.board_type == "review_reply"){
+				            		// 리뷰 내용 변경
+					            	_html += '<div class="c_answer">';
+					            	_html += '<div class="answer_review">';
+					            	_html += '<div class="answer_writer">';
+					            	_html += '<div>'+review_list.userid+'</div>';
+					            	_html += '<div>'+review_list.create_time+'</div>';
+					            	_html += '</div>';
+					            	_html += '<div class="answer_content">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""
+					            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
+						            	_html += '<div class="answer_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+						            	_html += '<div class="a_btn_update">';
+						            	_html += '수정';
+						            	_html += '</div>';
+						            	_html += '<div class="a_btn_delete">';
+						            	_html += '삭제';
+						            	_html += '</div>';
+						            	_html += '</div>';
+					            	}
+					            	_html += '</div>';
+				            		// 새로운 내용 추가
+				            	}
 			            	}
-			            	_html += '</div>';
-			            	_html += '';
-			            	// 새로운 내용 추가
-			            	$('.f_review_content').append(_html);
-		            	} else if (review_list.board_type == "review_reply"){
-		            		// 리뷰 내용 변경
-			            	_html += '<div class="c_answer">';
-			            	_html += '<div class="answer_review">';
-			            	_html += '<div class="answer_writer">';
-			            	_html += '<div>'+review_list.userid+'</div>';
-			            	_html += '<div>'+review_list.create_time+'</div>';
-			            	_html += '</div>';
-			            	_html += '<div class="answer_content">';
-			            	_html += review_list.etc_content;
-			            	_html += '</div>';
-			            	_html += '</div>';
-			            	// 로그인한 값 확인
-			            	if (document.querySelector('#m_dto_userid').value != ""
-			            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
-				            	_html += '<div class="answer_btn">';
-				            	_html += '<div class="a_btn_update">';
-				            	_html += '수정';
-				            	_html += '</div>';
-				            	_html += '<div class="a_btn_delete">';
-				            	_html += '삭제';
-				            	_html += '</div>';
-				            	_html += '</div>';
-			            	}
-			            	_html += '</div>';
-		            		// 새로운 내용 추가
-			            	$('.f_review_content').append(_html);
-		            	} 
-	            	}
-	            }
+		            		$('.f_review_content').append(_html);
+		            	}
+				        review();
+		            }
 	        }); 
 		});
 	}
 	
-	// 리뷰 삭제
+	// 리뷰원글 삭제
+	if(document.querySelector('.r_c_btn_delete')){
+		const e_blist_title = document.querySelectorAll(".r_c_btn_delete");
+		for (const e_title of e_blist_title) {
+			e_title.addEventListener('click', function(e) {
+				var etc_board_bno = e.target.parentElement.children[0];
+				var item_bno = e.target.parentElement.children[1];
+				console.log(etc_board_bno.value);
+				$.ajax({
+				    url: '/category/review-delete',
+				    type: 'post',
+				    data: 'text',
+				    data: {
+				    	etc_board_bno: etc_board_bno.value,
+				    	item_bno: item_bno.value
+				    },
+				    success: function(data){
+		            	var review_list;
+		            	var _html = '';
+		            	// 기존 삭제
+		            	if (data.length < 1) {
+				            $('#form_review_insert').remove();
+		            		_html += '<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">존재하는 게시물이 없습니다.</div>';
+		            		document.querySelector('.f_review_content').innerText = "";
+				            $('.f_review_content').append(_html);
+		            	} else {
+				            $('#form_review_insert').remove();
+			            	document.querySelector('.f_review_content').innerText = "";
+			            	for(var i=0; i<data.length; i++){
+				            	review_list = data[i].review_dto;
+				            	var etc_star_str = "";
+				            	// 리뷰
+				            	if (review_list.board_type == "review"){
+					            	// 리뷰 내용 업데이트
+					            	_html += '<div class="r_content">';
+					            	_html += '<div class="r_content_top">';
+					            	_html += '<div class="c_top_star">';
+					            	_html += '<span>';
+					            	if (review_list.etc_star==5){
+					            		etc_star_str = "★★★★★";
+					            	} else if (review_list.etc_star==4){
+					            		etc_star_str = "★★★★☆";
+					            	} else if (review_list.etc_star==3){
+					            		etc_star_str = "★★★☆☆";
+					            	} else if (review_list.etc_star==2){
+					            		etc_star_str = "★★☆☆☆";
+					            	} else if (review_list.etc_star==1){
+					            		etc_star_str = "★☆☆☆☆";
+					            	}
+					            	_html += etc_star_str;
+					            	_html += '</span>';
+					            	_html += ' <span>'+review_list.etc_star+'</span>';
+					            	_html += '</div>';
+					            	_html += '<div class="c_top_date">';
+					            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	_html += '<div class="r_content_middle">';
+					            	if (review_list.img_name != undefined){
+						            	_html += '<div class="c_middle_image">';
+						            	_html += '<img src="/category/load-image?fileName='+review_list.img_name+'">';
+						            	_html += '</div>';
+					            	}
+					            	_html += '<div class="c_middle_detail">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""){
+						            	_html += '<div class="r_content_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+					            		if (document.querySelector('#m_dto_userid').value == "admin"){
+							            	_html += '<div class="r_c_btn_reply">';
+							            	_html += '답글';
+							            	_html += '</div>';
+					            		}
+					            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
+							            	_html += '<div class="r_c_btn_update">';
+							            	_html += '수정';
+							            	_html += '</div>';
+							            	_html += '<div class="r_c_btn_delete">';
+							            	_html += '삭제';
+							            	_html += '</div>';
+					            		}
+						            	_html += '</div>';
+					            	}
+						           	_html += '</div>';
+				            	} else if (review_list.board_type == "review_reply"){
+				            		// 리뷰 내용 변경
+					            	_html += '<div class="c_answer">';
+					            	_html += '<div class="answer_review">';
+					            	_html += '<div class="answer_writer">';
+					            	_html += '<div>'+review_list.userid+'</div>';
+					            	_html += '<div>'+review_list.create_time+'</div>';
+					            	_html += '</div>';
+					            	_html += '<div class="answer_content">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""
+					            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
+						            	_html += '<div class="answer_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+						            	_html += '<div class="a_btn_update">';
+						            	_html += '수정';
+						            	_html += '</div>';
+						            	_html += '<div class="a_btn_delete">';
+						            	_html += '삭제';
+						            	_html += '</div>';
+						            	_html += '</div>';
+					            	}
+					            	_html += '</div>';
+				            		// 새로운 내용 추가
+				            	}
+			            	}
+		            		$('.f_review_content').append(_html);
+		            	}
+				        review();
+		            }
+				});
+			})
+		}
+	}	
 	
 	// 페이징
+	// 페이지 버튼 클릭
+	if(document.querySelector('.e_paging_re .e_paging_num .page_Bno')){
+		var page_Bno_List = document.querySelectorAll('.e_paging_re .e_paging_num .page_Bno');
+		for (const bno_ of page_Bno_List) {
+			bno_.addEventListener('click', function(e) {
+				var item_bno_ = document.querySelector('#item_bno').value;
+				var page_NowBno_r = bno_.innerText;
+				var standard_r = document.querySelector('#e_paging_review .e_paging_re #standard_r').value;
+				// 현재페이지, 최신순
+				$.ajax({
+				    url: '/category/review-paging',
+				    type: 'post',
+				    contentType:"application/json",
+				    data: JSON.stringify({
+				    	item_bno: item_bno_,
+				    	page_NowBno_r: page_NowBno_r,
+				    	standard_r: standard_r
+				    }),
+				    success: function(data){
+		            	// 리뷰
+		            	var review_list;
+		            	var _html = '';
+		            	// 기존 삭제
+		            	if (data[0].length < 1) {
+		            		_html += '<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">존재하는 게시물이 없습니다.</div>';
+		            		document.querySelector('.f_review_content').innerText = "";
+				            $('.f_review_content').append(_html);
+		            	} else {
+			            	document.querySelector('.f_review_content').innerText = "";
+			            	var review_data = data[0];
+			            	for(var i=0; i<data[0].length; i++){
+				            	review_list = review_data[i].review_dto;
+				            	var etc_star_str = "";
+				            	// 리뷰
+				            	if (review_list.board_type == "review"){
+					            	// 리뷰 내용 업데이트
+					            	_html += '<div class="r_content">';
+					            	_html += '<div class="r_content_top">';
+					            	_html += '<div class="c_top_star">';
+					            	_html += '<span>';
+					            	if (review_list.etc_star==5){
+					            		etc_star_str = "★★★★★";
+					            	} else if (review_list.etc_star==4){
+					            		etc_star_str = "★★★★☆";
+					            	} else if (review_list.etc_star==3){
+					            		etc_star_str = "★★★☆☆";
+					            	} else if (review_list.etc_star==2){
+					            		etc_star_str = "★★☆☆☆";
+					            	} else if (review_list.etc_star==1){
+					            		etc_star_str = "★☆☆☆☆";
+					            	}
+					            	_html += etc_star_str;
+					            	_html += '</span>';
+					            	_html += ' <span>'+review_list.etc_star+'</span>';
+					            	_html += '</div>';
+					            	_html += '<div class="c_top_date">';
+					            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	_html += '<div class="r_content_middle">';
+					            	if (review_list.img_name != undefined){
+						            	_html += '<div class="c_middle_image">';
+						            	_html += '<img src="/category/load-image?fileName='+review_list.img_name+'">';
+						            	_html += '</div>';
+					            	}
+					            	_html += '<div class="c_middle_detail">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""){
+						            	_html += '<div class="r_content_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+					            		if (document.querySelector('#m_dto_userid').value == "admin"){
+							            	_html += '<div class="r_c_btn_reply">';
+							            	_html += '답글';
+							            	_html += '</div>';
+					            		}
+					            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
+							            	_html += '<div class="r_c_btn_update">';
+							            	_html += '수정';
+							            	_html += '</div>';
+							            	_html += '<div class="r_c_btn_delete">';
+							            	_html += '삭제';
+							            	_html += '</div>';
+					            		}
+						            	_html += '</div>';
+					            	}
+						           	_html += '</div>';
+				            	} else if (review_list.board_type == "review_reply"){
+				            		// 리뷰 내용 변경
+					            	_html += '<div class="c_answer">';
+					            	_html += '<div class="answer_review">';
+					            	_html += '<div class="answer_writer">';
+					            	_html += '<div>'+review_list.userid+'</div>';
+					            	_html += '<div>'+review_list.create_time+'</div>';
+					            	_html += '</div>';
+					            	_html += '<div class="answer_content">';
+					            	_html += review_list.etc_content;
+					            	_html += '</div>';
+					            	_html += '</div>';
+					            	// 로그인한 값 확인
+					            	if (document.querySelector('#m_dto_userid').value != ""
+					            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
+						            	_html += '<div class="answer_btn">';
+						            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+						            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+						            	_html += '<div class="a_btn_update">';
+						            	_html += '수정';
+						            	_html += '</div>';
+						            	_html += '<div class="a_btn_delete">';
+						            	_html += '삭제';
+						            	_html += '</div>';
+						            	_html += '</div>';
+					            	}
+					            	_html += '</div>';
+				            		// 새로운 내용 추가
+				            	}
+			            	}
+		            		$('.f_review_content').append(_html);
+		            	}
+		            	
+		            	// 페이징
+		            	var review_paging_data = data[1];
+		            	var review_paging = review_paging_data[0].review_paging;
+		            	var html_p = '';
+		            	if (review_paging.page_AllCount == 1) {
+				            $('.e_paging_re').remove();
+		            		html_p += '<div class="e_paging_re">';
+				            html_p += '<input type="hidden" id="page_NowBno_r" value="'+review_paging.page_NowBno+'">';
+		            		html_p += '<input type="hidden" id="standard_r" value="'+review_paging.standard+'">';
+		            		html_p += '<div onclick="alert('+"'첫 페이지 입니다.');"+'"'+'class="e_paging_btnleft" id="e_paging_btnleft_no">'+'&lt;'+'</div>';
+		            		html_p += '<div class="e_paging_num">';
+		            		html_p += '<a id="page_NowBno">1</a>';
+		            		html_p += '</div>';
+		            		html_p += '<div onclick="alert('+"'마지막 페이지 입니다.');"+'"'+'class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>';
+		            		html_p += '</div>';
+				            $('#e_paging_review').append(html_p);
+		            	} else {
+				            $('.e_paging_re').remove();
+			            	var etc_star_str = "";
+		            		html_p += '<div class="e_paging_re">';
+		            		html_p += '<input type="hidden" id="page_NowBno_r" value="'+review_paging.page_NowBno+'">';
+		            		html_p += '<input type="hidden" id="standard_r" value="'+review_paging.standard+'">';
+		            		// 앞페이지 여부
+		            		if (!review_paging.page_prev){
+			            		html_p += '<div onclick="alert('+"'첫 페이지 입니다.'"+');"'+'class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>';
+		            		} else {
+			            		html_p += '<div class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>';
+		            		}
+		            		html_p += '<div class="e_paging_num">';
+		            		// 페이지 (현재페이지인지 확인)
+		            		for(var i=review_paging.page_StartBno; i<=review_paging.page_EndBno; i++){
+		            			if (i==review_paging.page_NowBno) {
+				            		html_p += '<a id="page_NowBno">'+i+'</a>';
+			            		} else {
+				            		html_p += '<a href="#" class="page_Bno" id="page_Bno'+i+'">'+i+'</a>';
+			            		}
+		            		}
+		            		html_p += '</div>';
+		            		// 뒤페이지 여부
+		            		if (!review_paging.page_next){
+			            		html_p += '<div onclick="alert('+"'마지막 페이지 입니다.');"+'"'+'class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>';
+		            		} else {
+			            		html_p += '<div class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>';
+		            		}
+				           	html_p += '</div>';
+		            		$('#e_paging_review').append(html_p);
+		            	}
+		            	document.querySelector('.e_paging_re .e_paging_btnleft').focus();
+				        review();
+		            }
+				});
+			});
+		}
+	}
+	
+	// 페이지 앞 클릭
+	if(document.querySelector('#e_paging_review .e_paging_re #e_paging_btnleft_yes')){
+		document.querySelector('#e_paging_review .e_paging_re #e_paging_btnleft_yes').addEventListener('click',()=>{
+			var item_bno_ = document.querySelector('#item_bno').value;
+			var page_NowBno_r = document.querySelector('#e_paging_review .e_paging_re #page_NowBno_r').value;
+			if (parseInt(page_NowBno_r)%5==0){
+				page_NowBno_r = 5*(Math.floor(parseInt(page_NowBno_r)/5))-9;
+			} else {
+				page_NowBno_r = 5*(Math.floor(parseInt(page_NowBno_r)/5))-4;
+			}
+			var standard_r = document.querySelector('#e_paging_review .e_paging_re #standard_r').value;
+			// 현재페이지, 최신순
+			$.ajax({
+			    url: '/category/review-paging',
+			    type: 'post',
+			    contentType:"application/json",
+			    data: JSON.stringify({
+			    	item_bno: item_bno_,
+			    	page_NowBno_r: page_NowBno_r,
+			    	standard_r: standard_r
+			    }),
+			    success: function(data){
+	            	// 리뷰
+	            	var review_list;
+	            	var _html = '';
+	            	// 기존 삭제
+	            	if (data[0].length < 1) {
+	            		_html += '<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">존재하는 게시물이 없습니다.</div>';
+	            		document.querySelector('.f_review_content').innerText = "";
+			            $('.f_review_content').append(_html);
+	            	} else {
+		            	document.querySelector('.f_review_content').innerText = "";
+		            	var review_data = data[0];
+		            	for(var i=0; i<data[0].length; i++){
+			            	review_list = review_data[i].review_dto;
+			            	var etc_star_str = "";
+			            	// 리뷰
+			            	if (review_list.board_type == "review"){
+				            	// 리뷰 내용 업데이트
+				            	_html += '<div class="r_content">';
+				            	_html += '<div class="r_content_top">';
+				            	_html += '<div class="c_top_star">';
+				            	_html += '<span>';
+				            	if (review_list.etc_star==5){
+				            		etc_star_str = "★★★★★";
+				            	} else if (review_list.etc_star==4){
+				            		etc_star_str = "★★★★☆";
+				            	} else if (review_list.etc_star==3){
+				            		etc_star_str = "★★★☆☆";
+				            	} else if (review_list.etc_star==2){
+				            		etc_star_str = "★★☆☆☆";
+				            	} else if (review_list.etc_star==1){
+				            		etc_star_str = "★☆☆☆☆";
+				            	}
+				            	_html += etc_star_str;
+				            	_html += '</span>';
+				            	_html += ' <span>'+review_list.etc_star+'</span>';
+				            	_html += '</div>';
+				            	_html += '<div class="c_top_date">';
+				            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
+				            	_html += '</div>';
+				            	_html += '</div>';
+				            	_html += '<div class="r_content_middle">';
+				            	if (review_list.img_name != undefined){
+					            	_html += '<div class="c_middle_image">';
+					            	_html += '<img src="/category/load-image?fileName='+review_list.img_name+'">';
+					            	_html += '</div>';
+				            	}
+				            	_html += '<div class="c_middle_detail">';
+				            	_html += review_list.etc_content;
+				            	_html += '</div>';
+				            	_html += '</div>';
+				            	// 로그인한 값 확인
+				            	if (document.querySelector('#m_dto_userid').value != ""){
+					            	_html += '<div class="r_content_btn">';
+					            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+					            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+				            		if (document.querySelector('#m_dto_userid').value == "admin"){
+						            	_html += '<div class="r_c_btn_reply">';
+						            	_html += '답글';
+						            	_html += '</div>';
+				            		}
+				            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
+						            	_html += '<div class="r_c_btn_update">';
+						            	_html += '수정';
+						            	_html += '</div>';
+						            	_html += '<div class="r_c_btn_delete">';
+						            	_html += '삭제';
+						            	_html += '</div>';
+				            		}
+					            	_html += '</div>';
+				            	}
+					           	_html += '</div>';
+			            	} else if (review_list.board_type == "review_reply"){
+			            		// 리뷰 내용 변경
+				            	_html += '<div class="c_answer">';
+				            	_html += '<div class="answer_review">';
+				            	_html += '<div class="answer_writer">';
+				            	_html += '<div>'+review_list.userid+'</div>';
+				            	_html += '<div>'+review_list.create_time+'</div>';
+				            	_html += '</div>';
+				            	_html += '<div class="answer_content">';
+				            	_html += review_list.etc_content;
+				            	_html += '</div>';
+				            	_html += '</div>';
+				            	// 로그인한 값 확인
+				            	if (document.querySelector('#m_dto_userid').value != ""
+				            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
+					            	_html += '<div class="answer_btn">';
+					            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+					            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+					            	_html += '<div class="a_btn_update">';
+					            	_html += '수정';
+					            	_html += '</div>';
+					            	_html += '<div class="a_btn_delete">';
+					            	_html += '삭제';
+					            	_html += '</div>';
+					            	_html += '</div>';
+				            	}
+				            	_html += '</div>';
+			            		// 새로운 내용 추가
+			            	}
+		            	}
+	            		$('.f_review_content').append(_html);
+	            	}
+	            	
+	            	// 페이징
+	            	var review_paging_data = data[1];
+	            	var review_paging = review_paging_data[0].review_paging;
+	            	var html_p = '';
+	            	if (review_paging.page_AllCount == 1) {
+			            $('.e_paging_re').remove();
+	            		html_p += '<div class="e_paging_re">';
+			            html_p += '<input type="hidden" id="page_NowBno_r" value="'+review_paging.page_NowBno+'">';
+	            		html_p += '<input type="hidden" id="standard_r" value="'+review_paging.standard+'">';
+	            		html_p += '<div onclick="alert('+"'첫 페이지 입니다.');"+'"'+'class="e_paging_btnleft" id="e_paging_btnleft_no">'+'&lt;'+'</div>';
+	            		html_p += '<div class="e_paging_num">';
+	            		html_p += '<a id="page_NowBno">1</a>';
+	            		html_p += '</div>';
+	            		html_p += '<div onclick="alert('+"'마지막 페이지 입니다.');"+'"'+'class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>';
+	            		html_p += '</div>';
+			            $('#e_paging_review').append(html_p);
+	            	} else {
+			            $('.e_paging_re').remove();
+		            	var etc_star_str = "";
+	            		html_p += '<div class="e_paging_re">';
+	            		html_p += '<input type="hidden" id="page_NowBno_r" value="'+review_paging.page_NowBno+'">';
+	            		html_p += '<input type="hidden" id="standard_r" value="'+review_paging.standard+'">';
+	            		// 앞페이지 여부
+	            		if (!review_paging.page_prev){
+		            		html_p += '<div onclick="alert('+"'첫 페이지 입니다.'"+');"'+'class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>';
+	            		} else {
+		            		html_p += '<div class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>';
+	            		}
+	            		html_p += '<div class="e_paging_num">';
+	            		// 페이지 (현재페이지인지 확인)
+	            		for(var i=review_paging.page_StartBno; i<=review_paging.page_EndBno; i++){
+	            			if (i==review_paging.page_NowBno) {
+			            		html_p += '<a id="page_NowBno">'+i+'</a>';
+		            		} else {
+			            		html_p += '<a href="#" class="page_Bno" id="page_Bno'+i+'">'+i+'</a>';
+		            		}
+	            		}
+	            		html_p += '</div>';
+	            		// 뒤페이지 여부
+	            		if (!review_paging.page_next){
+		            		html_p += '<div onclick="alert('+"'마지막 페이지 입니다.');"+'"'+'class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>';
+	            		} else {
+		            		html_p += '<div class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>';
+	            		}
+			           	html_p += '</div>';
+	            		$('#e_paging_review').append(html_p);
+	            	}
+	            	document.querySelector('.e_paging_re .e_paging_num #page_NowBno').focus();
+			        review();
+	            }
+			});
+		});
+	}
+	
+	// 페이지 뒤 클릭
+	if(document.querySelector('#e_paging_review .e_paging_re #e_paging_btnright_yes')){
+		document.querySelector('#e_paging_review .e_paging_re #e_paging_btnright_yes').addEventListener('click',()=>{
+			var item_bno_ = document.querySelector('#item_bno').value;
+			var page_NowBno_r = document.querySelector('#e_paging_review .e_paging_re #page_NowBno_r').value;
+			if (parseInt(page_NowBno_r)%5==0){
+				page_NowBno_r = 5*(Math.floor(parseInt(page_NowBno_r)/5))+1;
+			} else {
+				page_NowBno_r = 5*(Math.floor(parseInt(page_NowBno_r)/5))+6;
+			}
+			var standard_r = document.querySelector('#e_paging_review .e_paging_re #standard_r').value;
+			// 현재페이지, 최신순
+			$.ajax({
+			    url: '/category/review-paging',
+			    type: 'post',
+			    contentType:"application/json",
+			    data: JSON.stringify({
+			    	"item_bno": item_bno_,
+			    	"page_NowBno_r": page_NowBno_r,
+			    	"standard_r": standard_r
+			    }),
+			    success: function(data){
+			    	console.log(data);
+	            	// 리뷰
+	            	var review_list;
+	            	var _html = '';
+	            	// 기존 삭제
+	            	if (data[0].length < 1) {
+	            		_html += '<div style="font-size:13px; padding-top:10px; padding-bottom: 10px;">존재하는 게시물이 없습니다.</div>';
+	            		document.querySelector('.f_review_content').innerText = "";
+			            $('.f_review_content').append(_html);
+	            	} else {
+		            	document.querySelector('.f_review_content').innerText = "";
+		            	var review_data = data[0];
+		            	for(var i=0; i<review_data.length; i++){
+			            	review_list = review_data[i].review_dto;
+			            	var etc_star_str = "";
+			            	// 리뷰
+			            	if (review_list.board_type == "review"){
+				            	// 리뷰 내용 업데이트
+				            	_html += '<div class="r_content">';
+				            	_html += '<div class="r_content_top">';
+				            	_html += '<div class="c_top_star">';
+				            	_html += '<span>';
+				            	if (review_list.etc_star==5){
+				            		etc_star_str = "★★★★★";
+				            	} else if (review_list.etc_star==4){
+				            		etc_star_str = "★★★★☆";
+				            	} else if (review_list.etc_star==3){
+				            		etc_star_str = "★★★☆☆";
+				            	} else if (review_list.etc_star==2){
+				            		etc_star_str = "★★☆☆☆";
+				            	} else if (review_list.etc_star==1){
+				            		etc_star_str = "★☆☆☆☆";
+				            	}
+				            	_html += etc_star_str;
+				            	_html += '</span>';
+				            	_html += ' <span>'+review_list.etc_star+'</span>';
+				            	_html += '</div>';
+				            	_html += '<div class="c_top_date">';
+				            	_html += '<span>'+review_list.userid+'</span> <span>'+review_list.create_time+'</span>';
+				            	_html += '</div>';
+				            	_html += '</div>';
+				            	_html += '<div class="r_content_middle">';
+				            	if (review_list.img_name != undefined){
+					            	_html += '<div class="c_middle_image">';
+					            	_html += '<img src="/category/load-image?fileName='+review_list.img_name+'">';
+					            	_html += '</div>';
+				            	}
+				            	_html += '<div class="c_middle_detail">';
+				            	_html += review_list.etc_content;
+				            	_html += '</div>';
+				            	_html += '</div>';
+				            	// 로그인한 값 확인
+				            	if (document.querySelector('#m_dto_userid').value != ""){
+					            	_html += '<div class="r_content_btn">';
+					            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+					            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+				            		if (document.querySelector('#m_dto_userid').value == "admin"){
+						            	_html += '<div class="r_c_btn_reply">';
+						            	_html += '답글';
+						            	_html += '</div>';
+				            		}
+				            		if (document.querySelector('#m_dto_userid').value == review_list.userid){
+						            	_html += '<div class="r_c_btn_update">';
+						            	_html += '수정';
+						            	_html += '</div>';
+						            	_html += '<div class="r_c_btn_delete">';
+						            	_html += '삭제';
+						            	_html += '</div>';
+				            		}
+					            	_html += '</div>';
+				            	}
+					           	_html += '</div>';
+			            	} else if (review_list.board_type == "review_reply"){
+			            		// 리뷰 내용 변경
+				            	_html += '<div class="c_answer">';
+				            	_html += '<div class="answer_review">';
+				            	_html += '<div class="answer_writer">';
+				            	_html += '<div>'+review_list.userid+'</div>';
+				            	_html += '<div>'+review_list.create_time+'</div>';
+				            	_html += '</div>';
+				            	_html += '<div class="answer_content">';
+				            	_html += review_list.etc_content;
+				            	_html += '</div>';
+				            	_html += '</div>';
+				            	// 로그인한 값 확인
+				            	if (document.querySelector('#m_dto_userid').value != ""
+				            	&& document.querySelector('#m_dto_userid').value == review_list.userid){
+					            	_html += '<div class="answer_btn">';
+					            	_html += '<input type="hidden" value="'+review_list.etc_board_bno+'">';
+					            	_html += '<input type="hidden" value="'+review_list.item_bno+'">';
+					            	_html += '<div class="a_btn_update">';
+					            	_html += '수정';
+					            	_html += '</div>';
+					            	_html += '<div class="a_btn_delete">';
+					            	_html += '삭제';
+					            	_html += '</div>';
+					            	_html += '</div>';
+				            	}
+				            	_html += '</div>';
+			            		// 새로운 내용 추가
+			            	}
+		            	}
+	            		$('.f_review_content').append(_html);
+	            	}
+	            	
+	            	// 페이징
+	            	var review_paging_data = data[1];
+	            	var review_paging = review_paging_data[0].review_paging;
+	            	var html_p = '';
+	            	if (review_paging.page_AllCount == 1) {
+			            $('.e_paging_re').remove();
+	            		html_p += '<div class="e_paging_re">';
+			            html_p += '<input type="hidden" id="page_NowBno_r" value="'+review_paging.page_NowBno+'">';
+	            		html_p += '<input type="hidden" id="standard_r" value="'+review_paging.standard+'">';
+	            		html_p += '<div onclick="alert('+"'첫 페이지 입니다.');"+'"'+'class="e_paging_btnleft" id="e_paging_btnleft_no">'+'&lt;'+'</div>';
+	            		html_p += '<div class="e_paging_num">';
+	            		html_p += '<a id="page_NowBno">1</a>';
+	            		html_p += '</div>';
+	            		html_p += '<div onclick="alert('+"'마지막 페이지 입니다.');"+'"'+'class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>';
+	            		html_p += '</div>';
+			            $('#e_paging_review').append(html_p);
+	            	} else {
+			            $('.e_paging_re').remove();
+		            	var etc_star_str = "";
+	            		html_p += '<div class="e_paging_re">';
+	            		html_p += '<input type="hidden" id="page_NowBno_r" value="'+review_paging.page_NowBno+'">';
+	            		html_p += '<input type="hidden" id="standard_r" value="'+review_paging.standard+'">';
+	            		// 앞페이지 여부
+	            		if (!review_paging.page_prev){
+		            		html_p += '<div onclick="alert('+"'첫 페이지 입니다.'"+');"'+'class="e_paging_btnleft" id="e_paging_btnleft_no">&lt;</div>';
+	            		} else {
+		            		html_p += '<div class="e_paging_btnleft" id="e_paging_btnleft_yes">&lt;</div>';
+	            		}
+	            		html_p += '<div class="e_paging_num">';
+	            		// 페이지 (현재페이지인지 확인)
+	            		for(var i=review_paging.page_StartBno; i<=review_paging.page_EndBno; i++){
+	            			if (i==review_paging.page_NowBno) {
+			            		html_p += '<a id="page_NowBno">'+i+'</a>';
+		            		} else {
+			            		html_p += '<a href="#" class="page_Bno" id="page_Bno'+i+'">'+i+'</a>';
+		            		}
+	            		}
+	            		html_p += '</div>';
+	            		// 뒤페이지 여부
+	            		if (!review_paging.page_next){
+		            		html_p += '<div onclick="alert('+"'마지막 페이지 입니다.');"+'"'+'class="e_paging_btnright" id="e_paging_btnright_no">&gt;</div>';
+	            		} else {
+		            		html_p += '<div class="e_paging_btnright" id="e_paging_btnright_yes">&gt;</div>';
+	            		}
+			           	html_p += '</div>';
+	            		$('#e_paging_review').append(html_p);
+	            	}
+			        document.querySelector('.e_paging_re .e_paging_num #page_NowBno').focus();
+			        review();
+	            }
+			});
+		});
+	}
 }
+
 
 
 

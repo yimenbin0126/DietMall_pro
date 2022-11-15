@@ -30,7 +30,7 @@
             <form action="/member/join-detail" method="post" id="content">
                 <h4>아이디</h4>
                 <div id="id_confirm" class="errorindex">*영문 소문자와 숫자를 혼합해 5~20자리로 만들어주세요</div>
-                <input type="text" name="userId" id="id" placeholder="아이디를 입력해 주세요." onfocus="this.placeholder=''"
+                <input type="text" name="userid" id="id" placeholder="아이디를 입력해 주세요." onfocus="this.placeholder=''"
                     onblur="this.placeholder='아이디를 입력해 주세요.'">
 
 				<!-- 아이디 중복 확인 -->
@@ -41,7 +41,7 @@
 				
                 <h4>비밀번호</h4>
                 <div id="psw_confirm" class="errorindex">*영문 대소문자, 숫자, 특수문자(!@#*)를 하나 이상씩 사용하여 7~20자리로 만들어주세요</div>
-                <input type="password" name="userPass" id="password" placeholder="비밀번호를 입력해 주세요." onfocus="this.placeholder=''"
+                <input type="password" name="userpass" id="password" placeholder="비밀번호를 입력해 주세요." onfocus="this.placeholder=''"
                     onblur="this.placeholder='비밀번호를 입력해 주세요.'" >
 
                 <h4>비밀번호 확인</h4>
@@ -51,7 +51,7 @@
 
 				<h4>이름</h4>
                 <div id="name_confirm" class="errorindex">*이름을 입력해주세요.</div>
-                <input type="text" name="userName" id="name" placeholder="이름을 입력해 주세요."
+                <input type="text" name="username" id="name" placeholder="이름을 입력해 주세요."
                     onfocus="this.placeholder=''" onblur="this.placeholder='이름을 입력해 주세요.'" >
 				
                 <!-- 생년월일 시작 -->
@@ -60,7 +60,7 @@
                 <div id="bir">
                 	
                 	<!-- 값 전달 -->
-                	<input type="hidden" name="userBirth" id="bir_value">
+                	<input type="hidden" name="userbirth" id="bir_value">
                 	
                     <!-- 연도 -->
                     <div id="bir_yy">
@@ -88,7 +88,7 @@
                 <h4>성별</h4>
                 <div id="gender_confirm" class="errorindex">*성별을 선택해주세요.</div>
                 <div id="gender">
-                    <select name="userGender">
+                    <select name="usergender">
                         <option>선택</option>
                         <option>여자</option>
                         <option>남자</option>
@@ -99,7 +99,7 @@
                 <h4>이메일</h4>
                 <div id="email_confirm" class="errorindex">*이메일 형식이 올바르지 않습니다.</div>
                 <div id="email">
-                    <input type="test" name="userEmail" id="email_input" placeholder="ex) dietmall@naver.com"
+                    <input type="test" name="useremail" id="email_input" placeholder="ex) dietmall@naver.com"
                         onfocus="this.placeholder=''" onblur='this.placeholder="ex) dietmall@naver.com"' >
 					<button type="button" id="emailchk">중복 확인</button>
                 </div>
@@ -111,7 +111,7 @@
                 <h4>휴대전화</h4>
                 <div id="phone_confirm" class="errorindex">*올바른 전화번호 형식이 아닙니다.</div>
                 <div id="phone">
-                    <input type="text" name="userTel" id="tel" placeholder="ex) 01012345678, -를 빼고 입력해주세요."
+                    <input type="text" name="usertel" id="tel" placeholder="ex) 01012345678, -를 빼고 입력해주세요."
                         onfocus="this.placeholder=''" onblur="this.placeholder='ex) 01012345678, -를 빼고 입력해주세요.'">
                 </div>
 

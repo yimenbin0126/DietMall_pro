@@ -151,7 +151,8 @@ public class MemberController {
 
 	// 회원가입 선택 (2) - 다이어터몰 post
 	@PostMapping("/join-detail")
-	public String postJoinDetail(MemberDTO vo) throws Exception {
+	public String postJoinDetail(MemberDTO vo,
+			HttpServletResponse response) throws Exception {
 		log.info("MemberController - post join-detail");
 
 		log.info(vo.toString());
@@ -169,7 +170,10 @@ public class MemberController {
 				vo.setUserpass(pwd); // DB에 저장
 				service.join(vo);
 				log.info("회원가입 성공 - 다이어터몰");
-				return "/member/joinEnd";
+				PrintWriter out = response.getWriter();
+				out.println("<script>alert('회원가입을 축하드립니다!\n로그인 해주세요.')</script>");
+				out.flush();
+				return "/member/login";
 			}
 		} catch (Exception e) {
 			throw new RuntimeException();
