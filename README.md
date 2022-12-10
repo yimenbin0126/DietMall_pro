@@ -3,7 +3,6 @@
 # <b>개인 프로젝트</b>
 - <b>개발 목적</b> : 다이어트 쇼핑몰 웹 애플리케이션 구현
 - <b>기술 스택</b> : Spring Framework, Java, JSP, Ajax, Javascript, 외부라이브러리(jQuery), DBMS(Oracle), CSS
-- <b>개발 환경</b> : Eclipse, JDK 11.0.15, Apache Tomcat 9.0, Maven
 - <b>개발 기간</b> : 2022.10.27 ~ 2022.11.14
 <br>
 
